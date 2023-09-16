@@ -1,0 +1,32 @@
+/* Home.css */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav li {
+    font-size: 1.2rem;
+  }
+  
+  .nav a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  /* Style your logo here */
+  .logo img {
+    max-height: 80px; /* Adjust the height as needed */
+    /* Add any other CSS styles you want for the logo */
+    /* width: 100px; */
+  }
+  

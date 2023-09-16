@@ -1,0 +1,21 @@
+/* Vendor-Home.css */
+.vendor-home {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .vendor-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .vendor-icon {
+    text-align: center;
+  }
+  
+  .vendor-icon i {
+    font-size: 2.5rem;
+  }
+  

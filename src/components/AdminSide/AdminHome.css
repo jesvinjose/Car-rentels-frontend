@@ -1,0 +1,21 @@
+/* AdminHome.css */
+.admin-home {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .admin-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .admin-icon {
+    text-align: center;
+  }
+  
+  .admin-icon i {
+    font-size: 2.5rem;
+  }
+  
