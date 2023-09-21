@@ -4,18 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import bgImage from "../../assets/signUpbackgroundImage.jpg";
 import logo from "../../assets/logo-1.png";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 function UserLogin() {
-
-  useEffect(()=>{
-    const urlParams = new URLSearchParams(window.location.search).get("redirectFrom");
-    if(urlParams=="OTP"){
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search).get(
+      "redirectFrom"
+    );
+    if (urlParams === "OTP") {
       toast("Account Created Successfully");
     }
-  },[])
-  
+    if (urlParams === "PasswordReset") {
+      toast("Password Reset Successfully");
+    }
+  }, []);
+
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -38,6 +45,9 @@ function UserLogin() {
         // Set values in localStorage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("firstName", response.data.firstName);
+        localStorage.setItem("emailId", response.data.emailId);
+        localStorage.setItem("lastName", response.data.lastName);
+        localStorage.setItem("userId", response.data.userId);
         navigate("/");
       } else if (response.data.message === "Wrong password") {
         window.alert("Wrong password");
@@ -56,6 +66,27 @@ function UserLogin() {
     } catch (error) {
       console.error("Error during Sign In:", error.message);
     }
+  };
+
+  const handleGoogleLogin = async (credentialResponseDecoded) => {
+    console.log("inside handle google login");
+    console.log(credentialResponseDecoded.email);
+    let email = { email: credentialResponseDecoded.email };
+    console.log(email);
+    const response = await axios.post(
+      "http://localhost:5000/user/verifyGoogleLogin",
+      email
+    );
+    console.log(response, "--------response-----------");
+    if (response.data.message === "Google Login") {
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("firstName", response.data.firstName);
+      localStorage.setItem("emailId", response.data.emailId);
+      localStorage.setItem("lastName", response.data.lastName);
+      localStorage.setItem("userId", response.data.userId);
+      navigate("/");
+    }
+    if (response.data.message === "Invalid User") navigate("/login");
   };
 
   return (
@@ -120,8 +151,8 @@ function UserLogin() {
 
               <div className="flex items-center justify-between mt-4">
                 <a
-                  href="#"
                   className="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
+                  href="/forgotpassword"
                 >
                   Forget Password?
                 </a>
@@ -134,6 +165,23 @@ function UserLogin() {
                     Sign In
                   </button>
                 </div>
+              </div>
+
+              <div>
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    var credentialResponseDecoded = jwt_decode(
+                      credentialResponse.credential
+                    );
+                    console.log(credentialResponseDecoded);
+                    if (credentialResponseDecoded) {
+                      handleGoogleLogin(credentialResponseDecoded);
+                    }
+                  }}
+                  onError={() => {
+                    console.log("Login Failed");
+                  }}
+                />
               </div>
             </form>
           </div>
@@ -158,42 +206,42 @@ function UserLogin() {
 
 export default UserLogin;
 
-{
-  /* <div className="flex mt-4">
-<div className="w-1/2 pr-2">
-  <label
-    htmlFor="emailId"
-    className="block text-sm text-gray-800 dark:text-gray-200"
-  >
-    Email Id
-  </label>
-  <input
-    type="email"
-    className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-    placeholder="Enter Email"
-    value={emailId}
-    onChange={(e) => setEmail(e.target.value)}
-    required
-  />
-</div> */
-}
+// {
+//   /* <div className="flex mt-4">
+// <div className="w-1/2 pr-2">
+//   <label
+//     htmlFor="emailId"
+//     className="block text-sm text-gray-800 dark:text-gray-200"
+//   >
+//     Email Id
+//   </label>
+//   <input
+//     type="email"
+//     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+//     placeholder="Enter Email"
+//     value={emailId}
+//     onChange={(e) => setEmail(e.target.value)}
+//     required
+//   />
+// </div> */
+// }
 
-{
-  /* <div className="flex mt-4">
-<div className="w-1/2 pr-2">
-  <label
-    htmlFor="password"
-    className="block text-sm text-gray-800 dark:text-gray-200"
-  >
-    Password
-  </label>
-  <input
-    type="password"
-    className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-    placeholder="Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    required
-  />
-</div> */
-}
+// {
+//   /* <div className="flex mt-4">
+// <div className="w-1/2 pr-2">
+//   <label
+//     htmlFor="password"
+//     className="block text-sm text-gray-800 dark:text-gray-200"
+//   >
+//     Password
+//   </label>
+//   <input
+//     type="password"
+//     className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+//     placeholder="Password"
+//     value={password}
+//     onChange={(e) => setPassword(e.target.value)}
+//     required
+//   />
+// </div> */
+// }

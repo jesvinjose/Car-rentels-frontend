@@ -37,6 +37,9 @@ function VendorLogin() {
       if (response.data.message === "Valid Vendor") {
         localStorage.setItem("vendorToken", response.data.vendorToken);
         localStorage.setItem("vendorFirstName", response.data.vendorFirstName);
+        localStorage.setItem("vendorLastName", response.data.vendorBackName);
+        localStorage.setItem("vendorEmailId",response.data.vendorEmailId);
+        localStorage.setItem("vendorId",response.data.vendorId);
         navigate("/vendorHome");
       } else if (response.data.message === "Wrong password") {
         window.alert("Wrong password");
@@ -144,7 +147,7 @@ function VendorLogin() {
               to="/vendorregister"
               className="font-medium text-gray-700 dark:text-gray-200 hover:underline"
             >
-              Sign Up
+              Vendor Sign Up
             </Link>
           </div>
         </div>

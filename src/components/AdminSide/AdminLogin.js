@@ -17,7 +17,7 @@ function AdminLoginForm() {
       });
       console.log("res,>>>>>>>>>>>>>>>>", response);
       console.log(response.data.adminToken,"-----------adminToken");
-      console.log(response.data.emailId,"---------adminFirstName");
+      console.log(response.data.adminEmailId,"---------adminEmailId");
       const adminToken = response.data.adminToken;
       const adminEmailId=response.data.adminEmailId;
       console.log(adminToken);
