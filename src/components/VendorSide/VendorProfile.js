@@ -3,7 +3,7 @@ import axios from "axios";
 import Profile from "../../assets/profile.png";
 import { useParams } from "react-router-dom";
 import VendorHeader from "./VendorHeader";
-import UpdateVendorProfileDetails from "./UpdateVendorProfileDetails"
+import UpdateVendorProfileDetails from "./UpdateVendorProfileDetails";
 
 const VendorProfile = () => {
   const { vendorId } = useParams();
@@ -21,7 +21,7 @@ const VendorProfile = () => {
         );
       })
       .catch((error) => {
-        console.error("Error fetching user details:", error);
+        console.error("Error fetching vendor details:", error);
       });
   }, [vendorId]);
   console.log(vendorDetails, "---------vendorProfile console-----------");

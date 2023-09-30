@@ -23,32 +23,56 @@ const AdminHeader = () => {
       <div className="flex justify-evenly">
         <div className="bg-blue-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-tachometer-alt text-4xl text-blue-600 mb-2"></i>
-          <Link to="/dashboard" className="text-blue-600 hover:underline">
+          <Link to="/admin/dashboard" className="text-blue-600 hover:underline">
             Dashboard
           </Link>
         </div>
         <div className="bg-green-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-users text-4xl text-green-600 mb-2"></i>
-          <Link to="/userslist" className="text-green-600 hover:underline">
+          <Link
+            to="/admin/userslist"
+            className="text-green-600 hover:underline"
+          >
             Users
           </Link>
         </div>
         <div className="bg-yellow-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-store text-4xl text-yellow-600 mb-2"></i>
-          <Link to="/vendorslist" className="text-yellow-600 hover:underline">
+          <Link
+            to="/admin/vendorslist"
+            className="text-yellow-600 hover:underline"
+          >
             Vendors
           </Link>
         </div>
         <div className="bg-purple-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-book text-4xl text-purple-600 mb-2"></i>
-          <Link to="/bookingslist" className="text-purple-600 hover:underline">
+          <Link
+            to="/admin/bookingslist"
+            className="text-purple-600 hover:underline"
+          >
             Bookings
           </Link>
         </div>
         <div className="bg-pink-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
-          <Link to="/carrentalrates" className="text-pink-600 hover:underline">
+          <Link to="/admin/carousels" className="text-pink-600 hover:underline">
+            Carousels
+          </Link>
+        </div>
+        {/* <div className="bg-pink-200 p-4 rounded-lg flex flex-col items-center justify-center">
+          <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
+          <Link to="/admin/carrentalrates" className="text-pink-600 hover:underline">
             Car Rental Rates
+          </Link>
+        </div> */}
+        <div className="bg-pink-200 p-4 rounded-lg flex flex-col items-center justify-center">
+          <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
+          <Link
+            to="/admin/carslistadminside"
+            className="text-pink-600 hover:underline"
+          >
+            Cars
           </Link>
         </div>
         <div className="bg-red-200 p-4 rounded-lg flex flex-col items-center justify-center">
@@ -60,7 +84,7 @@ const AdminHeader = () => {
             Logout
           </button>
         </div>
-        </div>
+      </div>
       {/* </div> */}
     </header>
   );

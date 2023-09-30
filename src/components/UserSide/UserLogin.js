@@ -6,7 +6,7 @@ import bgImage from "../../assets/signUpbackgroundImage.jpg";
 import logo from "../../assets/logo-1.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { USER_INFO } from "../../redux/actions/types";
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
 
@@ -39,8 +39,8 @@ function UserLogin() {
         "http://localhost:5000/user/verifyUserLogin",
         userData
       );
-      console.log(response, "--------Frontend User Login Response");
-
+      // console.log(response, "--------Frontend User Login Response");
+      console.log(response.data,"-----response.data.........");
       if (response.data.message === "Valid User") {
         // Set values in localStorage
         localStorage.setItem("token", response.data.token);
@@ -48,20 +48,20 @@ function UserLogin() {
         localStorage.setItem("emailId", response.data.emailId);
         localStorage.setItem("lastName", response.data.lastName);
         localStorage.setItem("userId", response.data.userId);
-        navigate("/");
+        navigate("/usershome");
       } else if (response.data.message === "Wrong password") {
-        window.alert("Wrong password");
+        toast("Wrong password");
       } else if (
         response.data.message === "User is not registered, please register now"
       ) {
-        window.alert("User is not registered, please register now");
+        toast("User is not registered, please register now");
       } else if (
         response.data.message ===
         "User is blocked, contact jesvinjose49@gmail.com"
       ) {
-        window.alert("User is blocked, contact jesvinjose49@gmail.com");
+        toast("User is blocked, contact jesvinjose49@gmail.com");
       } else {
-        window.alert("Internal server error");
+        toast("Internal server error");
       }
     } catch (error) {
       console.error("Error during Sign In:", error.message);

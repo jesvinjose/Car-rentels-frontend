@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import logo from "../../assets/logo-1.png";
 const Header = () => {
   const token = localStorage.getItem("token");
@@ -7,7 +7,7 @@ const Header = () => {
   const emailId = localStorage.getItem("emailId");
   const lastName = localStorage.getItem("lastName");
   const userId = localStorage.getItem("userId");
-
+  const navigate=useNavigate();
   const handleLogout = (e) => {
     document.cookie = 'userToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT'; // Clear cookie
     localStorage.removeItem("token");
@@ -27,11 +27,11 @@ const Header = () => {
           <div className="flex justify-end  items-center ml-96  w-fit">
             <nav className=" text-black ">
               <ul className="font-serif text-black flex ">
-                <li className="">
-                  <a href="/">Home</a>
+                <li className="cursor-pointer">
+                  <a href="/usershome">Home</a>
                 </li>
-                <li className="ml-5 ">
-                  <a href="/subscription">Subscription</a>
+                <li className="ml-5 cursor-pointer ">
+                  <a onClick={()=>navigate('/allcars')}>Cars</a>
                 </li>
                 <li className="ml-5">
                   <a href="/offers">Offers</a>
@@ -57,10 +57,9 @@ const Header = () => {
             </nav>
           </div>
         </div>
-        <div className="logo ml-60 mt-7">
-          <Link to={`/userprofile/${userId}`}>
-            <p>{firstName}</p>
-          </Link>
+        <div className="logo ml-60 mt-7" >
+          <p className="cursor-pointer" onClick={()=>navigate(`/userprofile/${userId}`)}>{firstName}</p>
+            
         </div>
       </header>
     </div>

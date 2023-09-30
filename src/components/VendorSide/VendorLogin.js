@@ -6,13 +6,18 @@ import bgImage from "../../assets/ownacar.png";
 import logo from "../../assets/logo-1.png";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 function VendorLogin() {
 
   useEffect(()=>{
     const urlParams = new URLSearchParams(window.location.search).get("redirectFrom");
-    if(urlParams=="OTP"){
+    if(urlParams==="OTP"){
       toast("Vendor Account Created Successfully");
+    }
+    if (urlParams === "PasswordReset") {
+      toast("Password Reset Successfully");
     }
   },[])
 
@@ -42,22 +47,44 @@ function VendorLogin() {
         localStorage.setItem("vendorId",response.data.vendorId);
         navigate("/vendorHome");
       } else if (response.data.message === "Wrong password") {
-        window.alert("Wrong password");
+        toast("Wrong password");
       } else if (
-        response.data.message === "User is not registered, please register now"
+        response.data.message === "Vendor is not registered, please register now"
       ) {
-        window.alert("User is not registered, please register now");
+        toast("Vendor is not registered, please register now");
       } else if (
         response.data.message ===
-        "User is blocked, contact jesvinjose49@gmail.com"
+        "Vendor is blocked, contact jesvinjose49@gmail.com"
       ) {
-        window.alert("User is blocked, contact jesvinjose49@gmail.com");
+        console.log("Vendor is blocked, contact jesvinjose49@gmail.com");
+        toast("Vendor is blocked, contact jesvinjose49@gmail.com");
       } else {
-        window.alert("Internal server error");
+        toast("Internal server error");
       }
     } catch (error) {
       console.error("Error during Sign In:", error.message);
     }
+  };
+
+  const handleGoogleLogin = async (credentialResponseDecoded) => {
+    console.log("inside handle google login");
+    console.log(credentialResponseDecoded.email);
+    let email = { email: credentialResponseDecoded.email };
+    console.log(email);
+    const response = await axios.post(
+      "http://localhost:5000/vendor/verifyGoogleLogin",
+      email
+    );
+    console.log(response, "--------response-----------");
+    if (response.data.message === "Google Login") {
+      localStorage.setItem("vendorToken", response.data.vendorToken);
+      localStorage.setItem("vendorFirstName", response.data.vendorFirstName);
+      localStorage.setItem("vendorEmailId", response.data.vendorEmailId);
+      localStorage.setItem("vendorLastName", response.data.vendorLastName);
+      localStorage.setItem("vendorId", response.data.vendorId);
+      navigate("/vendorHome");
+    }
+    if (response.data.message === "Invalid User") navigate("/login");
   };
 
   return (
@@ -120,7 +147,7 @@ function VendorLogin() {
 
               <div className="flex items-center justify-between mt-4">
                 <a
-                  href="#"
+                  href="/forgotpassword4vendor"
                   className="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
                 >
                   Forget Password?
@@ -134,6 +161,22 @@ function VendorLogin() {
                     Sign In
                   </button>
                 </div>
+              </div>
+              <div>
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    var credentialResponseDecoded = jwt_decode(
+                      credentialResponse.credential
+                    );
+                    console.log(credentialResponseDecoded);
+                    if (credentialResponseDecoded) {
+                      handleGoogleLogin(credentialResponseDecoded);
+                    }
+                  }}
+                  onError={() => {
+                    console.log("Login Failed");
+                  }}
+                />
               </div>
             </form>
           </div>

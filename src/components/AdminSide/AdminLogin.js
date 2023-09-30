@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import logo from '../../assets/logo-1.png'
 
 function AdminLoginForm() {
   const [emailId, setEmail] = useState("");
@@ -32,12 +33,12 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 border border-black mt-44">
       <div className="px-6 py-4">
         <div className="flex justify-center mx-auto">
           <img
-            className="w-auto h-7 sm:h-8"
-            src="https://merakiui.com/images/logo.svg"
+            className="w-auto h-7 sm:h-24"
+            src={logo}
             alt=""
           />
         </div>
@@ -75,13 +76,7 @@ function AdminLoginForm() {
             />
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            {/* <a
-              href="#"
-              className="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
-            >
-              // Forgot Password? //{" "}
-            </a> */}
+          <div className="flex items-center justify-center mt-4">
             <button
               className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
               type="submit"

@@ -45,7 +45,7 @@ const VendorHeader = () => {
         <div className="bg-yellow-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-store text-4xl text-yellow-600 mb-2"></i>
           <Link
-            to="{`/vendorprofile/${vendorId}`}"
+            to={`/vendorprofile/${vendorId}`}
             className="text-yellow-600 hover:underline"
           >
             Vendor Info
@@ -77,9 +77,7 @@ const VendorHeader = () => {
         )}
 
         <div className="logo ml-0 mt-7">
-          <Link to={`/vendorprofile/${vendorId}`}>
-            <p>{vendorFirstName}</p>
-          </Link>
+          <p>{vendorFirstName}</p>
         </div>
       </div>
       {/* </div> */}
