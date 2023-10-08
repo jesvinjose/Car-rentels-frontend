@@ -33,7 +33,7 @@ function VerifyOTP() {
         }
       );
 
-      if (response.data.message === "OTP sent successfully") {
+      if (response.data.message === "Verify OTP Success") {
         navigate("/login?redirectFrom=OTP");
       } else if (response.data.message === "wrong OTP") {
         console.error("wrong OTP");

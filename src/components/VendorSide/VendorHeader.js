@@ -37,13 +37,14 @@ const VendorHeader = () => {
           </Link>
         </div>
         <div className="bg-green-200 p-4 rounded-lg flex flex-col items-center justify-center">
-          <i className="fas fa-users text-4xl text-green-600 mb-2"></i>
+          <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
           <Link to="/carsList" className="text-green-600 hover:underline">
             Cars
           </Link>
         </div>
         <div className="bg-yellow-200 p-4 rounded-lg flex flex-col items-center justify-center">
-          <i className="fas fa-store text-4xl text-yellow-600 mb-2"></i>
+          {/* <i className="fas fa-store text-4xl text-yellow-600 mb-2"></i> */}
+          <i className="fas fa-user fa-3x"></i>
           <Link
             to={`/vendorprofile/${vendorId}`}
             className="text-yellow-600 hover:underline"

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
 import axios from "axios";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 
 const CarDetailsModal=({carDetails,closeModal,carsData,setCarsData})=>{
@@ -61,12 +64,32 @@ const CarDetailsModal=({carDetails,closeModal,carsData,setCarsData})=>{
   }
 
 
+  useEffect(() => {
+    // Check if carDetails and carDetails[0] exist and have carLocation
+    if (carDetails && carDetails[0] && carDetails[0].carLocation) {
+      const { longitude, latitude } = carDetails[0].carLocation;
+  
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3',
+        center: [longitude, latitude],
+        zoom: 12,
+      });
+  
+      // Add a marker at the car's location
+      new mapboxgl.Marker()
+        .setLngLat([longitude, latitude])
+        .addTo(map);
+    }
+  }, [carDetails]);
+  
 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50  ">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-1/2 border border-black ">
-        <h2 className="text-xl font-semibold mb-4 text-center">User Details</h2>
+        <h2 className="text-xl font-semibold mb-4 text-center">Car Details</h2>
+        <div id="map" className="map-container mb-4" style={{ width: '100%', height: '200px', backgroundColor: 'gray' }}></div>
         <div className="flex justify-around">
           <p>
             <strong>Model Name:</strong> {carDetails[0].modelName}

@@ -36,7 +36,7 @@ const CategorywiseCars = () => {
           justifyContent: "center",
         }}
       >
-        <h1 className="header">Our Models of {category}</h1>
+        <h1 className="header">{category} Models</h1>
       </div>
 
       <div className="flex flex-wrap justify-center">

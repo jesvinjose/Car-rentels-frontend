@@ -9,21 +9,21 @@ const CarouselList = () => {
   const [carouselData, setCarouselData] = useState([]);
 
   useEffect(() => {
-    const fetchCarouselData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/admin/carouselslist");
-        if (Array.isArray(response.data)) {
-          setCarouselData(response.data);
-        } else {
-          console.error("Invalid data received from the server:", response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchCarouselData();
   },[]);
+
+  const fetchCarouselData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/admin/carouselslist");
+      if (Array.isArray(response.data)) {
+        setCarouselData(response.data);
+      } else {
+        console.error("Invalid data received from the server:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleBlock = async (id) => {
     try {
@@ -55,7 +55,7 @@ const CarouselList = () => {
       axios.delete(`http://localhost:5000/admin/delete-carousel/${carouselId}`)
         .then((response) => {
           console.log('Carousel deleted successfully', response.data);
-          navigate('/admin/carousels');
+          fetchCarouselData();
         })
         .catch((error) => {
           console.error('Error deleting carousel:', error);
@@ -131,7 +131,7 @@ const CarouselList = () => {
                               Disable
                             </button>
                           )}
-                          <a href={`/admin/edit-carousel?id=${carousel._id}`} className="btn btn-primary">
+                          <a href={`/editcarousel/${carousel._id}`} className="btn btn-primary">
                             Edit
                           </a>
                           <a href="#" className="btn btn-danger" onClick={() => handleDelete(carousel._id)}>

@@ -55,7 +55,8 @@ const AdminHeader = () => {
           </Link>
         </div>
         <div className="bg-pink-200 p-4 rounded-lg flex flex-col items-center justify-center">
-          <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
+          {/* <i className="fas fa-car text-4xl text-pink-600 mb-2"></i> */}
+          <i className="fas fa-camera fa-3x"></i> {/* Adjust size using fa-2x, fa-3x, fa-4x, fa-5x */}
           <Link to="/admin/carousels" className="text-pink-600 hover:underline">
             Carousels
           </Link>

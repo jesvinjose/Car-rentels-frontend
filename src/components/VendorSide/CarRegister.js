@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import * as React from "react";
 import axios from "axios";
 import VendorHeader from "./VendorHeader";
 import { useNavigate } from "react-router-dom";
+import ReactMapGL, { Marker } from "react-map-gl";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+mapboxgl.Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
+const Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+console.log(Token, "----------token");
 const CarRegister = () => {
   const carTypes = ["Standard", "Economy", "Luxury"];
   const fuelTypes = ["Petrol", "Diesel"];
@@ -25,8 +32,23 @@ const CarRegister = () => {
   const [hourlyRentalRate, setHourlyRentalRate] = useState("");
   const [dailyRentalRate, setDailyRentalRate] = useState("");
   const [monthlyRentalRate, setMonthlyRentalRate] = useState("");
-
+  // State to store car location (latitude and longitude)
+  const [carLocation, setCarLocation] = useState({
+    latitude: 12.971599,
+    longitude: 77.594566,
+  });
   const navigate = useNavigate();
+
+  function handleClick(event) {
+    event.preventDefault();
+    const { lngLat } = event;
+    const { lng, lat } = lngLat;
+
+    setCarLocation({
+      latitude: lat,
+      longitude: lng,
+    });
+  }
 
   const handleModelNameChange = (e) => {
     setModelName(e.target.value);
@@ -118,6 +140,7 @@ const CarRegister = () => {
     // console.log(modelName,deliveryHub,description,fuelCapacity,fuelType,seatNumber,rcNumber,rcImageDataUrl,"etc");
     e.preventDefault();
     try {
+      console.log(carLocation, "-------------carLocationFrontend-------");
       const response = await axios.post(
         "http://localhost:5000/vendor/registercar",
         {
@@ -136,7 +159,8 @@ const CarRegister = () => {
           selectedCarType,
           hourlyRentalRate,
           dailyRentalRate,
-          monthlyRentalRate
+          monthlyRentalRate,
+          carLocation, // Include car location (latitude and longitude)
         }
       );
 
@@ -161,7 +185,38 @@ const CarRegister = () => {
     setSelectedGearBox("");
     setRcImageDataUrl(null);
     setCarImageDataUrl(null);
+    setCarLocation({ latitude: 12.971599, longitude: 77.594566 }); // Reset car location
   };
+
+  console.log(carLocation);
+
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      container: "map",
+      // style: 'mapbox://styles/mapbox/streets-v11',
+      style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+      center: [carLocation.longitude, carLocation.latitude],
+      zoom: 12,
+    });
+
+    // Add a marker for the car's location
+    new mapboxgl.Marker()
+      .setLngLat([carLocation.longitude, carLocation.latitude])
+      .addTo(map);
+
+    // Event listener to update latitude and longitude on map click
+    map.on("click", (e) => {
+      const { lng, lat } = e.lngLat;
+      setCarLocation({
+        latitude: lat,
+        longitude: lng,
+      });
+    });
+
+    return () => {
+      map.remove(); // Clean up the map on component unmount
+    };
+  }, [carLocation.longitude, carLocation.latitude]);
 
   return (
     <div>
@@ -359,12 +414,28 @@ const CarRegister = () => {
           )}
         </div>
 
-        <button type="button" onClick={handleSubmit}>
-          Register Car
-        </button>
+        <div style={{ width: "100%", height: "300px", zIndex: 999 }}>
+          <div
+            id="map"
+            className="map-container mb-4"
+            style={{ width: "100%", height: "100%", backgroundColor: "gray" }}
+          ></div>
+        </div>
       </form>
+      <button type="submit" onClick={handleSubmit}>
+        Register Car
+      </button>
     </div>
   );
 };
 
 export default CarRegister;
+
+// Event handler to update car location
+
+// const handleMapClick = (event) => {
+//   const { lngLat } = event;
+//   if (!isNaN(lngLat[1]) && !isNaN(lngLat[0])) {
+//     setCarLocation({ latitude: lngLat[1], longitude: lngLat[0] });
+//   }
+// };

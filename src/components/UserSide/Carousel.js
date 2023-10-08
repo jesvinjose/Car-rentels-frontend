@@ -29,7 +29,7 @@ const Carousel = () => {
       <Splide options={{ rewind: true }} aria-label="React Splide Example">
         {images.map((image, index) => (
           <SplideSlide>
-            <img src={image} />
+            <img src={image} alt="" />
           </SplideSlide>
         ))}
       </Splide>

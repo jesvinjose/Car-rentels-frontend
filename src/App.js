@@ -1,4 +1,5 @@
 import "./App.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/UserSide/Home";
 import AdminLogin from "./components/AdminSide/AdminLogin";
@@ -33,6 +34,8 @@ import PasswordReset4Vendor from "./components/VendorSide/PasswordReset4Vendor";
 import CategorywiseCars from "./components/UserSide/CategorywiseCars";
 import CarouselList from "./components/AdminSide/CarouselList";
 import CarouselRegister from "./components/AdminSide/CarouselRegister";
+import EditCarousel from "./components/AdminSide/EditCarousel";
+import GoogleSignUpForm from "./components/UserSide/GoogleSignUpForm";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
@@ -83,6 +86,8 @@ function App() {
           />
           <Route path="/admin/carousels" element={<CarouselList/>}/>
           <Route path="/addnewcarousel" element={<CarouselRegister/>}/>
+          <Route path="/editcarousel/:carouselId" element={<EditCarousel/>}/>
+          <Route path="/googlesignupform/:email" element={<GoogleSignUpForm/>}/>
         </Routes>
       </Router>
     </div>

@@ -20,7 +20,7 @@ const Header = () => {
     <div>
       <header className="bg-white flex">
         <div className="flex  ">
-          <div className="logo ">
+          <div className="logo ml-5 ">
             <img src={logo} alt="Logo" /> {/* Use the logo image here */}
           </div>
 
@@ -31,7 +31,8 @@ const Header = () => {
                   <a href="/usershome">Home</a>
                 </li>
                 <li className="ml-5 cursor-pointer ">
-                  <a onClick={()=>navigate('/allcars')}>Cars</a>
+                  {/* <a onClick={()=>navigate('/allcars')}>Cars</a> */}
+                  <a href="/allcars">Cars</a>
                 </li>
                 <li className="ml-5">
                   <a href="/offers">Offers</a>

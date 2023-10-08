@@ -40,7 +40,7 @@ function UserLogin() {
         userData
       );
       // console.log(response, "--------Frontend User Login Response");
-      console.log(response.data,"-----response.data.........");
+      console.log(response.data, "-----response.data.........");
       if (response.data.message === "Valid User") {
         // Set values in localStorage
         localStorage.setItem("token", response.data.token);
@@ -86,8 +86,41 @@ function UserLogin() {
       localStorage.setItem("userId", response.data.userId);
       navigate("/");
     }
-    if (response.data.message === "Invalid User") navigate("/login");
+    if (response.data.message === "Invalid User") navigate(`/googlesignupform/${response.data.email}`);
+    toast("User is not Registered, So Please SignUp")
   };
+
+  // const handleGoogleSignup = async (credentialResponse) => {
+  //   // Decode the credential response to extract the email
+  //   const credentialResponseDecoded = jwt_decode(credentialResponse.credential);
+  //   console.log(credentialResponseDecoded, "credential response decoded");
+  
+  //   if (credentialResponseDecoded) {
+  //     const email = credentialResponseDecoded.email;
+      
+  //     try {
+  //       const response = await axios.post(
+  //         "http://localhost:5000/user/verifyGoogleSignup",
+  //         { email }
+  //       );
+  
+  //       // Check the response message from the backend
+  //       if (response.data.message === "User have already Registered") {
+  //         navigate("/login");
+  //         toast("User have already Registered,Please login normaly or with google ")
+  //       } else if (response.data.message === "Open google sign up registration form") {
+  //         // Navigate to the Google signup form page
+  //         navigate(`/googlesignupform/${email}`);
+  //       } else {
+  //         console.error("Unknown response from server:", response.data.message);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error during Google signup:", error.message);
+  //     }
+  //   }
+  // };
+  
+
 
   return (
     <div
@@ -197,6 +230,13 @@ function UserLogin() {
             >
               Sign Up
             </Link>
+            {/* <div>
+              <GoogleLogin
+                buttonText="Sign Up with Google" 
+                onSuccess={(credentialResponse) => handleGoogleSignup(credentialResponse)} 
+                onError={() => console.log("Google Sign Up Failed")} 
+              />
+            </div> */}
           </div>
         </div>
       </div>

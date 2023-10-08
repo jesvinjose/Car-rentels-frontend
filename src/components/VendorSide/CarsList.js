@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import VendorHeader from "./VendorHeader";
 import { Link } from "react-router-dom";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
+
   const carTypes = ["Standard", "Economy", "Luxury"];
   const fuelTypes = ["Petrol", "Diesel"];
   const gearTypes = ["Manual", "Automatic"];
   const [carDataForm, setCarDataForm] = useState(carDataToEdit[0]);
-  // console.log(carDataForm);
+  console.log(carDataForm,"hi modal");
   const [rcImageDataUrl, setRcImageDataUrl] = useState(
     carDataToEdit[0].rcImage
   );
@@ -46,7 +50,7 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
       // console.log(response.data.message, "from editCarDetails to frontend");
       if (response.data.message === "Car updated successfully")
         // console.log("Car updated successfully!");
-      onCarUpdate(updatedCarDataForm); // Notify the parent component of the update
+        onCarUpdate(updatedCarDataForm); // Notify the parent component of the update
       closeModal();
     } catch (error) {
       console.error("Error updating the car:", error);
@@ -96,11 +100,41 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
   };
 
   // console.log(carImageDataUrl, "---------carImage--------");
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      container: 'map',
+      // style: 'mapbox://styles/mapbox/streets-v11',
+      style:'mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3',
+      center: [carDataForm.carLocation.longitude, carDataForm.carLocation.latitude],
+      zoom: 12,
+    });
+  
+    // Add a marker for the car's location
+    new mapboxgl.Marker().setLngLat([carDataForm.carLocation.longitude, carDataForm.carLocation.latitude]).addTo(map);
+  
+    // Event listener to update latitude and longitude on map click
+    map.on('click', (e) => {
+      const { lng, lat } = e.lngLat;
+      setCarDataForm((prevDetails) => ({
+        ...prevDetails,
+        carLocation: {
+          ...prevDetails.carLocation,
+          latitude: lat,
+          longitude: lng,
+        },
+      }));
+    });
+  
+    return () => {
+      map.remove(); // Clean up the map on component unmount
+    };
+  }, [carDataForm.carLocation.longitude, carDataForm.carLocation.latitude]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg max-w-md w-full overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4 text-center">Car Details</h2>
+        <div id="map" className="map-container mb-4" style={{ width: '100%', height: '100px', backgroundColor: 'gray' }}></div>
         <form>
           <div className="grid grid-cols-4 gap-4 mb-4">
             <div>
@@ -374,11 +408,11 @@ const CarsList = () => {
   const [carData, setCarData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCarData, setSelectedCarData] = useState(null);
-  const vendorId=localStorage.getItem("vendorId")
+  const vendorId = localStorage.getItem("vendorId");
 
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
   const fetchData = async () => {
     try {
@@ -433,6 +467,10 @@ const CarsList = () => {
     );
   };
 
+  useEffect(()=>{
+
+  },[carData])
+
   return (
     <div>
       <VendorHeader />
@@ -480,6 +518,22 @@ const CarsList = () => {
                       </th>
                       <th
                         scope="col"
+                        className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                      >
+                        <button className="flex items-center gap-x-2">
+                          <span>Verification Status</span>
+                          <svg
+                            className="h-3"
+                            viewBox="0 0 10 11"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            {/* Your SVG icon here */}
+                          </svg>
+                        </button>
+                      </th>
+                      <th
+                        scope="col"
                         className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
                         Hourly Rental Rate
@@ -507,6 +561,9 @@ const CarsList = () => {
                         </td>
                         <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
                           {car.modelName}
+                        </td>
+                        <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
+                          {car.verificationStatus}
                         </td>
                         <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {car.hourlyRentalRate}
