@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance'
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import bgImage from '../../assets/ownacar.png'
@@ -17,8 +18,8 @@ const PasswordReset4Vendor = () => {
     event.preventDefault();
     console.log(password);
     console.log(confirmPassword);
-    const response = await axios.post(
-      "http://localhost:5000/vendor/confirmPasswordReset4Vendor",
+    const response = await axiosInstance.post(
+      "/vendor/confirmPasswordReset4Vendor",
       {
         emailId,
         password,

@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance'
 import AdminHeader from "./AdminHeader";
 
-
-const VendorDetailsModal = ({ vendorDetails, closeModal,vendorData,setVendorData }) => {
+const VendorDetailsModal = ({
+  vendorDetails,
+  closeModal,
+  vendorData,
+  setVendorData,
+}) => {
   // console.log(
   //   vendorDetails,
   //   ">>>>>>>>>y=userrrrrrrrrrrrrrrrrrrrrr>>>>>>>>>>>>.."
   // );
-  const handleAccept=async(id)=>{
-    console.log("vendorId:"+id);
+  const handleAccept = async (id) => {
+    console.log("vendorId:" + id);
     console.log("inside handle Accept");
-    const res = await axios.put(`http://localhost:5000/admin/vendorVerificationAccept/${id}`);
-    console.log(res,"return response");
-    if(res.data.message==="Vendor Account is Accepted"){
+    const res = await axiosInstance.put(
+      `/admin/vendorVerificationAccept/${id}`
+    );
+    console.log(res, "return response");
+    if (res.data.message === "Vendor Account is Accepted") {
       // setUserData()
-      const updatedVendorData = vendorData.map(vendor => {
+      const updatedVendorData = vendorData.map((vendor) => {
         if (vendor._id === id) {
           return { ...vendor, verificationStatus: "Approved" };
         }
@@ -24,15 +31,17 @@ const VendorDetailsModal = ({ vendorDetails, closeModal,vendorData,setVendorData
       setVendorData(updatedVendorData);
       console.log("vendor is verified successfully by the admin");
     }
-  }
+  };
 
-  const handleReject=async(id)=>{
-    console.log("vendorId:"+id);
+  const handleReject = async (id) => {
+    console.log("vendorId:" + id);
     console.log("inside handle Reject");
-    const res = await axios.put(`http://localhost:5000/admin/vendorVerificationReject/${id}`);
-    console.log(res,"return response");
-    if(res.data.message==="Vendor Account is Rejected"){
-      const updatedVendorData = vendorData.map(vendor => {
+    const res = await axiosInstance.put(
+      `/admin/vendorVerificationReject/${id}`
+    );
+    console.log(res, "return response");
+    if (res.data.message === "Vendor Account is Rejected") {
+      const updatedVendorData = vendorData.map((vendor) => {
         if (vendor._id === id) {
           return { ...vendor, verificationStatus: "Rejected" };
         }
@@ -41,12 +50,14 @@ const VendorDetailsModal = ({ vendorDetails, closeModal,vendorData,setVendorData
       setVendorData(updatedVendorData);
       console.log("vendor is rejected successfully by the admin");
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50  ">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-1/2 ">
-        <h2 className="text-xl font-semibold mb-4 text-center">Vendor Details</h2>
+        <h2 className="text-xl font-semibold mb-4 text-center">
+          Vendor Details
+        </h2>
         <div className="flex justify-evenly">
           <p>
             <strong>First Name:</strong> {vendorDetails[0].firstName}
@@ -81,21 +92,20 @@ const VendorDetailsModal = ({ vendorDetails, closeModal,vendorData,setVendorData
             />
           </p>
         </div>
-        <div className="flex justify-evenly">
-        <button
-          onClick={()=>handleAccept(vendorDetails[0]._id)}
-          className="mt-6 w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700"
-        >
-          Accept
-        </button>
-        <button
-          onClick={()=>handleReject(vendorDetails[0]._id)}
-          className="mt-6 w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
-        >
-          Reject
-        </button>
-
-        </div>
+        {/* <div className="flex justify-evenly">
+          <button
+            onClick={() => handleAccept(vendorDetails[0]._id)}
+            className="mt-6 w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() => handleReject(vendorDetails[0]._id)}
+            className="mt-6 w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
+          >
+            Reject
+          </button>
+        </div> */}
 
         <button
           onClick={closeModal}
@@ -104,20 +114,24 @@ const VendorDetailsModal = ({ vendorDetails, closeModal,vendorData,setVendorData
           Close
         </button>
       </div>
-
     </div>
   );
 };
-
 
 const VendorsList = () => {
   const [vendorData, setVendorData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVendorDetails, setSelectedVendorDetails] = useState(null);
+  const adminToken=localStorage.getItem('adminToken');
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/admin/vendorslist")
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    axiosInstance
+      .get("/admin/vendorslist",config)
       .then((response) => {
         // Check if the response data is an array before setting the state
         console.log(response.data);
@@ -136,9 +150,14 @@ const VendorsList = () => {
   }, []);
 
   const handleBlock = async (id) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
     console.log("Handling block for vendor with id:", id);
-    const res = await axios.put(
-      `http://localhost:5000/admin/vendorblock/${id}`
+    const res = await axiosInstance.put(
+      `/admin/vendorblock/${id}`,null, config
     );
     console.log(id);
 
@@ -153,8 +172,13 @@ const VendorsList = () => {
   const handleUnblock = async (id) => {
     console.log(id, "");
     console.log("hellooooooooooooooooooooooo");
-    const resss = await axios.put(
-      `http://localhost:5000/admin/vendorunblock/${id}`
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    const resss = await axiosInstance.put(
+      `/admin/vendorunblock/${id}`,null, config
     );
     console.log(id);
 
@@ -208,22 +232,12 @@ const VendorsList = () => {
                           <span>EmailId</span>
                         </div>
                       </th>
-                      <th
+                      {/* <th
                         scope="col"
-                        className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
-                        <button className="flex items-center gap-x-2">
-                          <span>Verification Status</span>
-                          <svg
-                            className="h-3"
-                            viewBox="0 0 10 11"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            {/* Your SVG icon here */}
-                          </svg>
-                        </button>
-                      </th>
+                        Verification Status
+                      </th> */}
                       <th
                         scope="col"
                         className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
@@ -253,9 +267,9 @@ const VendorsList = () => {
                         <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {vendor.emailId}
                         </td>
-                        <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
+                        {/* <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
                           {vendor.verificationStatus}
-                        </td>
+                        </td> */}
                         <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {vendor.mobileNumber}
                         </td>
@@ -263,9 +277,10 @@ const VendorsList = () => {
                           {new Date(vendor.createdAt).toLocaleString()}
                         </td>
                         <td className="pr-4 py-3 text-sm font-medium text-right">
-                          <button 
-                          onClick={() => handleViewDetails(vendor._id)}
-                          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600">
+                          <button
+                            onClick={() => handleViewDetails(vendor._id)}
+                            className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600"
+                          >
                             View Details
                           </button>
                           {vendor.blockStatus ? (

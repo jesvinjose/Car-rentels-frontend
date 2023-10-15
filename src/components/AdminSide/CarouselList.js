@@ -1,20 +1,35 @@
 import React, { useState, useEffect } from "react";
 import AdminHeader from "./AdminHeader";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance' 
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const CarouselList = () => {
   const navigate = useNavigate();
   const [carouselData, setCarouselData] = useState([]);
+  const adminToken = localStorage.getItem("adminToken");
 
   useEffect(() => {
     fetchCarouselData();
-  },[]);
+  }, []);
+
+  useEffect(()=>{
+
+  },[carouselData])
 
   const fetchCarouselData = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+      },
+    };
     try {
-      const response = await axios.get("http://localhost:5000/admin/carouselslist");
+      const response = await axiosInstance.get(
+        "/admin/carouselslist",
+        config
+      );
       if (Array.isArray(response.data)) {
         setCarouselData(response.data);
       } else {
@@ -27,7 +42,16 @@ const CarouselList = () => {
 
   const handleBlock = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/admin/carouselblock/${id}`);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+        },
+      };
+      await axiosInstance.put(
+        `/admin/carouselblock/${id}`,
+        null,
+        config
+      );
       const updatedCarousel = carouselData.map((i) =>
         i._id === id ? { ...i, blockStatus: true } : i
       );
@@ -39,7 +63,16 @@ const CarouselList = () => {
 
   const handleUnblock = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/admin/carouselunblock/${id}`);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+        },
+      };
+      await axiosInstance.put(
+        `/admin/carouselunblock/${id}`,
+        null,
+        config
+      );
       const updatedCarousel = carouselData.map((i) =>
         i._id === id ? { ...i, blockStatus: false } : i
       );
@@ -50,18 +83,26 @@ const CarouselList = () => {
   };
 
   const handleDelete = (carouselId) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this carousel?');
+    const confirmDelete = window.confirm("Are you sure you want to delete this carousel?");
     if (confirmDelete) {
-      axios.delete(`http://localhost:5000/admin/delete-carousel/${carouselId}`)
+      const config = {
+        headers: {
+          Authorization: `Bearer ${adminToken}`
+        }
+      };
+      axiosInstance
+        .delete(`/admin/delete-carousel/${carouselId}`,config)
         .then((response) => {
-          console.log('Carousel deleted successfully', response.data);
-          fetchCarouselData();
+          console.log("Carousel deleted successfully");
+          fetchCarouselData();  // Fetch updated carousel data
+          navigate("/admin/carousels");  // Navigate to the carousel page
         })
         .catch((error) => {
-          console.error('Error deleting carousel:', error);
+          console.error("Error deleting carousel:", error);
         });
     }
   };
+  
 
   return (
     <div>
@@ -96,7 +137,7 @@ const CarouselList = () => {
                           <span>Carousel Images</span>
                           {/* <svg className="h-3" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                             {/* Your SVG icon here */}
-                          {/* </svg> */} 
+                          {/* </svg> */}
                         </button>
                       </th>
                       <th className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -109,13 +150,22 @@ const CarouselList = () => {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
                     {carouselData.map((carousel) => (
-                      <tr key={carousel._id} className="bg-white dark:bg-gray-900">
+                      <tr
+                        key={carousel._id}
+                        className="bg-white dark:bg-gray-900"
+                      >
                         <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {carousel.carouselName}
                         </td>
                         <td>
                           {carousel.carouselImages.map((image, index) => (
-                            <img key={index} src={image} alt="" width="50px" height="50px" />
+                            <img
+                              key={index}
+                              src={image}
+                              alt=""
+                              width="50px"
+                              height="50px"
+                            />
                           ))}
                         </td>
                         <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
@@ -123,18 +173,35 @@ const CarouselList = () => {
                         </td>
                         <td className="pr-4 py-3 text-sm font-medium text-right">
                           {carousel.blockStatus ? (
-                            <button onClick={() => handleUnblock(carousel._id, "Enable")} className="ml-2 text-green-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600">
+                            <button
+                              onClick={() =>
+                                handleUnblock(carousel._id, "Enable")
+                              }
+                              className="ml-2 text-green-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
+                            >
                               Enable
                             </button>
                           ) : (
-                            <button onClick={() => handleBlock(carousel._id, "Disable")} className="ml-2 text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600">
+                            <button
+                              onClick={() =>
+                                handleBlock(carousel._id, "Disable")
+                              }
+                              className="ml-2 text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
+                            >
                               Disable
                             </button>
                           )}
-                          <a href={`/editcarousel/${carousel._id}`} className="btn btn-primary">
+                          <a
+                            href={`/editcarousel/${carousel._id}`}
+                            className="btn btn-primary"
+                          >
                             Edit
                           </a>
-                          <a href="#" className="btn btn-danger" onClick={() => handleDelete(carousel._id)}>
+                          <a
+                            href="#"
+                            className="btn btn-danger"
+                            onClick={() => handleDelete(carousel._id)}
+                          >
                             Delete
                           </a>
                         </td>

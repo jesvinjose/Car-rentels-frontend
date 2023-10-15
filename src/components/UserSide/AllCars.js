@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.css"; // Import Font Awesome CSS
+import categoryicon from "../../assets/categoryicon.png";
+import gearbox from "../../assets/gearbox.png";
+import gasstation from "../../assets/gas-station.png";
+import axiosInstance from "../../api/axiosInstance";
+import SearchBar from "./SeachBar";
 
 const AllCars = () => {
   const [allcars, setAllCars] = useState([]);
   const [search, setSearch] = useState(""); // Search term
   const [carTypes, setCarTypes] = useState([]); // Selected car types
   const [gearTypes, setGearTypes] = useState([]); // Selected gear types
-
+  const [fuelTypes, setFuelTypes] = useState([]);
   const [sortPriceLowToHigh, setSortPriceLowToHigh] = useState(false); // Sort by price: low to high
   const [sortPriceHighToLow, setSortPriceHighToLow] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,68 +23,6 @@ const AllCars = () => {
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = allcars.slice(indexOfFirstCar, indexOfLastCar);
-
-  // const handleGearTypeChange = async (type) => {
-  //   // If the selected type is already in gearTypes, unselect it
-  //   setGearTypes((prevTypes) => (prevTypes.includes(type) ? [] : [type]));
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:5000/user/Geartype?gearType=${type}`
-  //     );
-  //     console.log("Response from backend:", response.data);
-  //     if (Array.isArray(response.data)) {
-  //       setAllCars(response.data);
-  //     }
-  //     console.log(allcars);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // const handleFuelTypeChange = async (type) => {
-  //   // If the selected type is already in fuelTypes, unselect it
-  //   setFuelTypes((prevTypes) => (prevTypes.includes(type) ? [] : [type]));
-  //   try {
-  //     const response=await axios.get(`http://localhost:5000/user/Fueltype?fuelType=${type}`)
-  //     console.log("Response from backend:", response.data);
-  //     if (Array.isArray(response.data)) {
-  //       setAllCars(response.data);
-  //     }
-  //     console.log(allcars);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  const [fuelTypes, setFuelTypes] = useState([]);
-
-
-  // const handleCarTypeChange = async (type) => {
-  //   // If the selected type is already in carTypes, unselect it
-  //   setCarTypes((prevTypes) => (prevTypes.includes(type) ? [] : [type]));
-  //   try {
-  //     let response;
-  //     // If no car types are selected, fetch all cars
-  //     if (carTypes.length === 0) {
-  //       response = await axios.get("http://localhost:5000/user/allcars");
-  //       // console.log("Response from backend:", response.data);
-  //       // if (Array.isArray(response.data)) {
-  //       //   setAllCars(response.data);
-  //       // }
-  //     } else {
-  //       response = await axios.get(
-  //         `http://localhost:5000/user/carsbycartype?carType=${type}`
-  //       );
-  //       console.log("Response from backend:", response.data);
-  //       if (Array.isArray(response.data)) {
-  //         setAllCars(response.data);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
 
   useEffect(() => {
     console.log("Updated allcars:", allcars); // Log allcars whenever it changes
@@ -105,58 +48,24 @@ const AllCars = () => {
     console.log("Updated sortPriceHighToLow:", sortPriceHighToLow);
   }, [sortPriceHighToLow]);
 
-  const handleSortPriceLowToHighChange = async () => {
-    const newSortPriceLowToHigh = !sortPriceLowToHigh; // Toggle the sort
-    setSortPriceLowToHigh(newSortPriceLowToHigh); // Update the state
-    setSortPriceHighToLow(false); // Always set high to low to false when changing low to high
-
-    const sortType = newSortPriceLowToHigh ? "asc" : "desc"; // Determine the sort type
-
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/user/SortAscentingType?SortAscentingType=${sortType}`
-      );
-      // console.log(response.data, "-----received from backend to frontend");
-      if (Array.isArray(response.data)) {
-        // console.log(response.data,"---------------");
-        setAllCars(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const handleSortPriceHighToLowChange = async () => {
-    const newSortPriceHighToLow = !sortPriceHighToLow; // Toggle the sort
-    setSortPriceHighToLow(newSortPriceHighToLow); // Update the state
-    setSortPriceLowToHigh(false); // Always set high to low to false when changing low to high
-
-    const sortType = newSortPriceHighToLow ? "desc" : "asc"; // Determine the sort type
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/user/SortDescentingType?SortDescentingType=${sortType}`
-      );
-      // console.log(response.data, "-----received from backend to frontend");
-      if (Array.isArray(response.data)) {
-        // console.log(response.data,"---------------");
-        setAllCars(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // useEffect(() => {
+  //   console.log("Updated sortPriceHighToLow:", search);
+  // }, [search]);
 
   const handleSearch = async () => {
     try {
+      console.log(search, "search in frontend");
       await handleSelection(search, carTypes, gearTypes, fuelTypes, sortTypes);
     } catch (error) {
-      console.error('Error searching:', error);
+      console.error("Error searching:", error);
     }
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/user/allcars")
+    axiosInstance
+      .get("/user/allcars")
+      // axios
+      //   .get("http://localhost:5000/user/allcars")
       .then((response) => {
         if (Array.isArray(response.data)) {
           setAllCars(response.data);
@@ -192,8 +101,6 @@ const AllCars = () => {
     </li>
   ));
 
-
-
   const handleFuelTypeChange = async (type) => {
     let updatedFuelTypes = "";
 
@@ -203,7 +110,7 @@ const AllCars = () => {
     } else {
       updatedFuelTypes = type;
     }
-  
+
     setFuelTypes(updatedFuelTypes);
 
     // Call handleSelection with updated fuelTypes
@@ -216,13 +123,13 @@ const AllCars = () => {
     );
   };
 
-  const handleGearTypeChange=async(type)=>{
-    let updatedGearTypes="";
+  const handleGearTypeChange = async (type) => {
+    let updatedGearTypes = "";
     // If the selected type is already in gearTypes, unselect it
-    if(gearTypes===type){
-      updatedGearTypes="";
-    }else{
-      updatedGearTypes=type;
+    if (gearTypes === type) {
+      updatedGearTypes = "";
+    } else {
+      updatedGearTypes = type;
     }
     setGearTypes(updatedGearTypes);
     await handleSelection(
@@ -232,15 +139,15 @@ const AllCars = () => {
       fuelTypes,
       sortTypes
     );
-  }
+  };
 
-  const handleCarTypeChange=async(type)=>{
-    let updatedCarTypes="";
+  const handleCarTypeChange = async (type) => {
+    let updatedCarTypes = "";
     // If the selected type is already in gearTypes, unselect it
-    if(carTypes===type){
-      updatedCarTypes="";
-    }else{
-      updatedCarTypes=type;
+    if (carTypes === type) {
+      updatedCarTypes = "";
+    } else {
+      updatedCarTypes = type;
     }
     setCarTypes(updatedCarTypes);
     await handleSelection(
@@ -250,15 +157,14 @@ const AllCars = () => {
       fuelTypes,
       sortTypes
     );
+  };
 
-  }
-
-  const handleSortTypeChange=async(type)=>{
-    let updatedSortTypes="";
-    if(sortTypes===type){
-      updatedSortTypes="";
-    }else{
-      updatedSortTypes=type;
+  const handleSortTypeChange = async (type) => {
+    let updatedSortTypes = "";
+    if (sortTypes === type) {
+      updatedSortTypes = "";
+    } else {
+      updatedSortTypes = type;
     }
     setSortTypes(updatedSortTypes);
     await handleSelection(
@@ -268,7 +174,7 @@ const AllCars = () => {
       fuelTypes,
       updatedSortTypes
     );
-  }
+  };
 
   const handleSelection = async (
     search,
@@ -284,6 +190,11 @@ const AllCars = () => {
       if (search) {
         url += `?search=${search}`;
       }
+
+      // Add pickupDate and returnDate to the URL
+      // if(searchInitiated)
+      // url += `?pickupDate=${pickupDate}&returnDate=${returnDate}`;
+
       if (carTypes) {
         url += search ? `&carTypes=${carTypes}` : `?carTypes=${carTypes}`;
       }
@@ -315,125 +226,234 @@ const AllCars = () => {
     }
   };
 
+  //----------------------------
+
+  const handleBooking = async (carId) => {
+    const userId = localStorage.getItem("userId");
+    const pickupDateObj = new Date(pickupDate);
+    const returnDateObj = new Date(returnDate);
+    const bookingData = {
+      pickupDate: pickupDate,
+      returnDate: returnDate,
+      userId: userId,
+      Amount: (returnDateObj - pickupDateObj) / (1000 * 60 * 60 * 24), // Calculate the difference in days
+    };
+    try {
+      await axiosInstance.post("/user/carbooking", {
+        carId: carId, // Pass the carId in the correct structure
+        bookingData: bookingData, // Pass the bookingData in the correct structure
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = async (pickupDate, returnDate) => {
+    console.log(pickupDate, "pickupDate");
+    setSearchInitiated(true); // Set search initiated flag to true
+    try {
+      console.log(pickupDate, returnDate, "inside handleSubmit");
+      // Send a POST request to the server to get available cars
+      const response = await axios.post(
+        "http://localhost:5000/user/availableCars",
+        {
+          pickupDate,
+          returnDate,
+        }
+      );
+      if (response) {
+        // Update the availableCars state with the response data
+        setAllCars(response.data);
+
+        // console.log(availableCars);
+        // navigate("/available_cars");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  const handlePickupDateChange = (e) => {
+    const selectedDate = e.target.value;
+    setPickupDate(selectedDate);
+
+    // Set return date to be at least the pickup date
+    const minReturnDate = new Date(selectedDate);
+    minReturnDate.setDate(minReturnDate.getDate());
+    setReturnDate(minReturnDate.toISOString().split("T")[0]);
+  };
+
+  const today = new Date().toISOString().split("T")[0];
+  const [searchInitiated, setSearchInitiated] = useState(false);
+  // const [availableCars, setAvailableCars] = useState([]);
+  // const navigate = useNavigate();
+  const [pickupDate, setPickupDate] = useState(today);
+  const [returnDate, setReturnDate] = useState(today);
+  // const [searchInitiated, setSearchInitiated] = useState(false);
+  // const [availableCars, setAvailableCars] = useState([]);
+  // const navigate = useNavigate();
+
+  //-----------------------
+
+  useEffect(() => {}, [searchInitiated]);
+
   return (
     <div>
       <Header />
+      {/*  */}
+      {/* <SearchBar handleSubmit={handleSubmit} /> */}
+      {/*  */}
+      <div className="border border-black p-4 bg-lime-300 flex flex-col md:flex-row justify-center items-center mt-3">
+        <label>Pickup Date:</label>
+        <input
+          type="date"
+          className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-4 py-2"
+          placeholder="Pickup Date"
+          value={pickupDate}
+          onChange={handlePickupDateChange}
+          min={today} // Set min to today's date
+          required
+        />
+
+        <label>Return Date: </label>
+        <input
+          type="date"
+          className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-4 py-2"
+          placeholder="Return Date"
+          value={returnDate}
+          onChange={(e) => setReturnDate(e.target.value)}
+          min={pickupDate} // Set min to the return date
+          required
+        />
+
+        <button
+          onClick={() => handleSubmit(pickupDate, returnDate)}
+          className="bg-green-500 border border-black rounded-lg px-4 py-2 mb-2 ml-4 text-white hover:bg-green-600 cursor-pointer"
+        >
+          Search
+        </button>
+      </div>
+
       {/* Search form */}
       {/* Search, Filter, and Sort in a single row */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        {/* Search form */}
-        <form className="w-25">
-          <input
-            className="form-control me-2"
-            type="search"
-            placeholder="Search car model"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <button
-            className="btn btn-outline-success"
-            type="submit"
-            onClick={handleSearch}
+      {searchInitiated ? null : (
+        <div className="flex justify-content-between align-items-center mb-4 mt-5">
+          {/* Search form */}
+          <form
+            className="w-25 flex"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
           >
-            Search
-          </button>
-        </form>
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search car model"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <button className="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
 
-        {/* Filter options */}
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          {/* Car type filters */}
-          <div>
-            <h5>Car Types:</h5>
-            <label>
-              <input
-                type="checkbox"
-                checked={carTypes.includes("Standard")}
-                onChange={() => handleCarTypeChange("Standard")}
-              />
-              Standard
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={carTypes.includes("Economy")}
-                onChange={() => handleCarTypeChange("Economy")}
-              />
-              Economy
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={carTypes.includes("Luxury")}
-                onChange={() => handleCarTypeChange("Luxury")}
-              />
-              Luxury
-            </label>
-          </div>
+          {/* Filter options */}
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            {/* Car type filters */}
+            <div>
+              <h5>Car Types:</h5>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={carTypes.includes("Standard")}
+                  onChange={() => handleCarTypeChange("Standard")}
+                />
+                Standard
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={carTypes.includes("Economy")}
+                  onChange={() => handleCarTypeChange("Economy")}
+                />
+                Economy
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={carTypes.includes("Luxury")}
+                  onChange={() => handleCarTypeChange("Luxury")}
+                />
+                Luxury
+              </label>
+            </div>
 
-          {/* Gear type filters */}
-          <div className="ml-10">
-            <h5>Gear Types:</h5>
-            <label>
-              <input
-                type="checkbox"
-                checked={gearTypes.includes("Manual")}
-                onChange={() => handleGearTypeChange("Manual")}
-              />
-              Manual
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={gearTypes.includes("Automatic")}
-                onChange={() => handleGearTypeChange("Automatic")}
-              />
-              Automatic
-            </label>
-          </div>
+            {/* Gear type filters */}
+            <div className="ml-10">
+              <h5>Gear Types:</h5>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={gearTypes.includes("Manual")}
+                  onChange={() => handleGearTypeChange("Manual")}
+                />
+                Manual
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={gearTypes.includes("Automatic")}
+                  onChange={() => handleGearTypeChange("Automatic")}
+                />
+                Automatic
+              </label>
+            </div>
 
-          {/* Fuel type filters */}
-          <div className="ml-10">
-            <h5>Fuel Types:</h5>
-            <label>
-              <input
-                type="checkbox"
-                checked={fuelTypes.includes("Petrol")}
-                onChange={() => handleFuelTypeChange("Petrol")}
-              />
-              Petrol
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={fuelTypes.includes("Diesel")}
-                onChange={() => handleFuelTypeChange("Diesel")}
-              />
-              Diesel
-            </label>
-          </div>
+            {/* Fuel type filters */}
+            <div className="ml-10">
+              <h5>Fuel Types:</h5>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={fuelTypes.includes("Petrol")}
+                  onChange={() => handleFuelTypeChange("Petrol")}
+                />
+                Petrol
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={fuelTypes.includes("Diesel")}
+                  onChange={() => handleFuelTypeChange("Diesel")}
+                />
+                Diesel
+              </label>
+            </div>
 
-          {/* Sort option */}
-          <div className="ml-10">
-            <h5>Sort:</h5>
-            <label>
-              <input
-                type="checkbox"
-                checked={sortTypes.includes("sortPriceLowToHigh")}
-                onChange={()=>handleSortTypeChange("sortPriceLowToHigh")}
-              />
-              Price: Low to High
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={sortTypes.includes("sortPriceHighToLow")}
-                onChange={()=>handleSortTypeChange("sortPriceHighToLow")}
-              />
-              Price: High to Low
-            </label>
+            {/* Sort option */}
+            <div className="ml-10">
+              <h5>Sort:</h5>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={sortTypes.includes("sortPriceLowToHigh")}
+                  onChange={() => handleSortTypeChange("sortPriceLowToHigh")}
+                />
+                Price: Low to High
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={sortTypes.includes("sortPriceHighToLow")}
+                  onChange={() => handleSortTypeChange("sortPriceHighToLow")}
+                />
+                Price: High to Low
+              </label>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div
         style={{
           width: "100%",
@@ -442,9 +462,7 @@ const AllCars = () => {
           alignItems: "center",
           justifyContent: "center",
         }}
-      >
-        <h1 className="header">Our Models</h1>
-      </div>
+      ></div>
 
       <div className="flex flex-wrap justify-center">
         {currentCars.map((car, index) => (
@@ -458,27 +476,85 @@ const AllCars = () => {
                   style={{ width: "400px", height: "200px" }}
                 />
 
-                <div className="px-6 py-4">
+                <div className="px-6 py-4 justify-between">
                   <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
                     {car.modelName}
                   </h1>
-                  {/* Add your p element here */}
-                  <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
-                    {/* Add your SVG and h1 elements here */}
+                  <div className="flex justify-evenly">
+                    <div>
+                      <img
+                        style={{ width: "50px", height: "50px" }}
+                        src={categoryicon}
+                        alt="categoryicon-preview"
+                      />
+                      <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
+                        {car.carTypeName}
+                      </h1>
+                    </div>
+                    <div>
+                      <img
+                        style={{ width: "50px", height: "50px" }}
+                        src={gasstation}
+                        alt="gasstation-preview"
+                      />
+                      <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
+                        {car.fuelType}
+                      </h1>
+                    </div>
+                    <div>
+                      <img
+                        style={{ width: "50px", height: "50px" }}
+                        src={gearbox}
+                        alt="gearbox-preview"
+                      />
+                      <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
+                        {car.gearBoxType}
+                      </h1>
+                    </div>
                   </div>
                   <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
-                    {/* Add your SVG and h1 elements here */}
-                  </div>
-                  <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
-                    <h1 className="px-2 text-sm">
+                    {/* <h1 className="px-2 text-sm">
                       {car.hourlyRentalRate}Rs/hr
+                    </h1> */}
+                    <h1 className="px-2 text-lg">
+                      Rental-Rate:{car.dailyRentalRate} Rs/day
                     </h1>
                     {/* <h1 className="px-2 text-sm">
-                      {car.dailyRentalRate}Rs/day
-                    </h1>
-                    <h1 className="px-2 text-sm">
                       {car.monthlyRentalRate}Rs/month
-                    </h1> */}
+                    </h1>  */}
+                    {/* <button className="border border-black w-28 rounded-lg bg-orange-500-100 hover:bg-orange-800-400 shadow-md">
+                      <a
+                        onClick={
+                          searchInitiated ? () => handleBooking(car._id) : null
+                        }
+                        href={
+                          searchInitiated
+                            ? null
+                            : `/car_details?carId=${car._id}`
+                        }
+                        className="btn_3"
+                      >
+                            {searchInitiated ? "Book Now" : "View Details"}
+                      </a>
+                    </button> */}
+                    <button className="border border-black w-28 rounded-lg bg-orange-500-100 hover:bg-orange-800-400 shadow-md">
+                      {searchInitiated ? (
+                        <a
+                          // onClick={() => handleBooking(car._id)}
+                          href={`/booking_details?carId=${car._id}&pickupDate=${pickupDate}&returnDate=${returnDate}`}
+                          className="btn_3"
+                        >
+                          Book Now
+                        </a>
+                      ) : (
+                        <a
+                          href={`/car_details?carId=${car._id}`}
+                          className="btn_3"
+                        >
+                          View Details
+                        </a>
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>

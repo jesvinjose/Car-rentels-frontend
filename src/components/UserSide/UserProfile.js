@@ -4,23 +4,34 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Profile from "../../assets/profile.png";
 import { useParams } from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
+
 const UserProfile = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
+  const usertoken = localStorage.getItem("token");
 
   useEffect(() => {
-    // Fetch user details based on userId
-    axios
-      .get(`http://localhost:5000/user/${userId}`)
+    const config = {
+      headers: {
+        Authorization: `Bearer ${usertoken}`, // Set the token in the headers
+      },
+    };
+    // Use axiosInstance instead of axios here
+    axiosInstance
+      .get(`user/${userId}`, config) // The baseURL will be appended due to the interceptor
       .then((response) => {
         setUserDetails(response.data.userDetails);
-        console.log(response.data.userDetails,"---------from Response-----------")
+        console.log(
+          response.data.userDetails,
+          "---------from Response-----------"
+        );
       })
       .catch((error) => {
         console.error("Error fetching user details:", error);
       });
-  }, [userId]);
-  console.log(userDetails,"----------userProfile console----------");
+  }, [userId, usertoken]);
+  console.log(userDetails, "----------userProfile console----------");
 
   return (
     <div>
@@ -55,10 +66,7 @@ const UserProfile = () => {
         <p>Loading user details...</p>
       )}
       {userDetails && (
-        <UpdateProfileDetails
-            userData={userDetails}
-            userId={userId}
-        />
+        <UpdateProfileDetails userData={userDetails} userId={userId} />
       )}
     </div>
   );

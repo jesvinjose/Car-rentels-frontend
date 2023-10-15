@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance';
 
 const UpdateProfileDetails = ({ userId, userData }) => {
   console.log(userData, "---------userData-----------");
@@ -17,6 +18,8 @@ const UpdateProfileDetails = ({ userId, userData }) => {
     lastName: userData.lastName,
     mobileNumber: userData.mobileNumber,
   });
+
+  const usertoken=localStorage.getItem('token')
 
   // Add state properties to hold image previews
   const [aadharFrontImagePreview, setAadharFrontImagePreview] = useState(
@@ -44,10 +47,17 @@ const UpdateProfileDetails = ({ userId, userData }) => {
     console.log(userDetails, "......frontend..........");
 
     try {
-      const response = await axios.post(
-        `http://localhost:5000/user/updateProfile/${userId}`,
-        userDetails
-      );
+      const config = {
+        headers: {
+          Authorization: `Bearer ${usertoken}`  // Set the token in the headers
+        }
+      };
+      // const response = await axios.post(
+      //   `http://localhost:5000/user/updateProfile/${userId}`,
+      //   userDetails,
+      //   config  // pass config as the third argument
+      // );
+      const response=await axiosInstance.post(`user/updateProfile/${userId}`,userDetails,config)
       console.log("User details updated:", response.data.user);
       alert("User details updated successfully!");
     } catch (error) {

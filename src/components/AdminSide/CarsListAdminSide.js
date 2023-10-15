@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance';
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -9,28 +10,46 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 const CarDetailsModal=({carDetails,closeModal,carsData,setCarsData})=>{
 
   const [vendorFirstName, setVendorFirstName] = useState("");
-
+  const [vendorAdharFrontImage, setVendorAdharFrontImage] = useState("");
+  const [vendorAdharBackImage, setVendorAdharBackImage] = useState("");
+  const adminToken=localStorage.getItem('adminToken');
   useEffect(() => {
-    const fetchVendorName = async () => {
+    const fetchVendorNameAndAdhar = async () => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,  // Set the token in the headers
+        }
+      };
       try {
-        const response = await axios.get(
-          `http://localhost:5000/admin/findVendorName/${carDetails[0].vendorId}`
+        const response = await axiosInstance.get(
+          `/admin/findVendorNameAndAdhar/${carDetails[0].vendorId}`,config
         );
         if (response.data.firstName) {
           setVendorFirstName(response.data.firstName);
+        }
+        if(response.data.aadharFrontImage){
+          setVendorAdharFrontImage(response.data.aadharFrontImage)
+        }
+        if(response.data.aadharBackImage){
+          setVendorAdharBackImage(response.data.aadharBackImage)
         }
       } catch (error) {
         console.error("Error fetching vendor name:", error);
       }
     };
 
-    fetchVendorName();
-  }, [carDetails]);
+    fetchVendorNameAndAdhar();
+  }, []);
 
   const handleAccept=async(id)=>{
     console.log("carId:"+id);
     console.log("inside handle Accept");
-    const res = await axios.put(`http://localhost:5000/admin/carrVerificationAccept/${id}`);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    const res = await axiosInstance.put(`/admin/carrVerificationAccept/${id}`,null,config);
     console.log(res,"return response");
     if(res.data.message==="Car is Accepted"){
       // setUserData()
@@ -48,7 +67,12 @@ const CarDetailsModal=({carDetails,closeModal,carsData,setCarsData})=>{
   const handleReject=async(id)=>{
     console.log("carId:"+id);
     console.log("inside handle Reject");
-    const res = await axios.put(`http://localhost:5000/admin/carrVerificationReject/${id}`);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    const res = await axiosInstance.put(`/admin/carrVerificationReject/${id}`,null,config);
     console.log(res,"return response");
     if(res.data.message==="Car is Rejected"){
       // setUserData()
@@ -62,6 +86,8 @@ const CarDetailsModal=({carDetails,closeModal,carsData,setCarsData})=>{
       console.log("car is rejected successfully by the admin");
     }
   }
+
+  useEffect(()=>{},[carDetails])
 
 
   useEffect(() => {
@@ -81,7 +107,7 @@ const CarDetailsModal=({carDetails,closeModal,carsData,setCarsData})=>{
         .setLngLat([longitude, latitude])
         .addTo(map);
     }
-  }, [carDetails]);
+  }, []);
   
 
 
@@ -163,6 +189,22 @@ const CarDetailsModal=({carDetails,closeModal,carsData,setCarsData})=>{
               style={{ maxWidth: "100%", maxHeight: "100px" }}
             />
           </p>
+          <p>
+            <strong>Adhar Front Image</strong>
+            <img
+              src={vendorAdharFrontImage}
+              alt="Adhar Front Image Preview"
+              style={{ maxWidth: "100%", maxHeight: "100px" }}
+            />
+          </p>
+          <p>
+            <strong>Adhar Back Image</strong>
+            <img
+              src={vendorAdharBackImage}
+              alt="Adhar Back Image Preview"
+              style={{ maxWidth: "100%", maxHeight: "100px" }}
+            />
+          </p>
         </div>
 
         <div className="flex justify-evenly">
@@ -198,9 +240,16 @@ const CarsListAdminSide = () => {
   const [isModalOpen,setIsModalOpen]=useState(false);
   const [selectedCarDetails,setSelectedCarDetails]=useState(null);
 
+  const adminToken=localStorage.getItem('adminToken');
+
   useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
     axios
-      .get("http://localhost:5000/admin/carslist")
+      .get("http://localhost:5000/admin/carslist",config)
       .then((response) => {
         if (Array.isArray(response.data)) {
           setCarsData(response.data);
@@ -214,11 +263,18 @@ const CarsListAdminSide = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [carsData]);
+  }, []);
   console.log(carsData);
 
+  useEffect(()=>{},[carsData])
+
   const handleBlock = async (id) => {
-    const res = await axios.put(`http://localhost:5000/admin/carblock/${id}`);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    const res = await axios.put(`http://localhost:5000/admin/carblock/${id}`,null,config);
     // console.log(id);
 
     console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -233,8 +289,13 @@ const CarsListAdminSide = () => {
   const handleUnblock = async (id) => {
     console.log(id, "");
     console.log("hellooooooooooooooooooooooo");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
     const resss = await axios.put(
-      `http://localhost:5000/admin/carunblock/${id}`
+      `http://localhost:5000/admin/carunblock/${id}`,null,config
     );
     console.log(id);
 

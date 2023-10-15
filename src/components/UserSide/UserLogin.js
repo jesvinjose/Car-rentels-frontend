@@ -9,9 +9,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { USER_INFO } from "../../redux/actions/types";
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
+import axiosInstance from '../../api/axiosInstance';
 
 function UserLogin() {
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId")
   useEffect(() => {
+    if(userId){
+      navigate('/')
+    }
     const urlParams = new URLSearchParams(window.location.search).get(
       "redirectFrom"
     );
@@ -25,7 +31,7 @@ function UserLogin() {
 
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -35,8 +41,8 @@ function UserLogin() {
         emailId: emailId,
         password: password,
       };
-      const response = await axios.post(
-        "http://localhost:5000/user/verifyUserLogin",
+      const response = await axiosInstance.post(
+        "/user/verifyUserLogin",
         userData
       );
       // console.log(response, "--------Frontend User Login Response");
@@ -73,8 +79,8 @@ function UserLogin() {
     console.log(credentialResponseDecoded.email);
     let email = { email: credentialResponseDecoded.email };
     console.log(email);
-    const response = await axios.post(
-      "http://localhost:5000/user/verifyGoogleLogin",
+    const response = await axiosInstance.post(
+      "/user/verifyGoogleLogin",
       email
     );
     console.log(response, "--------response-----------");

@@ -43,7 +43,7 @@ const CarTypes = () => {
             </div>
             <div className="single_product_content font-serif ml-4 mb-2">
               <h2>
-                <a href="single-product">{carType.name} Collection</a>
+                <p>{carType.name} Collection</p>
               </h2>
 
               <button className="border border-black w-28 rounded-lg bg-lime-100 hover:bg-lime-400 shadow-md">

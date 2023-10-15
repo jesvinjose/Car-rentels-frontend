@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance';
 import AdminHeader from "./AdminHeader";
 
-
-const UserDetailsModal = ({ userDetails, closeModal,userData,setUserData }) => {
+const UserDetailsModal = ({
+  userDetails,
+  closeModal,
+  userData,
+  setUserData,
+}) => {
   // console.log(
   //   userDetails,
   //   ">>>>>>>>>y=userrrrrrrrrrrrrrrrrrrrrr>>>>>>>>>>>>.."
   // );
   // const [userData, setUserData] = useState(userDetails[0]);
-  const handleAccept=async(id)=>{
-    console.log("userId:"+id);
+  const handleAccept = async (id) => {
+    console.log("userId:" + id);
     console.log("inside handle Accept");
-    const res = await axios.put(`http://localhost:5000/admin/userVerificationAccept/${id}`);
-    console.log(res,"return response");
-    if(res.data.message==="User Account is Accepted"){
+    const res = await axiosInstance.put(
+      `/admin/userVerificationAccept/${id}`
+    );
+    console.log(res, "return response");
+    if (res.data.message === "User Account is Accepted") {
       // setUserData()
-      const updatedUserData = userData.map(user => {
+      const updatedUserData = userData.map((user) => {
         if (user._id === id) {
           return { ...user, verificationStatus: "Approved" };
         }
@@ -25,15 +32,17 @@ const UserDetailsModal = ({ userDetails, closeModal,userData,setUserData }) => {
       setUserData(updatedUserData);
       console.log("user is verified successfully by the admin");
     }
-  }
+  };
 
-  const handleReject=async(id)=>{
-    console.log("userId:"+id);
+  const handleReject = async (id) => {
+    console.log("userId:" + id);
     console.log("inside handle Reject");
-    const res = await axios.put(`http://localhost:5000/admin/userVerificationReject/${id}`);
-    console.log(res,"return response");
-    if(res.data.message==="User Account is Rejected"){
-      const updatedUserData = userData.map(user => {
+    const res = await axiosInstance.put(
+      `/admin/userVerificationReject/${id}`,
+    );
+    console.log(res, "return response");
+    if (res.data.message === "User Account is Rejected") {
+      const updatedUserData = userData.map((user) => {
         if (user._id === id) {
           return { ...user, verificationStatus: "Rejected" };
         }
@@ -42,7 +51,7 @@ const UserDetailsModal = ({ userDetails, closeModal,userData,setUserData }) => {
       setUserData(updatedUserData);
       console.log("user is rejected successfully by the admin");
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50  ">
@@ -108,21 +117,20 @@ const UserDetailsModal = ({ userDetails, closeModal,userData,setUserData }) => {
             />
           </p>
         </div>
-        <div className="flex justify-evenly">
-        <button
-          onClick={()=>handleAccept(userDetails[0]._id)}
-          className="mt-6 w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700"
-        >
-          Accept
-        </button>
-        <button
-          onClick={()=>handleReject(userDetails[0]._id)}
-          className="mt-6 w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
-        >
-          Reject
-        </button>
-
-        </div>
+        {/* <div className="flex justify-evenly">
+          <button
+            onClick={() => handleAccept(userDetails[0]._id)}
+            className="mt-6 w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() => handleReject(userDetails[0]._id)}
+            className="mt-6 w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
+          >
+            Reject
+          </button>
+        </div> */}
 
         <button
           onClick={closeModal}
@@ -131,7 +139,6 @@ const UserDetailsModal = ({ userDetails, closeModal,userData,setUserData }) => {
           Close
         </button>
       </div>
-
     </div>
   );
 };
@@ -141,10 +148,17 @@ const UsersList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserDetails, setSelectedUserDetails] = useState(null);
 
+  const adminToken=localStorage.getItem('adminToken');
+
   // console.log(userData,"------------full Users--------------");
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/admin/userslist")
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    axiosInstance
+      .get("/admin/userslist",config)
       .then((response) => {
         // Check if the response data is an array before setting the state
         // console.log(response.data);
@@ -163,7 +177,12 @@ const UsersList = () => {
   }, []);
 
   const handleBlock = async (id) => {
-    const res = await axios.put(`http://localhost:5000/admin/userblock/${id}`);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    const res = await axiosInstance.put(`/admin/userblock/${id}`,null, config);
     console.log(id);
 
     // console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -177,8 +196,13 @@ const UsersList = () => {
   const handleUnblock = async (id) => {
     console.log(id, "");
     console.log("hellooooooooooooooooooooooo");
-    const resss = await axios.put(
-      `http://localhost:5000/admin/userunblock/${id}`
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+      }
+    };
+    const resss = await axiosInstance.put(
+      `/admin/userunblock/${id}`,null, config
     );
     console.log(id);
 
@@ -232,22 +256,13 @@ const UsersList = () => {
                           <span>EmailId</span>
                         </div>
                       </th>
-                      <th
+                      {/* <th
                         scope="col"
-                        className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
-                        <button className="flex items-center gap-x-2">
-                          <span>Verification Status</span>
-                          <svg
-                            className="h-3"
-                            viewBox="0 0 10 11"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            {/* Your SVG icon here */}
-                          </svg>
-                        </button>
-                      </th>
+                          Verification Status
+
+                      </th> */}
                       <th
                         scope="col"
                         className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
@@ -274,9 +289,9 @@ const UsersList = () => {
                         <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {user.emailId}
                         </td>
-                        <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
+                        {/* <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
                           {user.verificationStatus}
-                        </td>
+                        </td> */}
                         <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {user.mobileNumber}
                         </td>

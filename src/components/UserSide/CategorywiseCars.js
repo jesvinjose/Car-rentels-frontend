@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import axiosInstance from '../../api/axiosInstance';
 
 const CategorywiseCars = () => {
   const location = useLocation();
@@ -12,7 +13,8 @@ const CategorywiseCars = () => {
     // Make API request to fetch cars based on the category
     const fetchCars = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/user/car_list?category=${category}`);
+          // const response = await axios.get(`http://localhost:5000/user/car_list?category=${category}`);
+          const response=await axiosInstance.get(`/user//car_list?category=${category}`)
           setCategoryCars(response.data);
         } catch (error) {
           console.error('Error fetching products:', error);
@@ -63,15 +65,17 @@ const CategorywiseCars = () => {
                     {/* Add your SVG and h1 elements here */}
                   </div>
                   <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
-                    <h1 className="px-2 text-sm">
+                    {/* <h1 className="px-2 text-sm">
                       {car.hourlyRentalRate}Rs/hr
-                    </h1>
+                    </h1> */}
                     <h1 className="px-2 text-sm">
                       {car.dailyRentalRate}Rs/day
                     </h1>
-                    <h1 className="px-2 text-sm">
+                    {/* <h1 className="px-2 text-sm">
                       {car.monthlyRentalRate}Rs/month
-                    </h1>
+                    </h1> */}
+                    <button><h1 className="px-10 text-base">View Details</h1></button>
+                    
                   </div>
                 </div>
               </div>

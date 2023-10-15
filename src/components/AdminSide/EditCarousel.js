@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance';
 import AdminHeader from "./AdminHeader";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -9,15 +10,20 @@ const EditCarousel = () => {
   const navigate = useNavigate();
 
   const [carouselDetails, setCarouselDetails] = useState({});
-
+  const adminToken = localStorage.getItem("adminToken");
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const response = await axios.get(
-      `http://localhost:5000/admin/loadEditCarousel/${carouselId}`
+    const config = {
+      headers: {
+        Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+      },
+    };
+    const response = await axiosInstance.get(
+      `/admin/loadEditCarousel/${carouselId}`,config
     );
     setCarouselDetails(response.data);
     console.log(carouselDetails, "carouselsdata");
@@ -45,13 +51,18 @@ const EditCarousel = () => {
     }
 
     try {
-      const response = await axios.put(`http://localhost:5000/admin/editCarousel/${carouselId}`, formData,{
+      const config = {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-    });
+          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+          'Content-Type': 'multipart/form-data' // Set the content type for multipart form data
+        },
+      };
+      const response = await axiosInstance.put(`/admin/editCarousel/${carouselId}`, formData,config
+    );
       console.log('Carousel editted successfully:', response.data);
-      navigate('/admin/carousels');
+      if (navigate) {
+        navigate('/admin/carousels');
+      }
     } catch (error) {
       console.error('Error registering carousel:', error);
     }

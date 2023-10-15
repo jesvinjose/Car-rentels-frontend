@@ -2,19 +2,21 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import axios from "axios";
 import VendorHeader from "./VendorHeader";
-import { useNavigate } from "react-router-dom";
-import ReactMapGL, { Marker } from "react-map-gl";
+import { useNavigate,useParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-mapboxgl.Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+import axiosInstance from '../../api/axiosInstance'
 
-const Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-console.log(Token, "----------token");
+// mapboxgl.Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+
+// const Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+// console.log(Token, "----------token");
+
 const CarRegister = () => {
   const carTypes = ["Standard", "Economy", "Luxury"];
   const fuelTypes = ["Petrol", "Diesel"];
   const gearTypes = ["Manual", "Automatic"];
-  const vendorId = localStorage.getItem("vendorId");
+  // const vendorId = localStorage.getItem("vendorId");
   const [deliveryHub, setDeliveryHub] = useState("");
   const [modelName, setModelName] = useState("");
   const [fuelCapacity, setFuelCapacity] = useState("");
@@ -22,6 +24,7 @@ const CarRegister = () => {
   const [mileage, setMileage] = useState("");
   const [description, setDescription] = useState("");
   const [rcNumber, setRcNumber] = useState("");
+  const { vendorId } = useParams();
 
   const [rcImageDataUrl, setRcImageDataUrl] = useState(null);
   const [carImageDataUrl, setCarImageDataUrl] = useState(null);
@@ -39,16 +42,7 @@ const CarRegister = () => {
   });
   const navigate = useNavigate();
 
-  function handleClick(event) {
-    event.preventDefault();
-    const { lngLat } = event;
-    const { lng, lat } = lngLat;
-
-    setCarLocation({
-      latitude: lat,
-      longitude: lng,
-    });
-  }
+  const vendortoken=localStorage.getItem('vendorToken')
 
   const handleModelNameChange = (e) => {
     setModelName(e.target.value);
@@ -140,9 +134,14 @@ const CarRegister = () => {
     // console.log(modelName,deliveryHub,description,fuelCapacity,fuelType,seatNumber,rcNumber,rcImageDataUrl,"etc");
     e.preventDefault();
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+        }
+      };
       console.log(carLocation, "-------------carLocationFrontend-------");
-      const response = await axios.post(
-        "http://localhost:5000/vendor/registercar",
+      const response = await axiosInstance.post(
+        `/vendor/registercar/${vendorId}`,
         {
           modelName,
           deliveryHub,
@@ -161,12 +160,13 @@ const CarRegister = () => {
           dailyRentalRate,
           monthlyRentalRate,
           carLocation, // Include car location (latitude and longitude)
-        }
+        },
+        config
       );
 
       console.log("Car registered successfully:", response.data);
       resetForm();
-      navigate("/carsList");
+      navigate(`/carsList/${vendorId}`);
     } catch (error) {
       console.error("Error registering car:", error);
     }
@@ -431,11 +431,3 @@ const CarRegister = () => {
 
 export default CarRegister;
 
-// Event handler to update car location
-
-// const handleMapClick = (event) => {
-//   const { lngLat } = event;
-//   if (!isNaN(lngLat[1]) && !isNaN(lngLat[0])) {
-//     setCarLocation({ latitude: lngLat[1], longitude: lngLat[0] });
-//   }
-// };

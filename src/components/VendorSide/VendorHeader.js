@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 
 const VendorHeader = () => {
   const vendorToken = localStorage.getItem("vendorToken");
@@ -8,6 +8,8 @@ const VendorHeader = () => {
   const vendorLastName = localStorage.getItem("vendorLastName");
   const vendorEmailId = localStorage.getItem("vendorEmailId");
   const vendorId = localStorage.getItem("vendorId");
+  // const { vendorId } = useParams();
+  
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -38,7 +40,7 @@ const VendorHeader = () => {
         </div>
         <div className="bg-green-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
-          <Link to="/carsList" className="text-green-600 hover:underline">
+          <Link to={`/carsList/${vendorId}`} className="text-green-600 hover:underline">
             Cars
           </Link>
         </div>

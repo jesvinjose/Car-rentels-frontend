@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance"
 import Profile from "../../assets/profile.png";
 import { useParams } from "react-router-dom";
 import VendorHeader from "./VendorHeader";
@@ -8,11 +9,16 @@ import UpdateVendorProfileDetails from "./UpdateVendorProfileDetails";
 const VendorProfile = () => {
   const { vendorId } = useParams();
   const [vendorDetails, setVendorDetails] = useState(null);
-
+  const vendortoken=localStorage.getItem('vendorToken');
   useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+      }
+    };
     //Fetch vendor details based on vendorId
-    axios
-      .get(`http://localhost:5000/vendor/${vendorId}`)
+    axiosInstance
+      .get(`/vendor/${vendorId}`,config)
       .then((response) => {
         setVendorDetails(response.data.vendorDetails);
         console.log(
@@ -23,7 +29,7 @@ const VendorProfile = () => {
       .catch((error) => {
         console.error("Error fetching vendor details:", error);
       });
-  }, [vendorId]);
+  }, [vendorId,vendortoken]);
   console.log(vendorDetails, "---------vendorProfile console-----------");
   return (
     <div>

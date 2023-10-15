@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance'
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import bgImage from "../../assets/ownacar.png";
@@ -20,8 +21,8 @@ function VendorRegisterForm() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/vendor/register",
+      const response = await axiosInstance.post(
+        "/vendor/register",
         {
           firstName,
           lastName,

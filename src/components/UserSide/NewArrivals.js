@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import axiosInstance from '../../api/axiosInstance';
 
 const NewArrivals = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/user/newlyarrivedcars")
+    axiosInstance
+      .get("/user/newlyarrivedcars")
       .then((response) => {
         if (Array.isArray(response.data)) {
           setCars(response.data);
@@ -55,15 +56,15 @@ const NewArrivals = () => {
                     {/* Add your SVG and h1 elements here */}
                   </div>
                   <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
-                    <h1 className="px-2 text-sm">
+                    {/* <h1 className="px-2 text-sm">
                       {car.hourlyRentalRate}Rs/hr
-                    </h1>
+                    </h1> */}
                     <h1 className="px-2 text-sm">
                       {car.dailyRentalRate}Rs/day
                     </h1>
-                    <h1 className="px-2 text-sm">
+                    {/* <h1 className="px-2 text-sm">
                       {car.monthlyRentalRate}Rs/month
-                    </h1>
+                    </h1> */}
                   </div>
                 </div>
               </div>

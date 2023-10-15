@@ -1,5 +1,5 @@
 import "./App.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/UserSide/Home";
 import AdminLogin from "./components/AdminSide/AdminLogin";
@@ -36,58 +36,138 @@ import CarouselList from "./components/AdminSide/CarouselList";
 import CarouselRegister from "./components/AdminSide/CarouselRegister";
 import EditCarousel from "./components/AdminSide/EditCarousel";
 import GoogleSignUpForm from "./components/UserSide/GoogleSignUpForm";
+import CarDetails from "./components/UserSide/CarDetails";
+import { PrivateRoutesAdminSide } from "./components/utils/PrivateRoutesAdminSide";
+import GoogleSignUpFormVendorSide from './components/VendorSide/GoogleSignUpFormVendorSide'
+import AvailableCars from "./components/UserSide/AvailableCars";
+import BookingInfo from "./components/UserSide/BookingInfo";
+import BookingsList from "./components/VendorSide/BookingsList";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
+
   return (
     <div className="App">
       <Router>
         <Routes>
+          <Route
+            path="/userprofile/:userId"
+            element={<PrivateRoutes Component={UserProfile} />}
+          />
 
-          <Route path="/userprofile/:userId" element={<PrivateRoutes Component={UserProfile} />} />
-          <Route path="/vendorprofile/:vendorId" element={<PrivateRoutesVendorSide Component={VendorProfile} />} />
-
-          
           <Route element={<UsersHome />} path="/usershome" />
           <Route path="/" element={<Home />} />
           <Route element={<RegisterForm />} path="/register" />
+          <Route
+            path="/googlesignupform/:email"
+            element={<GoogleSignUpForm />}
+          />
+          <Route path="/googlesignupformvendorside/:email" element={<GoogleSignUpFormVendorSide/>}/>
           <Route element={<VerifyOTP />} path="/verifyOTP" />
           <Route element={<UserLogin />} path="/login" />
           <Route element={<UserLogin />} path="/logout" />
           <Route element={<ForgotPassword />} path="/forgotpassword" />
-          <Route element={<ForgotPassword4Vendor/>} path="/forgotpassword4vendor"/>
+          <Route path="/car_list" element={<CategorywiseCars />} />
+          <Route path="/car_details" element={<CarDetails />} />
+          <Route path="/available_cars" element={<AvailableCars/>}/>
+          <Route path="/bookingslist" element={<BookingsList/>}/>
+
+          <Route
+            element={<ForgotPassword4Vendor />}
+            path="/forgotpassword4vendor"
+          />
           <Route
             path="/verifyOTP4PasswordReset"
             element={<VerifyOTP4PasswordReset />}
           />
-          <Route path="/verifyOTP4PasswordReset4Vendor"element={<VerifyOTP4PasswordReset4Vendor/>}/>
+          <Route
+            path="/verifyOTP4PasswordReset4Vendor"
+            element={<VerifyOTP4PasswordReset4Vendor />}
+          />
           <Route path="/allcars" element={<AllCars />} />
           <Route path="/PasswordReset" element={<PasswordReset />} />
-          <Route path="/PasswordReset4Vendor" element={<PasswordReset4Vendor />} />
-          <Route path="/car_list" element={<CategorywiseCars/>}/>
-          
-          {/* Define your Home component */}
-          <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/home" element={<AdminHome />} />{" "}
-          <Route path="/admin/userslist" element={<UsersList />} />
-          <Route path="/admin/vendorslist" element={<VendorsList />} />
+          <Route
+            path="/PasswordReset4Vendor"
+            element={<PasswordReset4Vendor />}
+          />
+
+          <Route path="/booking_details" element={<BookingInfo/>}/>
+
           <Route path="/vendorregister" element={<VendorRegisterForm />} />
           <Route path="/vendorverifyOTP" element={<VendorVerifyOTP />} />
           <Route path="/vendorlogin" element={<VendorLogin />} />
           <Route path="/vendorHome" element={<VendorHome />} />
-          
-          {/* <Route path="/admin/carrentalrates" element={<CarRentalRates />} /> */}
-          {/* <Route path="/addnewcartype" element={<CarTypeRegister />} /> */}
-          <Route path="/carsList" element={<CarsList vendorId={vendorId} />} />
-          <Route path="/addnewcar" element={<CarRegister />} />
+
           <Route
+            path="/vendorprofile/:vendorId"
+            element={<PrivateRoutesVendorSide Component={VendorProfile} />}
+          />
+          {/* <Route path="/carsList/:vendorId" element={<CarsList/>} /> */}
+          <Route
+            path="/carsList/:vendorId"
+            element={<PrivateRoutesVendorSide Component={CarsList} />}
+          />
+          {/* <Route path="/addnewcar/:vendorId" element={<CarRegister/>} /> */}
+          <Route
+            path="/addnewcar/:vendorId"
+            element={<PrivateRoutesVendorSide Component={CarRegister} />}
+          />
+
+          <Route
+            path="/carsList/:vendorId"
+            element={<PrivateRoutesVendorSide Component={CarsList} />}
+          />
+
+          {/* <Route path="/admin/home" element={<AdminHome />} />{" "} */}
+          <Route
+            path="/admin/home"
+            element={<PrivateRoutesAdminSide Component={AdminHome} />}
+          />
+
+          {/* Define your AdminHome component */}
+          <Route path="/admin" element={<AdminLogin />} />
+
+          {/* <Route path="/admin/userslist" element={<UsersList />} /> */}
+          <Route
+            path="/admin/userslist"
+            element={<PrivateRoutesAdminSide Component={UsersList} />}
+          />
+
+          {/* <Route path="/admin/vendorslist" element={<VendorsList />} /> */}
+          <Route
+            path="/admin/vendorslist"
+            element={<PrivateRoutesAdminSide Component={VendorsList} />}
+          />
+
+          {/* <Route
             path="/admin/carslistadminside"
             element={<CarsListAdminSide />}
+          /> */}
+          <Route
+            path="/admin/carslistadminside"
+            element={<PrivateRoutesAdminSide Component={CarsListAdminSide} />}
           />
-          <Route path="/admin/carousels" element={<CarouselList/>}/>
-          <Route path="/addnewcarousel" element={<CarouselRegister/>}/>
-          <Route path="/editcarousel/:carouselId" element={<EditCarousel/>}/>
-          <Route path="/googlesignupform/:email" element={<GoogleSignUpForm/>}/>
+
+          {/* <Route path="/admin/carrentalrates" element={<CarRentalRates />} /> */}
+          {/* <Route path="/addnewcartype" element={<CarTypeRegister />} /> */}
+
+          {/* <Route path="/admin/carousels" element={<CarouselList />} /> */}
+          <Route
+            path="/admin/carousels"
+            element={<PrivateRoutesAdminSide Component={CarouselList} />}
+          />
+
+          {/* <Route path="/addnewcarousel" element={<CarouselRegister />} /> */}
+          <Route
+            path="/addnewcarousel"
+            element={<PrivateRoutesAdminSide Component={CarouselRegister} />}
+          />
+
+          {/* <Route path="/editcarousel/:carouselId" element={<EditCarousel />} /> */}
+          <Route
+            path="/editcarousel/:carouselId"
+            element={<PrivateRoutesAdminSide Component={EditCarousel} />}
+          />
         </Routes>
       </Router>
     </div>

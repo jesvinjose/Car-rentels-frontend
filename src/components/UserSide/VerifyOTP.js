@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import bgImage from "../../assets/signUpbackgroundImage.jpg";
-
+import axiosInstance from '../../api/axiosInstance'
 function VerifyOTP() {
   const location = useLocation();
   const {
@@ -20,8 +20,8 @@ function VerifyOTP() {
   const handleVerifyOTP = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/user/verifyOTP",
+      const response = await axiosInstance.post(
+        "/user/verifyOTP",
         {
           otp,
           firstName,

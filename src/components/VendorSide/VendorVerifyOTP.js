@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance'
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -20,8 +21,8 @@ function VendorVerifyOTP() {
   const handleVerifyOTP = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/vendor/verifyOTP",
+      const response = await axiosInstance.post(
+        "/vendor/verifyOTP",
         {
           otp,
           firstName,

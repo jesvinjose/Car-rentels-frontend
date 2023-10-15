@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance'
 import VendorHeader from "./VendorHeader";
-import { Link } from "react-router-dom";
+import { Link,useParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+
+
 
 const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
 
@@ -19,6 +22,8 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
   const [carImageDataUrl, setCarImageDataUrl] = useState(
     carDataToEdit[0].carImage
   );
+
+  useEffect(()=>{},[carDataForm])
 
   const handleUpdate = async (event) => {
     event.preventDefault();
@@ -35,17 +40,26 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
       ...carDataForm,
     };
 
+    const vendortoken=localStorage.getItem('vendorToken')
+
     console.log(updatedCarDataForm, "handle the update of carDataForm");
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+        }
+      };
       // Send the updated car type data to your server using Axios or a similar HTTP library
-      const response = await axios.put(
-        `http://localhost:5000/vendor/carDataFormEdit/${carDataForm._id}`,
+      const response = await axiosInstance.put(
+        `/vendor/carDataFormEdit/${carDataForm._id}`,
         updatedCarDataForm,
+        config,
         {
           headers: {
             "Content-Type": "application/json", // Adjust the content type if needed
           },
-        }
+        },
+        
       );
       // console.log(response.data.message, "from editCarDetails to frontend");
       if (response.data.message === "Car updated successfully")
@@ -408,16 +422,25 @@ const CarsList = () => {
   const [carData, setCarData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCarData, setSelectedCarData] = useState(null);
-  const vendorId = localStorage.getItem("vendorId");
+  // const vendorId = localStorage.getItem("vendorId");
+  const { vendorId } = useParams();
+
+  const vendortoken=localStorage.getItem('vendorToken')
 
   useEffect(() => {
     fetchData();
-  });
+  },[]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/vendor/carslist/${vendorId}`
+      const config = {
+        headers: {
+          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+        }
+      };
+
+      const response = await axiosInstance.get(
+        `/vendor/carslist/${vendorId}`,config
       );
       if (Array.isArray(response.data)) {
         setCarData(response.data);
@@ -445,8 +468,13 @@ const CarsList = () => {
 
   const handleDelete = async (id) => {
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+        }
+      };
       const response = await axios.get(
-        `http://localhost:5000/vendor/deletecar/${id}`
+        `http://localhost:5000/vendor/deletecar/${id}`,config
       );
       if (response.data.message === "car deleted successfully") {
         // console.log("Car deleted successfully");
@@ -483,7 +511,7 @@ const CarsList = () => {
             {carData.length} cars
           </span>
           <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-            <Link to="/addnewcar">Add New Car</Link>
+            <Link to={`/addnewcar/${vendorId}`}>Add New Car</Link>
           </h2>
         </div>
 

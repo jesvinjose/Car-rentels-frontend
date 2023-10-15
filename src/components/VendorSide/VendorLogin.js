@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
+import axiosInstance from '../../api/axiosInstance'
 
 function VendorLogin() {
 
@@ -33,8 +34,8 @@ function VendorLogin() {
         emailId: emailId,
         password: password,
       };
-      const response = await axios.post(
-        "http://localhost:5000/vendor/verifyVendorLogin",
+      const response = await axiosInstance.post(
+        "/vendor/verifyVendorLogin",
         vendorData
       );
       console.log(response, "--------Frontend User Login Response");
@@ -71,8 +72,8 @@ function VendorLogin() {
     console.log(credentialResponseDecoded.email);
     let email = { email: credentialResponseDecoded.email };
     console.log(email);
-    const response = await axios.post(
-      "http://localhost:5000/vendor/verifyGoogleLogin",
+    const response = await axiosInstance.post(
+      "/vendor/verifyGoogleLogin",
       email
     );
     console.log(response, "--------response-----------");
@@ -84,7 +85,7 @@ function VendorLogin() {
       localStorage.setItem("vendorId", response.data.vendorId);
       navigate("/vendorHome");
     }
-    if (response.data.message === "Invalid User") navigate("/login");
+    if (response.data.message === "Invalid User") navigate(`/googlesignupformvendorside/${response.data.email}`);
   };
 
   return (

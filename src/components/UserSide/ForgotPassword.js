@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import bgImage from '../../assets/signUpbackgroundImage.jpg'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import axiosInstance from '../../api/axiosInstance';
 const ForgotPassword = () => {
 
   const navigate=useNavigate();
@@ -13,9 +13,12 @@ const ForgotPassword = () => {
     event.preventDefault();
     try {
       console.log("inside handleVerifyEmail")
-      const response=await axios.post("http://localhost:5000/user/verifyEmail",{
-        emailId
-      })
+      // const response=await axios.post("http://localhost:5000/user/verifyEmail",{
+      //   emailId
+      // })
+      const response=await axiosInstance.post("/user/verifyEmail",{
+           emailId
+         })
       if(response.data.message==="OTP sent successfully"){
         console.log("OTP sent successfully");
         navigate('/verifyOTP4PasswordReset',{

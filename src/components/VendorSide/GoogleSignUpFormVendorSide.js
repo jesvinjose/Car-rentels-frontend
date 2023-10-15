@@ -1,77 +1,64 @@
-//RegisterForm.js
+//GoogleSignUpFormVendorSide.js
 
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import bgImage from "../../assets/signUpbackgroundImage.jpg";
+import bgImage from "../../assets/ownacar.png";
 import logo from "../../assets/logo-1.png";
-import axiosInstance from '../../api/axiosInstance';
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import axiosInstance from '../../api/axiosInstance'
 
-function RegisterForm() {
+function GoogleSignUpForm() {
+    const { email } = useParams(); // Extract carouselId from URL
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailId, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const navigate = useNavigate();
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axiosInstance.post("/user/register", {
+      const response = await axiosInstance.post("/vendor/googleregister", {
         firstName,
         lastName,
-        emailId,
+        email,
         password,
         confirmPassword,
         mobileNumber,
       });
       console.log(response, "----------response");
-      if (response.status === 200) {
-        // OTP sent successfully
-        // Pass userDetails as a prop when navigating
-        navigate("/verifyOTP", {
-          state: {
-            firstName,
-            lastName,
-            emailId,
-            password,
-            confirmPassword,
-            mobileNumber,
-          },
-        });
+      if (response.data.message==="Google registration is success") {
+        navigate("/vendorlogin");
+        
+        toast("Vendor Account is created please login")
       } else if (response.status === 400) {
         // Handle validation errors
         const responseData = response.data;
         if (responseData.message === "Please enter a valid firstName") {
-          console.error("Invalid first name");
+            toast("Invalid first name");
         } else if (responseData.message === "Please enter a valid lastName") {
-          console.error("Invalid last name");
+            toast("Invalid last name");
         } else if (
           responseData.message ===
           "Password should be at least 8 characters long"
         ) {
-          console.error("Password too short");
+            toast("Password too short");
         } else if (responseData.message === "Passwords do not match") {
-          console.error("Passwords do not match");
-        } else if (
-          responseData.message === "Please enter a valid email address"
-        ) {
-          console.error("Invalid email address");
+            toast("Passwords do not match");
         } else if (
           responseData.message === "Please enter a valid mobile number"
         ) {
-          console.error("Invalid mobile number");
+            toast("Invalid mobile number");
         }
-      } else if (response.status === 409) {
-        // User already exists
-        console.error("User already exists");
       } else {
         // Other errors
-        console.error("Registration failed:", response.data.message);
+        console.error("Google Registration failed:", response.data.message);
       }
     } catch (error) {
       console.error("Error during registration:", error.message);
@@ -183,9 +170,9 @@ function RegisterForm() {
                 type="email"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Enter Email"
-                value={emailId}
-                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 required
+                disabled // This disables the input field
               />
             </div>
 
@@ -221,7 +208,7 @@ function RegisterForm() {
           {" "}
           Already have an account?{" "}
           <Link
-            to="/login"
+            to="/vendorlogin"
             className="font-medium text-gray-700 dark:text-gray-200 hover:underline"
           >
             Sign in
@@ -232,55 +219,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
-
-// <div>
-//       <h1>Register</h1>
-//       <form onSubmit={handleLogin}>
-//         <input
-//           type="string"
-//           placeholder="First Name"
-//           value={firstName}
-//           onChange={(e) => setFirstName(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="string"
-//           placeholder="Last Name"
-//           value={lastName}
-//           onChange={(e) => setLastName(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="password"
-//           placeholder="Confirm Password"
-//           value={confirmPassword}
-//           onChange={(e) => setConfirmPassword(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="email"
-//           placeholder="Email"
-//           value={emailId}
-//           onChange={(e) => setEmail(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="Number"
-//           placeholder="Mobile Number"
-//           value={mobileNumber}
-//           onChange={(e) => setMobileNumber(e.target.value)}
-//           required
-//         />
-
-//         <button type="submit">Register</button>
-//       </form>
-//     </div>
-//   );
+export default GoogleSignUpForm;

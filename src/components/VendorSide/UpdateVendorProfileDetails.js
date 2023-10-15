@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import axiosInstance from '../../api/axiosInstance'
 
 const UpdateVendorProfileDetails = ({ vendorId, vendorData }) => {
   console.log(vendorData);
@@ -14,6 +15,8 @@ const UpdateVendorProfileDetails = ({ vendorId, vendorData }) => {
     aadharFrontImage: vendorData.aadharFrontImage,
     aadharBackImage: vendorData.aadharBackImage,
   });
+
+  const vendortoken=localStorage.getItem('vendorToken')
 
   // Add state properties to hold image previews
   const [aadharFrontImagePreview, setAadharFrontImagePreview] = useState(
@@ -35,9 +38,16 @@ const UpdateVendorProfileDetails = ({ vendorId, vendorData }) => {
     // console.log(vendorDetails, "......frontend..........");
     console.log(vendorDetails.aadharNumber, "-------------");
     try {
-      await axios.post(
-        `http://localhost:5000/vendor/updateVendorProfile/${vendorId}`,
-        vendorDetails
+      const config = {
+        headers: {
+          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+        }
+      };
+
+      await axiosInstance.post(
+        `/vendor/updateVendorProfile/${vendorId}`,
+        vendorDetails,
+        config
       );
       //   console.log("Vendor details updated:", response.data.vendor);
       alert("Vendor details updated successfully!");
