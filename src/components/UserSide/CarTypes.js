@@ -4,7 +4,6 @@ import luxury from "../../assets/luxury-car-e1600161258813.png";
 import standard from "../../assets/standard.png";
 
 const CarTypes = () => {
-  // Sample data for car types
   const carTypes = [
     {
       name: "Economy",
@@ -27,33 +26,35 @@ const CarTypes = () => {
   ];
 
   return (
-    <div>
-      <div className="flex justify-center">
+    <div className="container">
+      <div className="row justify-content-center">
         {carTypes.map((carType, index) => (
           <div
-            className="car-type ml-5 border shadow-2xl mt-4 mb-3 w-full "
+            className="col-lg-4 col-md-6 col-sm-12 mb-4"
             key={index}
           >
-            <div className="single_product_img pl-10">
-              <img
-                src={carType.image}
-                className="img-fluid"
-                alt={carType.name}
-              />
-            </div>
-            <div className="single_product_content font-serif ml-4 mb-2">
-              <h2>
-                <p>{carType.name} Collection</p>
-              </h2>
+            <div className="border shadow-lg p-4 h-100 mt-5">
+              <div className="single_product_img">
+                <img
+                  src={carType.image}
+                  className="img-fluid"
+                  alt={carType.name}
+                />
+              </div>
+              <div className="single_product_content mt-3">
+                <h2>
+                  <p>{carType.name} Collection</p>
+                </h2>
 
-              <button className="border border-black w-28 rounded-lg bg-lime-100 hover:bg-lime-400 shadow-md">
-                <a
-                  href={`/car_list?category=${carType.name}`}
-                  className="btn_3"
-                >
-                  Explore Now
-                </a>
-              </button>
+                <button className="btn btn-outline-dark w-100 mt-3">
+                  <a
+                    href={`/car_list?category=${carType.name}`}
+                    className="btn_3"
+                  >
+                    Explore Now
+                  </a>
+                </button>
+              </div>
             </div>
           </div>
         ))}

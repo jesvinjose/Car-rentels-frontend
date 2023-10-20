@@ -12,7 +12,6 @@ function Home() {
     <>
       <Header />
       <Carousel/>
-      <SearchBar />
       <CarTypes />
       {userToken ? <NewArrivals/> : <VendorSignUpBar />}
     </>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
 import Header from "./Header";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -19,6 +19,8 @@ const BookingInfo = () => {
   const carId = searchParams.get("carId");
   const pickupDate = searchParams.get("pickupDate");
   const returnDate = searchParams.get("returnDate");
+
+  const navigate=useNavigate();
 
   // Assume pickupDate and returnDate are available as props or state
   const [numDays, setNumDays] = useState(0); // Number of days between pickup and return
@@ -102,7 +104,9 @@ const BookingInfo = () => {
           data
         );
 
-        alert(result.data.msg);
+        // alert(result.data.msg);
+        navigate('/booking_success')
+        
       
       },
       prefill: {

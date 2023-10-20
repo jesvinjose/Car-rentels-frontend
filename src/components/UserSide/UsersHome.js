@@ -10,7 +10,7 @@ function Home() {
     <>
       <Header />
       <Carousel />
-      <SearchBar />
+      {/* <SearchBar /> */}
       <CarTypes />
       <NewArrivals />
     </>

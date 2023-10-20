@@ -29,7 +29,7 @@ const NewArrivals = () => {
 
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-5">
         <h1 className="text-3xl font-bold my-8">New Arrivals</h1>
       </div>
       <div className="flex flex-wrap justify-center">
@@ -75,48 +75,7 @@ const NewArrivals = () => {
     </div>
   );
 
-  // <section className="new_arrivals">
-  //   <div className="container">
-  //     <div className="row">
-  //       <div className="col-lg-12">
-  //         <div className="section_tittle text-center">
-  //           <h2>New Arrivals</h2>
-  //         </div>
-  //       </div>
-  //     </div>
-  //     <div className="row">
-  //       {cars.map((car) => {
-  //         if (!car.blockStatus) {
-  //           return (
-  //             <div className="col-lg-4 col-sm-6" key={car._id}>
-  //               <div className="single_product_item">
-  //                 <div className="single_product_item_thumb">
-  //                   <img src={car.carImage} alt="#" className="img-fluid" />
-  //                 </div>
-  //                 <h3>
-  //                   <Link path={`/car-details/${car._id}`}>
-  //                     {car.modelName}
-  //                   </Link>
-  //                 </h3>
-  //                 {/* <p>Fuel Capacity: {car.fuelCapacity}</p>
-  //                 <p>Seat Numbers: {car.seatNumber}</p>
-  //                 <p>Mileage: {car.mileage}</p>
-  //                 <p>Gear Box Type: {car.gearBoxType}</p>
-  //                 <p>Fuel Type: {car.fuelType}</p>
-  //                 <p>Description: {car.description}</p>
-  //                 <p>RC Number: {car.rcNumber}</p>
-  //                 <p>Hourly Rental Rate: Rs. {car.hourlyRentalRate}</p>
-  //                 <p>Daily Rental Rate: Rs. {car.dailyRentalRate}</p>
-  //                 <p>Monthly Rental Rate: Rs. {car.monthlyRentalRate}</p> */}
-  //               </div>
-  //             </div>
-  //           );
-  //         }
-  //         return null;
-  //       })}
-  //     </div>
-  //   </div>
-  // </section>
+  
 };
 
 export default NewArrivals;

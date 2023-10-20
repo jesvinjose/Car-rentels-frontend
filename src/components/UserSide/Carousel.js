@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/react-splide/css";
-import axiosInstance from '../../api/axiosInstance';
+import "@splidejs/splide/dist/css/splide.min.css";
+
+import axiosInstance from "../../api/axiosInstance";
 
 const Carousel = () => {
   const [images, setImages] = useState([]);
@@ -10,10 +10,7 @@ const Carousel = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        // const response = await axios.get(
-        //   "http://localhost:5000/user/usershome"
-        // );
-        const response=await axiosInstance.get("/user/usershome")
+        const response = await axiosInstance.get("/user/usershome");
         setImages(response.data);
       } catch (error) {
         console.error("Error fetching images:", error);
@@ -23,15 +20,31 @@ const Carousel = () => {
     fetchImages();
   }, []);
 
-
-//   console.log(images, "imagessssssssssssss"); // Add this line
+  const splideOptions = {
+    type: "fade",
+    rewind: true,
+    pagination: false,
+    gap: "1rem",
+    autoHeight: true,
+    breakpoints: {
+      768: {
+        fixedWidth: "80%",
+      },
+      576: {
+        fixedWidth: "90%",
+      },
+      480: {
+        fixedWidth: "95%",
+      },
+    },
+  };
 
   return (
-    <div>
-      <Splide options={{ rewind: true }} aria-label="React Splide Example">
+    <div className="carousel-container">
+      <Splide options={splideOptions}>
         {images.map((image, index) => (
           <SplideSlide key={index}>
-            <img src={image} alt="" />
+            <img src={image} alt="" className="carousel-image" />
           </SplideSlide>
         ))}
       </Splide>

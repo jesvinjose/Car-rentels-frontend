@@ -42,6 +42,9 @@ import GoogleSignUpFormVendorSide from './components/VendorSide/GoogleSignUpForm
 import AvailableCars from "./components/UserSide/AvailableCars";
 import BookingInfo from "./components/UserSide/BookingInfo";
 import BookingsList from "./components/VendorSide/BookingsList";
+import BookingSuccessPage from "./components/UserSide/BookingSuccessPage";
+import BookingHistory from "./components/UserSide/BookingHistory";
+import BookingsListAdminSide from "./components/AdminSide/BookingsListAdminSide";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
@@ -71,6 +74,7 @@ function App() {
           <Route path="/car_details" element={<CarDetails />} />
           <Route path="/available_cars" element={<AvailableCars/>}/>
           <Route path="/bookingslist" element={<BookingsList/>}/>
+          <Route path="/booking_history" element={<BookingHistory/>}/>
 
           <Route
             element={<ForgotPassword4Vendor />}
@@ -92,6 +96,7 @@ function App() {
           />
 
           <Route path="/booking_details" element={<BookingInfo/>}/>
+          <Route path="/booking_success" element={<BookingSuccessPage/>}/>
 
           <Route path="/vendorregister" element={<VendorRegisterForm />} />
           <Route path="/vendorverifyOTP" element={<VendorVerifyOTP />} />
@@ -168,6 +173,8 @@ function App() {
             path="/editcarousel/:carouselId"
             element={<PrivateRoutesAdminSide Component={EditCarousel} />}
           />
+
+          <Route path="/bookings_list_adminside" element={<BookingsListAdminSide/>}/>
         </Routes>
       </Router>
     </div>

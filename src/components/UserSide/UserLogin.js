@@ -66,7 +66,10 @@ function UserLogin() {
         "User is blocked, contact jesvinjose49@gmail.com"
       ) {
         toast("User is blocked, contact jesvinjose49@gmail.com");
-      } else {
+      } else if(response.data.message==="Wrong password"){
+        toast("Wrong password");
+      }
+      else {
         toast("Internal server error");
       }
     } catch (error) {

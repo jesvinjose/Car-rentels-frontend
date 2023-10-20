@@ -48,7 +48,7 @@ const AdminHeader = () => {
         <div className="bg-purple-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-book text-4xl text-purple-600 mb-2"></i>
           <Link
-            to="/admin/bookingslist"
+            to="/bookings_list_adminside"
             className="text-purple-600 hover:underline"
           >
             Bookings

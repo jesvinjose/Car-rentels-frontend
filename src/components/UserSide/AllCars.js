@@ -61,6 +61,13 @@ const AllCars = () => {
     }
   };
 
+  // Function to calculate the minimum return date (one day after pickup date)
+  const getMinReturnDate = () => {
+    const minReturnDate = new Date(pickupDate);
+    minReturnDate.setDate(minReturnDate.getDate() + 1); // Set to one day after pickup date
+    return minReturnDate.toISOString().split("T")[0];
+  };
+
   useEffect(() => {
     axiosInstance
       .get("/user/allcars")
@@ -228,26 +235,6 @@ const AllCars = () => {
 
   //----------------------------
 
-  const handleBooking = async (carId) => {
-    const userId = localStorage.getItem("userId");
-    const pickupDateObj = new Date(pickupDate);
-    const returnDateObj = new Date(returnDate);
-    const bookingData = {
-      pickupDate: pickupDate,
-      returnDate: returnDate,
-      userId: userId,
-      Amount: (returnDateObj - pickupDateObj) / (1000 * 60 * 60 * 24), // Calculate the difference in days
-    };
-    try {
-      await axiosInstance.post("/user/carbooking", {
-        carId: carId, // Pass the carId in the correct structure
-        bookingData: bookingData, // Pass the bookingData in the correct structure
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleSubmit = async (pickupDate, returnDate) => {
     console.log(pickupDate, "pickupDate");
     setSearchInitiated(true); // Set search initiated flag to true
@@ -277,18 +264,25 @@ const AllCars = () => {
     const selectedDate = e.target.value;
     setPickupDate(selectedDate);
 
-    // Set return date to be at least the pickup date
+    // Calculate the minimum return date (one day after pickup date)
     const minReturnDate = new Date(selectedDate);
-    minReturnDate.setDate(minReturnDate.getDate());
+    minReturnDate.setDate(minReturnDate.getDate() + 1);
+
+    // Set the return date to the minimum return date
     setReturnDate(minReturnDate.toISOString().split("T")[0]);
   };
 
   const today = new Date().toISOString().split("T")[0];
+  // Calculate next day
+  const tomorrow = new Date();
+  tomorrow.setDate(new Date().getDate() + 1);
+  const nextDay = tomorrow.toISOString().split("T")[0];
   const [searchInitiated, setSearchInitiated] = useState(false);
   // const [availableCars, setAvailableCars] = useState([]);
   // const navigate = useNavigate();
   const [pickupDate, setPickupDate] = useState(today);
-  const [returnDate, setReturnDate] = useState(today);
+  const [returnDate, setReturnDate] = useState(nextDay); // Set to next day
+
   // const [searchInitiated, setSearchInitiated] = useState(false);
   // const [availableCars, setAvailableCars] = useState([]);
   // const navigate = useNavigate();
@@ -322,7 +316,7 @@ const AllCars = () => {
           placeholder="Return Date"
           value={returnDate}
           onChange={(e) => setReturnDate(e.target.value)}
-          min={pickupDate} // Set min to the return date
+          min={getMinReturnDate()} // Set min to the calculated minimum return date
           required
         />
 
@@ -336,133 +330,130 @@ const AllCars = () => {
 
       {/* Search form */}
       {/* Search, Filter, and Sort in a single row */}
+
       {searchInitiated ? null : (
-        <div className="flex justify-content-between align-items-center mb-4 mt-5">
+        <div className="container mt-5">
           {/* Search form */}
-          <form
-            className="w-25 flex"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSearch();
-            }}
-          >
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search car model"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
+          <div className="row">
+            <form
+              className="col-lg-4 mb-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSearch();
+              }}
+            >
+              <div className="input-group">
+                <input
+                  className="form-control"
+                  type="search"
+                  placeholder="Search car model"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <button className="btn btn-outline-success" type="submit">
+                  Search
+                </button>
+              </div>
+            </form>
 
-          {/* Filter options */}
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            {/* Car type filters */}
-            <div>
-              <h5>Car Types:</h5>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={carTypes.includes("Standard")}
-                  onChange={() => handleCarTypeChange("Standard")}
-                />
-                Standard
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={carTypes.includes("Economy")}
-                  onChange={() => handleCarTypeChange("Economy")}
-                />
-                Economy
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={carTypes.includes("Luxury")}
-                  onChange={() => handleCarTypeChange("Luxury")}
-                />
-                Luxury
-              </label>
-            </div>
+            <div className="col-lg-8 d-flex flex-wrap justify-content-between align-items-center mb-3">
+              {/* Car type filters */}
+              <div className="mb-3">
+                <h5>Car Types:</h5>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={carTypes.includes("Standard")}
+                    onChange={() => handleCarTypeChange("Standard")}
+                  />
+                  Standard
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={carTypes.includes("Economy")}
+                    onChange={() => handleCarTypeChange("Economy")}
+                  />
+                  Economy
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={carTypes.includes("Luxury")}
+                    onChange={() => handleCarTypeChange("Luxury")}
+                  />
+                  Luxury
+                </label>
+              </div>
 
-            {/* Gear type filters */}
-            <div className="ml-10">
-              <h5>Gear Types:</h5>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={gearTypes.includes("Manual")}
-                  onChange={() => handleGearTypeChange("Manual")}
-                />
-                Manual
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={gearTypes.includes("Automatic")}
-                  onChange={() => handleGearTypeChange("Automatic")}
-                />
-                Automatic
-              </label>
-            </div>
+              {/* Gear type filters */}
+              <div className="mb-3">
+                <h5>Gear Types:</h5>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={gearTypes.includes("Manual")}
+                    onChange={() => handleGearTypeChange("Manual")}
+                  />
+                  Manual
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={gearTypes.includes("Automatic")}
+                    onChange={() => handleGearTypeChange("Automatic")}
+                  />
+                  Automatic
+                </label>
+              </div>
 
-            {/* Fuel type filters */}
-            <div className="ml-10">
-              <h5>Fuel Types:</h5>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={fuelTypes.includes("Petrol")}
-                  onChange={() => handleFuelTypeChange("Petrol")}
-                />
-                Petrol
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={fuelTypes.includes("Diesel")}
-                  onChange={() => handleFuelTypeChange("Diesel")}
-                />
-                Diesel
-              </label>
-            </div>
+              {/* Fuel type filters */}
+              <div className="mb-3">
+                <h5>Fuel Types:</h5>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={fuelTypes.includes("Petrol")}
+                    onChange={() => handleFuelTypeChange("Petrol")}
+                  />
+                  Petrol
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={fuelTypes.includes("Diesel")}
+                    onChange={() => handleFuelTypeChange("Diesel")}
+                  />
+                  Diesel
+                </label>
+              </div>
 
-            {/* Sort option */}
-            <div className="ml-10">
-              <h5>Sort:</h5>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={sortTypes.includes("sortPriceLowToHigh")}
-                  onChange={() => handleSortTypeChange("sortPriceLowToHigh")}
-                />
-                Price: Low to High
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={sortTypes.includes("sortPriceHighToLow")}
-                  onChange={() => handleSortTypeChange("sortPriceHighToLow")}
-                />
-                Price: High to Low
-              </label>
+              {/* Sort option */}
+              <div className="mb-3">
+                <h5>Sort:</h5>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={sortTypes.includes("sortPriceLowToHigh")}
+                    onChange={() => handleSortTypeChange("sortPriceLowToHigh")}
+                  />
+                  Price: Low to High
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={sortTypes.includes("sortPriceHighToLow")}
+                    onChange={() => handleSortTypeChange("sortPriceHighToLow")}
+                  />
+                  Price: High to Low
+                </label>
+              </div>
             </div>
           </div>
+
+          {/* Filter options */}
         </div>
       )}
-      <div
-        style={{
-          width: "100%",
-          height: "100px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      ></div>
 
       <div className="flex flex-wrap justify-center">
         {currentCars.map((car, index) => (

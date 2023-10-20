@@ -12,14 +12,28 @@ const UserProfile = () => {
   const usertoken = localStorage.getItem("token");
 
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${usertoken}`, // Set the token in the headers
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${usertoken}`, // Set the token in the headers
+    //   },
+    // };
+    // // Use axiosInstance instead of axios here
+    // axiosInstance
+    //   .get(`user/${userId}`, config) // The baseURL will be appended due to the interceptor
+    //   .then((response) => {
+    //     setUserDetails(response.data.userDetails);
+    //     console.log(
+    //       response.data.userDetails,
+    //       "---------from Response-----------"
+    //     );
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching user details:", error);
+    //   });
+    
     // Use axiosInstance instead of axios here
     axiosInstance
-      .get(`user/${userId}`, config) // The baseURL will be appended due to the interceptor
+      .get(`user/${userId}`) // The baseURL will be appended due to the interceptor
       .then((response) => {
         setUserDetails(response.data.userDetails);
         console.log(
