@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import AdminHeader from "./AdminHeader";
 
 const VendorDetailsModal = ({
@@ -16,7 +16,7 @@ const VendorDetailsModal = ({
   const handleAccept = async (id) => {
     console.log("vendorId:" + id);
     console.log("inside handle Accept");
-    const res = await axiosInstance.put(
+    const res = await axiosInstanceforAdmin.put(
       `/admin/vendorVerificationAccept/${id}`
     );
     console.log(res, "return response");
@@ -36,7 +36,7 @@ const VendorDetailsModal = ({
   const handleReject = async (id) => {
     console.log("vendorId:" + id);
     console.log("inside handle Reject");
-    const res = await axiosInstance.put(
+    const res = await axiosInstanceforAdmin.put(
       `/admin/vendorVerificationReject/${id}`
     );
     console.log(res, "return response");
@@ -122,16 +122,18 @@ const VendorsList = () => {
   const [vendorData, setVendorData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVendorDetails, setSelectedVendorDetails] = useState(null);
-  const adminToken=localStorage.getItem('adminToken');
+  // const adminToken=localStorage.getItem('adminToken');
 
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
-      }
-    };
-    axiosInstance
-      .get("/admin/vendorslist",config)
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+    //   }
+    // };
+    axiosInstanceforAdmin
+      .get("/admin/vendorslist", 
+      // config
+      )
       .then((response) => {
         // Check if the response data is an array before setting the state
         console.log(response.data);
@@ -150,14 +152,16 @@ const VendorsList = () => {
   }, []);
 
   const handleBlock = async (id) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
-      }
-    };
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
     console.log("Handling block for vendor with id:", id);
-    const res = await axiosInstance.put(
-      `/admin/vendorblock/${id}`,null, config
+    const res = await axiosInstanceforAdmin.put(
+      `/admin/vendorblock/${id}`,
+      null,
+      // config
     );
     console.log(id);
 
@@ -172,13 +176,15 @@ const VendorsList = () => {
   const handleUnblock = async (id) => {
     console.log(id, "");
     console.log("hellooooooooooooooooooooooo");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
-      }
-    };
-    const resss = await axiosInstance.put(
-      `/admin/vendorunblock/${id}`,null, config
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
+    const resss = await axiosInstanceforAdmin.put(
+      `/admin/vendorunblock/${id}`,
+      null,
+      // config
     );
     console.log(id);
 

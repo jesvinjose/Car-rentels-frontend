@@ -5,7 +5,7 @@ import BookingDetailsModal from "./BookingDetailsModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import LoadingSpinner from "./LoadingSpinner";
 
 const BookingHistory = () => {
   const [bookingData, setBookingData] = useState([]);
@@ -15,9 +15,10 @@ const BookingHistory = () => {
   const [otp, setOtp] = useState("");
   const [numDays, setNumDays] = useState(0);
   const [date, setDate] = useState(new Date());
-  const [allData,setAllData]=useState([])
+  const [allData, setAllData] = useState([]);
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const currentDate = new Date();
   const navigate = useNavigate();
@@ -68,12 +69,15 @@ const BookingHistory = () => {
       } else if (response.data.message === "End trip OTP is wrong") {
         toast("End trip OTP is wrong");
       } else if (response.data.message === "Booking not found") {
-        toast("Booking not found");
+        // toast("Booking not found");
+        navigate('/404')
       } else {
-        toast("Check your code");
+        // toast("Check your code");
+        navigate('/404')
       }
     } catch (error) {
       console.log(error);
+      navigate('/404')
     }
   };
 
@@ -83,48 +87,59 @@ const BookingHistory = () => {
 
   const fetchData = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${usertoken}`, // Set the token in the headers
-        },
-      };
-
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${usertoken}`, // Set the token in the headers
+      //   },
+      // };
+      setIsLoading(true);
+      console.log(isLoading);
       const response = await axiosInstance.get(
         `/user/bookingslist_user_side/${userId}`,
-        config
+        // config
       );
       if (Array.isArray(response.data)) {
-        setBookingData(response.data);
-        setAllData(response.data)
-        setError(null);
+        // Optional code to simulate delay
+        setTimeout(() => {
+          setBookingData(response.data);
+          setAllData(response.data); // Fix the typo "respose" to "response"
+          setIsLoading(false);
+        }, 1500); // Adjust the timeout value as needed
       } else {
         setError("Invalid data received from the server");
+        setIsLoading(false);
+        navigate('/404')
       }
     } catch (error) {
       setError("Error fetching data: " + error.message);
+      setIsLoading(false);
+      navigate('/404')
     }
   };
+  
   const handleCancel = async (id) => {
     console.log(id, "-----bookingId");
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${usertoken}`, // Set the token in the headers
-        },
-      };
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${usertoken}`, // Set the token in the headers
+      //   },
+      // };
       const response = await axiosInstance.get(
         `/user/cancelbooking_user_side/${id}`,
-        config
+        // config
       );
       if (response.data.message === "Booking cancelled successfully") {
-        console.log("Car cancelled successfully");
+        toast("Car cancelled successfully");
         // Fetch the updated car list after deletion
         fetchData();
       } else {
-        console.error("Failed to cancel booking");
+        // toast("Failed to cancel booking");
+        navigate('/404');
       }
     } catch (error) {
-      console.error("Error in cancelling the booking:", error);
+      // toast("Error in cancelling the booking:", error);
+      navigate('/404');
     }
   };
 
@@ -149,14 +164,9 @@ const BookingHistory = () => {
     setOtp(e.target.value);
   };
 
-  const handleAlert = () => {
-    alert("Working");
-  };
-
   const calculateTotalAmount = () => {
     return numDays * dailyRentalRate;
   };
-
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -178,129 +188,145 @@ const BookingHistory = () => {
     <div>
       <Header />
       <ToastContainer />
-      <section className="container px-4 mx-auto">
-        <div className="flex items-center gap-x-3">
-          <h2 className="text-lg font-medium text-gray-800 dark:text-white">
-            Bookings
-          </h2>
-          <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
-            {bookingData.length} bookings
-          </span>
-        </div>
+      {isLoading ? (
+         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+         <LoadingSpinner />
+       </div>
+      ) : (
+        <section className="container px-4 mx-auto">
+          <div className="flex items-center gap-x-3">
+            <h2 className="text-lg font-medium text-gray-800 dark:text-white">
+              Bookings
+            </h2>
+            <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">
+              {bookingData.length} bookings
+            </span>
+          </div>
 
-        <div className="flex flex-col mt-6">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-              <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                  <thead className="bg-gray-50 dark:bg-gray-800">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                      >
-                        <div className="flex items-center gap-x-3">
-                          <span>Model</span>
-                        </div>
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                      >
-                        <div className="flex items-center gap-x-3">
-                          <span>Trip Start Date</span>
-                        </div>
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                      >
-                        <div className="flex items-center gap-x-3">
-                          <span>Trip End Date</span>
-                        </div>
-                      </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 pr-4 text-sm font-normal text-right text-gray-500 dark:text-gray-400"
-                      >
-                        Booking Status
-                      </th>
-                      <th
-                        scope="col"
-                        className="py-3.5 pr-4 text-sm font-normal text-right text-gray-500 dark:text-gray-400"
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                    {displayData.map((booking) => (
-                      <tr
-                        key={booking.bookingId}
-                        className="bg-white dark:bg-gray-900"
-                      >
-                        <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                          {booking.modelName}
-                        </td>
-                        <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
-                          {booking.pickupDate}
-                        </td>
-                        <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
-                          {booking.returnDate}
-                        </td>
-                        <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                          {booking.Amount}
-                        </td>
-                        <td className="pr-4 py-3 text-sm font-medium text-right">
-                          {booking.bookingStatus}
-                        </td>
-                        <td className="pr-4 py-3 text-sm font-medium text-right">
-                          <button
-                            onClick={() =>
-                              handleViewBookingDetails(booking.bookingId)
-                            }
-                            className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600"
-                          >
-                            View Booking Details
-                          </button>
-                          {booking.bookingStatus === "booked" &&
-                            new Date(booking.pickupDate) > new Date() && (
-                              <button
-                                onClick={() => handleCancel(booking.bookingId)}
-                                className="ml-2 text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
-                              >
-                                Cancel
-                              </button>
-                            )}
-                        </td>
+          <div className="flex flex-col mt-6">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-800">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        >
+                          <div className="flex items-center gap-x-3">
+                            <span>Model</span>
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        >
+                          <div className="flex items-center gap-x-3">
+                            <span>Trip Start Date</span>
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        >
+                          <div className="flex items-center gap-x-3">
+                            <span>Trip End Date</span>
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        >
+                          Amount
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3.5 pr-4 text-sm font-normal text-right text-gray-500 dark:text-gray-400"
+                        >
+                          Booking Status
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3.5 pr-4 text-sm font-normal text-right text-gray-500 dark:text-gray-400"
+                        >
+                          Actions
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div>
-                <button className="ml-5" disabled={currentPage==1} onClick={handlePrevPage}>
-                    Prev
-                  </button>
-                  <button className="ml-10" disabled={currentPage==totalPages} onClick={handleNextPage}>
-                    Next
-                  </button>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                      {displayData.map((booking) => (
+                        <tr
+                          key={booking.bookingId}
+                          className="bg-white dark:bg-gray-900"
+                        >
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                            {booking.modelName}
+                          </td>
+                          <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
+                            {booking.pickupDate}
+                          </td>
+                          <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
+                            {booking.returnDate}
+                          </td>
+                          <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                            {booking.Amount}
+                          </td>
+                          <td className="pr-4 py-3 text-sm font-medium text-right">
+                            {booking.bookingStatus}
+                          </td>
+                          <td className="pr-4 py-3 text-sm font-medium text-right">
+                            <button
+                              onClick={() =>
+                                handleViewBookingDetails(booking.bookingId)
+                              }
+                              className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600"
+                            >
+                              View Booking Details
+                            </button>
+                            {booking.bookingStatus === "booked" &&
+                              new Date(booking.pickupDate) > new Date() && (
+                                <button
+                                  onClick={() =>
+                                    handleCancel(booking.bookingId)
+                                  }
+                                  className="ml-2 text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
+                                >
+                                  Cancel
+                                </button>
+                              )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div>
+                    <button
+                      className="ml-5"
+                      disabled={currentPage == 1}
+                      onClick={handlePrevPage}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="ml-10"
+                      disabled={currentPage == totalPages}
+                      onClick={handleNextPage}
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
       {isModalOpen && (
         <BookingDetailsModal
           selectedBookingDetails={selectedBookingDetails}
           closeModal={closeModal}
-          handleAlert={handleAlert}
           handleSubmit={handleSubmit}
           otp={otp}
           setOtp={setOtp}

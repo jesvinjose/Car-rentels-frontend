@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import AdminHeader from "./AdminHeader";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -17,13 +17,14 @@ const EditCarousel = () => {
   }, []);
 
   const fetchData = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-      },
-    };
-    const response = await axiosInstance.get(
-      `/admin/loadEditCarousel/${carouselId}`,config
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
+    const response = await axiosInstanceforAdmin.get(
+      `/admin/loadEditCarousel/${carouselId}`,
+      // config
     );
     setCarouselDetails(response.data);
     console.log(carouselDetails, "carouselsdata");
@@ -33,7 +34,6 @@ const EditCarousel = () => {
   const [carouselName, setCarouselName] = useState("");
   const [carouselImages, setCarouselImages] = useState("");
   const [carouselDescription, setCarouselDescription] = useState("");
-
 
   const handleImageChange = (event) => {
     setCarouselImages(event.target.files);
@@ -53,18 +53,21 @@ const EditCarousel = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-          'Content-Type': 'multipart/form-data' // Set the content type for multipart form data
+          // Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+          "Content-Type": "multipart/form-data", // Set the content type for multipart form data
         },
       };
-      const response = await axiosInstance.put(`/admin/editCarousel/${carouselId}`, formData,config
-    );
-      console.log('Carousel editted successfully:', response.data);
+      const response = await axiosInstanceforAdmin.put(
+        `/admin/editCarousel/${carouselId}`,
+        formData,
+        config
+      );
+      console.log("Carousel editted successfully:", response.data);
       if (navigate) {
-        navigate('/admin/carousels');
+        navigate("/admin/carousels");
       }
     } catch (error) {
-      console.error('Error registering carousel:', error);
+      console.error("Error registering carousel:", error);
     }
   };
 

@@ -1,16 +1,14 @@
-import { useState, useEffect } from "react";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+// import * as React from "react";
 import axios from "axios";
 import VendorHeader from "./VendorHeader";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import axiosInstance from '../../api/axiosInstance'
+// import axiosInstance from "../../api/axiosInstance";
+import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 
-// mapboxgl.Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-
-// const Token = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-// console.log(Token, "----------token");
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 const CarRegister = () => {
   const carTypes = ["Standard", "Economy", "Luxury"];
@@ -131,16 +129,18 @@ const CarRegister = () => {
   };
 
   const handleSubmit = async (e) => {
-    // console.log(modelName,deliveryHub,description,fuelCapacity,fuelType,seatNumber,rcNumber,rcImageDataUrl,"etc");
+    console.log(modelName,deliveryHub,description,fuelCapacity,selectedFuelType,seatNumber,rcNumber,rcImageDataUrl,"etc");
+    console.log(vendorId,"-------vendorId");
     e.preventDefault();
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
-        }
-      };
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+      //   }
+      // };
       console.log(carLocation, "-------------carLocationFrontend-------");
-      const response = await axiosInstance.post(
+      // console.log(rcImageDataUrl,"----------imageurl");
+      const response = await axiosInstanceforVendor.post(
         `/vendor/registercar/${vendorId}`,
         {
           modelName,
@@ -161,14 +161,15 @@ const CarRegister = () => {
           monthlyRentalRate,
           carLocation, // Include car location (latitude and longitude)
         },
-        config
+        // config
       );
 
       console.log("Car registered successfully:", response.data);
       resetForm();
+      // alert("updated list")
       navigate(`/carsList/${vendorId}`);
     } catch (error) {
-      console.error("Error registering car:", error);
+      console.error("Error registering car:", error.message);
     }
   };
 
@@ -191,6 +192,7 @@ const CarRegister = () => {
   console.log(carLocation);
 
   useEffect(() => {
+    mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN; // Set Mapbox access token
     const map = new mapboxgl.Map({
       container: "map",
       // style: 'mapbox://styles/mapbox/streets-v11',

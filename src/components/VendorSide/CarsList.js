@@ -9,7 +9,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 
 
-const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
+const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate }) => {
 
   const carTypes = ["Standard", "Economy", "Luxury"];
   const fuelTypes = ["Petrol", "Diesel"];
@@ -64,6 +64,7 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate }) => {
       // console.log(response.data.message, "from editCarDetails to frontend");
       if (response.data.message === "Car updated successfully")
         // console.log("Car updated successfully!");
+        setDate(new Date())
         onCarUpdate(updatedCarDataForm); // Notify the parent component of the update
       closeModal();
     } catch (error) {
@@ -425,11 +426,13 @@ const CarsList = () => {
   // const vendorId = localStorage.getItem("vendorId");
   const { vendorId } = useParams();
 
+  const [date,setDate]=useState(new Date())
+
   const vendortoken=localStorage.getItem('vendorToken')
 
   useEffect(() => {
     fetchData();
-  },[]);
+  },[date]);
 
   const fetchData = async () => {
     try {
@@ -625,6 +628,8 @@ const CarsList = () => {
           closeModal={closeModal}
           carData={carData}
           onCarUpdate={handleCarUpdate}
+          date={date}
+          setDate={setDate}
         />
       )}
     </div>

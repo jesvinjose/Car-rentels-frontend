@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import VendorHeader from "./VendorHeader";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const BookingDetailsModal = ({
   selectedBookingDetails,
@@ -141,7 +142,7 @@ const BookingsList = () => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
 
-  const vendortoken = localStorage.getItem("vendorToken");
+  const vendorToken = localStorage.getItem("vendorToken");
 
   const firstBookingDetail = selectedBookingDetails ? selectedBookingDetails[0] : null;
   const [error, setError] = useState(null);
@@ -161,7 +162,7 @@ const BookingsList = () => {
     console.log(userId, "00userId");
     console.log(bookingId, "-----bookingId-");
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosInstanceforVendor.post(
         `/vendor/check_user_and_deliver_vehicle`,
         {
           otpToBeChecked,
@@ -176,7 +177,7 @@ const BookingsList = () => {
       ) {
         toast("car, booking history and booking details updated");
         setDate(new Date());
-        // navigate("/bookingslist");
+        navigate("/bookingslist");
       } else if (response.data.message === "Start trip Otp is wrong") {
         toast("Start trip Otp is wrong");
       } else if (response.data.message === "Booking not found") {
@@ -192,16 +193,20 @@ const BookingsList = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+
+    fetchData();
+  }, [date]);
+
+      const fetchData = async () => {
       try {
         const config = {
           headers: {
-            Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+            Authorization: `Bearer ${vendorToken}`, // Set the token in the headers
           },
         };
   
-        const response = await axiosInstance.get(
-          `/vendor/bookingslist/${vendorId}`,
+        const response = await axios.get(
+          ` http://localhost:5000/vendor/bookingslist/${vendorId}`,
           config
         );
         if (Array.isArray(response.data)) {
@@ -214,8 +219,6 @@ const BookingsList = () => {
         setError("Error fetching data: " + error.message);
       }
     };
-    fetchData();
-  }, [date]);
 
 
 
@@ -225,14 +228,14 @@ const BookingsList = () => {
   const handleCancel = async (id) => {
     // console.log(id, "-----bookingId");
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
-        },
-      };
-      const response = await axiosInstance.get(
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+      //   },
+      // };
+      const response = await axiosInstanceforVendor.get(
         `/vendor/cancelbooking/${id}`,
-        config
+        // config
       );
       if (response.data.message === "Booking cancelled successfully") {
         console.log("Car cancelled successfully");

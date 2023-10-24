@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import bgImage from "../../assets/signUpbackgroundImage.jpg";
 import logo from "../../assets/logo-1.png";
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from "../../api/axiosInstance";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function RegisterForm() {
   const [firstName, setFirstName] = useState("");
@@ -48,33 +50,41 @@ function RegisterForm() {
         const responseData = response.data;
         if (responseData.message === "Please enter a valid firstName") {
           console.error("Invalid first name");
+          toast("Please enter a valid firstName")
         } else if (responseData.message === "Please enter a valid lastName") {
           console.error("Invalid last name");
+          toast("Please enter a valid lastName")
         } else if (
           responseData.message ===
           "Password should be at least 8 characters long"
         ) {
           console.error("Password too short");
+          toast("Password should be at least 8 characters long")
         } else if (responseData.message === "Passwords do not match") {
           console.error("Passwords do not match");
+          toast("Passwords do not match")
         } else if (
           responseData.message === "Please enter a valid email address"
         ) {
           console.error("Invalid email address");
+          toast("Invalid email address")
         } else if (
           responseData.message === "Please enter a valid mobile number"
         ) {
           console.error("Invalid mobile number");
+          toast("Invalid mobile number")
         }
       } else if (response.status === 409) {
         // User already exists
         console.error("User already exists");
+        toast("User already exists")
       } else {
         // Other errors
         console.error("Registration failed:", response.data.message);
       }
     } catch (error) {
       console.error("Error during registration:", error.message);
+      navigate("/404");
     }
   };
 
@@ -97,6 +107,8 @@ function RegisterForm() {
             </span>
           </div>
         </div>
+
+        <ToastContainer />
 
         <form className="mt-6">
           <div className="flex">

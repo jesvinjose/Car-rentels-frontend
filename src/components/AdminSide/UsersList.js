@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import AdminHeader from "./AdminHeader";
 
 const UserDetailsModal = ({
@@ -17,7 +17,7 @@ const UserDetailsModal = ({
   const handleAccept = async (id) => {
     console.log("userId:" + id);
     console.log("inside handle Accept");
-    const res = await axiosInstance.put(
+    const res = await axiosInstanceforAdmin.put(
       `/admin/userVerificationAccept/${id}`
     );
     console.log(res, "return response");
@@ -37,8 +37,8 @@ const UserDetailsModal = ({
   const handleReject = async (id) => {
     console.log("userId:" + id);
     console.log("inside handle Reject");
-    const res = await axiosInstance.put(
-      `/admin/userVerificationReject/${id}`,
+    const res = await axiosInstanceforAdmin.put(
+      `/admin/userVerificationReject/${id}`
     );
     console.log(res, "return response");
     if (res.data.message === "User Account is Rejected") {
@@ -148,17 +148,20 @@ const UsersList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserDetails, setSelectedUserDetails] = useState(null);
 
-  const adminToken=localStorage.getItem('adminToken');
+  const adminToken = localStorage.getItem("adminToken");
 
   // console.log(userData,"------------full Users--------------");
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
-      }
-    };
-    axiosInstance
-      .get("/admin/userslist",config)
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`  // Set the token in the headers
+    //   }
+    // };
+    axiosInstanceforAdmin
+      .get(
+        "/admin/userslist"
+        // config
+      )
       .then((response) => {
         // Check if the response data is an array before setting the state
         // console.log(response.data);
@@ -177,12 +180,14 @@ const UsersList = () => {
   }, []);
 
   const handleBlock = async (id) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
-      }
-    };
-    const res = await axiosInstance.put(`/admin/userblock/${id}`,null, config);
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
+    const res = await axiosInstanceforAdmin.put(`/admin/userblock/${id}`, null, 
+    // config
+    );
     console.log(id);
 
     // console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -196,13 +201,15 @@ const UsersList = () => {
   const handleUnblock = async (id) => {
     console.log(id, "");
     console.log("hellooooooooooooooooooooooo");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`  // Set the token in the headers
-      }
-    };
-    const resss = await axiosInstance.put(
-      `/admin/userunblock/${id}`,null, config
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
+    const resss = await axiosInstanceforAdmin.put(
+      `/admin/userunblock/${id}`,
+      null,
+      // config
     );
     console.log(id);
 

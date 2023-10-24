@@ -8,6 +8,7 @@ const Header = () => {
   const emailId = localStorage.getItem("emailId");
   const lastName = localStorage.getItem("lastName");
   const userId = localStorage.getItem("userId");
+  const walletBalance=localStorage.getItem("walletBalance")
   const navigate = useNavigate();
   const handleLogout = (e) => {
     document.cookie = "userToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT"; // Clear cookie
@@ -16,6 +17,7 @@ const Header = () => {
     localStorage.removeItem("lastName");
     localStorage.removeItem("emailId");
     localStorage.removeItem("userId");
+    localStorage.removeItem("walletBalance");
   };
   return (
 <div>
@@ -68,11 +70,16 @@ const Header = () => {
                 {firstName}
               </p>
             </a>
+            {walletBalance ? (
+                  <li className="dropdown-item">
+                    Wallet: {walletBalance}
+                  </li>
+                ) : null}
             {token ? (
               <Link to="/booking_history" className="dropdown-item">
                 <li>Booking History</li>
               </Link>
-            ) : (
+           ) : (
               <></>
             )}
             {token ? (

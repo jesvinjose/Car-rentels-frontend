@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstanceforAdmin from '../../api/axiosInstanceforAdmin';
 import AdminHeader from './AdminHeader';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ const CarouselRegister = () => {
   const [carouselImages, setCarouselImages] = useState([]);
   const [carouselDescription, setCarouselDescription] = useState('');
   const navigate=useNavigate();
-  const adminToken=localStorage.getItem('adminToken');
+  // const adminToken=localStorage.getItem('adminToken');
 
   const handleImageChange = (event) => {
     setCarouselImages(event.target.files);
@@ -30,11 +30,11 @@ const CarouselRegister = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+          // Authorization: `Bearer ${adminToken}`, // Set the token in the headers
           'Content-Type': 'multipart/form-data' // Set the content type for multipart form data
         },
       };
-      const response = await axiosInstance.post('/admin/addCarousels', formData,config);
+      const response = await axiosInstanceforAdmin.post('/admin/addCarousels', formData,config);
       console.log('Carousel registered successfully:', response.data);
       navigate('/admin/carousels');
     } catch (error) {

@@ -42,6 +42,7 @@ function VerifyOTP() {
       }
     } catch (error) {
       console.log(error);
+      navigate('/404')
     }
   };
 

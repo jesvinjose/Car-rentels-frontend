@@ -45,6 +45,8 @@ import BookingsList from "./components/VendorSide/BookingsList";
 import BookingSuccessPage from "./components/UserSide/BookingSuccessPage";
 import BookingHistory from "./components/UserSide/BookingHistory";
 import BookingsListAdminSide from "./components/AdminSide/BookingsListAdminSide";
+import NotFound from "./components/UserSide/NotFound";
+import AdminDashboard from "./components/AdminSide/AdminDashboard";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
@@ -72,9 +74,10 @@ function App() {
           <Route element={<ForgotPassword />} path="/forgotpassword" />
           <Route path="/car_list" element={<CategorywiseCars />} />
           <Route path="/car_details" element={<CarDetails />} />
-          <Route path="/available_cars" element={<AvailableCars/>}/>
+          {/* <Route path="/available_cars" element={<AvailableCars/>}/> */}
           <Route path="/bookingslist" element={<BookingsList/>}/>
           <Route path="/booking_history" element={<BookingHistory/>}/>
+          
 
           <Route
             element={<ForgotPassword4Vendor />}
@@ -132,11 +135,11 @@ function App() {
           {/* Define your AdminHome component */}
           <Route path="/admin" element={<AdminLogin />} />
 
-          {/* <Route path="/admin/userslist" element={<UsersList />} /> */}
-          <Route
+          <Route path="/admin/userslist" element={<UsersList />} />
+          {/* <Route
             path="/admin/userslist"
             element={<PrivateRoutesAdminSide Component={UsersList} />}
-          />
+          /> */}
 
           {/* <Route path="/admin/vendorslist" element={<VendorsList />} /> */}
           <Route
@@ -175,6 +178,9 @@ function App() {
           />
 
           <Route path="/bookings_list_adminside" element={<BookingsListAdminSide/>}/>
+          <Route path="/404" element={<NotFound/>} />
+          <Route path="/*" element={<NotFound/>} />
+          <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
         </Routes>
       </Router>
     </div>

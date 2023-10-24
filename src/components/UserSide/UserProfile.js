@@ -5,11 +5,14 @@ import axios from "axios";
 import Profile from "../../assets/profile.png";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
+
 
 const UserProfile = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
   const usertoken = localStorage.getItem("token");
+  const navigate=useNavigate();
 
   useEffect(() => {
     // const config = {
@@ -32,8 +35,10 @@ const UserProfile = () => {
     //   });
     
     // Use axiosInstance instead of axios here
+    // axios
+    //   .get(`http://localhost:5000/user/${userId}`) // The baseURL will be appended due to the interceptor
     axiosInstance
-      .get(`user/${userId}`) // The baseURL will be appended due to the interceptor
+      .get(`/user/${userId}`) // The baseURL will be appended due to the interceptor
       .then((response) => {
         setUserDetails(response.data.userDetails);
         console.log(
@@ -43,6 +48,7 @@ const UserProfile = () => {
       })
       .catch((error) => {
         console.error("Error fetching user details:", error);
+        // navigate('/404')
       });
   }, [userId, usertoken]);
   console.log(userDetails, "----------userProfile console----------");

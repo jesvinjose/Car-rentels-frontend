@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 
-const axiosInstance = axios.create({
+const axiosInstanceforAdmin = axios.create({
   baseURL: 'http://localhost:5000', // Replace with your actual base URL
 });
 
-axiosInstance.interceptors.request.use(
+axiosInstanceforAdmin.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('adminToken');
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`
     }
@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-axiosInstance.interceptors.response.use(
+axiosInstanceforAdmin.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -26,8 +26,8 @@ axiosInstance.interceptors.response.use(
     if(error.code==="ECONNABORTED") toast.error("This request tooking long to respond",{position:toast.POSITION.TOP_CENTER})
    else if (error.response.status === 403) {
       toast.error(`${error.response.data.message}`,{position:toast.POSITION.TOP_CENTER})
-      localStorage.removeItem('token')
-      window.location.href = '/login';
+      localStorage.removeItem('adminToken')
+      window.location.href = '/admin';
 
     }
     else{
@@ -38,4 +38,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export default axiosInstanceforAdmin;

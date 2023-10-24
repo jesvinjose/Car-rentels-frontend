@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import BookingDetailsModalAdminSide from "./BookingDetailsModalAdminSide";
 
 const BookingsListAdminSide = () => {
@@ -36,15 +36,15 @@ const BookingsListAdminSide = () => {
 
   const fetchData = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-        },
-      };
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+      //   },
+      // };
 
-      const response = await axiosInstance.get(
+      const response = await axiosInstanceforAdmin.get(
         `/admin/bookingslist/${adminEmailId}`,
-        config
+        // config
       );
       if (Array.isArray(response.data)) {
         setBookingData(response.data);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminHeader from "./AdminHeader";
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance' 
+import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,26 +9,24 @@ import { ToastContainer, toast } from "react-toastify";
 const CarouselList = () => {
   const navigate = useNavigate();
   const [carouselData, setCarouselData] = useState([]);
-  const adminToken = localStorage.getItem("adminToken");
+  // const adminToken = localStorage.getItem("adminToken");
 
   useEffect(() => {
     fetchCarouselData();
   }, []);
 
-  useEffect(()=>{
-
-  },[carouselData])
+  useEffect(() => {}, [carouselData]);
 
   const fetchCarouselData = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
     try {
-      const response = await axiosInstance.get(
-        "/admin/carouselslist",
-        config
+      const response = await axiosInstanceforAdmin.get(
+        "/admin/carouselslist"
+        // config
       );
       if (Array.isArray(response.data)) {
         setCarouselData(response.data);
@@ -42,15 +40,15 @@ const CarouselList = () => {
 
   const handleBlock = async (id) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-        },
-      };
-      await axiosInstance.put(
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+      //   },
+      // };
+      await axiosInstanceforAdmin.put(
         `/admin/carouselblock/${id}`,
-        null,
-        config
+        null
+        // config
       );
       const updatedCarousel = carouselData.map((i) =>
         i._id === id ? { ...i, blockStatus: true } : i
@@ -63,15 +61,15 @@ const CarouselList = () => {
 
   const handleUnblock = async (id) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-        },
-      };
-      await axiosInstance.put(
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+      //   },
+      // };
+      await axiosInstanceforAdmin.put(
         `/admin/carouselunblock/${id}`,
-        null,
-        config
+        null
+        // config
       );
       const updatedCarousel = carouselData.map((i) =>
         i._id === id ? { ...i, blockStatus: false } : i
@@ -83,26 +81,27 @@ const CarouselList = () => {
   };
 
   const handleDelete = (carouselId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this carousel?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this carousel?"
+    );
     if (confirmDelete) {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${adminToken}`
-        }
-      };
-      axiosInstance
-        .delete(`/admin/delete-carousel/${carouselId}`,config)
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${adminToken}`
+      //   }
+      // };
+      axiosInstanceforAdmin
+        .delete(`/admin/delete-carousel/${carouselId}`)
         .then((response) => {
           console.log("Carousel deleted successfully");
-          fetchCarouselData();  // Fetch updated carousel data
-          navigate("/admin/carousels");  // Navigate to the carousel page
+          fetchCarouselData(); // Fetch updated carousel data
+          navigate("/admin/carousels"); // Navigate to the carousel page
         })
         .catch((error) => {
           console.error("Error deleting carousel:", error);
         });
     }
   };
-  
 
   return (
     <div>
@@ -191,19 +190,18 @@ const CarouselList = () => {
                               Disable
                             </button>
                           )}
-                          <a
-                            href={`/editcarousel/${carousel._id}`}
+                          <Link
+                            to={`/editcarousel/${carousel._id}`}
                             className="btn btn-primary"
                           >
                             Edit
-                          </a>
-                          <a
-                            href="#"
+                          </Link>
+                          <button
                             className="btn btn-danger"
                             onClick={() => handleDelete(carousel._id)}
                           >
                             Delete
-                          </a>
+                          </button>
                         </td>
                       </tr>
                     ))}

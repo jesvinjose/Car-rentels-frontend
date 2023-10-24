@@ -1,7 +1,6 @@
 // AdminLoginForm.js
 import React, { useState } from "react";
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance';
 import { useNavigate } from "react-router-dom";
 import logo from '../../assets/logo-1.png'
 
@@ -13,7 +12,7 @@ function AdminLoginForm() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post("/admin/login", {
+      const response = await axios.post("http://localhost:5000/admin/login", {
         emailId,
         password,
       });

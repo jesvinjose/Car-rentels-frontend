@@ -36,6 +36,7 @@ function VerifyOTP4PasswordReset() {
       }
     } catch (error) {
       console.log(error);
+      navigate('/404')
     }
   };
 

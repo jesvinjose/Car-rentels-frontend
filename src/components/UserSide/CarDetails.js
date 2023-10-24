@@ -36,16 +36,21 @@ const CarDetails = () => {
     setReturnDate(minReturnDate.toISOString().split("T")[0]);
   };
 
-  const today = new Date().toISOString().split("T")[0];
-  // Calculate next day
-  const tomorrow = new Date();
-  tomorrow.setDate(new Date().getDate() + 1);
-  const nextDay = tomorrow.toISOString().split("T")[0];
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  const secondDay = new Date(today);
+  secondDay.setDate(today.getDate() + 2);
+  const nextDay = secondDay.toISOString().split("T")[0];
+
+  const [pickupDate, setPickupDate] = useState(
+    tomorrow.toISOString().split("T")[0]
+  );
+  const [returnDate, setReturnDate] = useState(nextDay);
+
   const [searchInitiated, setSearchInitiated] = useState(false);
   const [availableCar, setAvailableCar] = useState(false);
-  // const navigate = useNavigate();
-  const [pickupDate, setPickupDate] = useState(today);
-  const [returnDate, setReturnDate] = useState(nextDay); // Set to next day
 
   useEffect(() => {}, [searchInitiated]);
 
@@ -75,6 +80,8 @@ const CarDetails = () => {
       document.body.appendChild(script);
     });
   }
+
+  const token = localStorage.getItem("token");
 
   async function displayRazorpay() {
     const res = await loadScript(
@@ -169,6 +176,7 @@ const CarDetails = () => {
       // ...
     } catch (error) {
       console.log("Error during booking:", error);
+      navigate("/404");
     }
   };
 
@@ -186,8 +194,16 @@ const CarDetails = () => {
     try {
       console.log(pickupDate, returnDate, "inside handleSubmit");
       // Send a POST request to the server to get available cars
-      const response = await axios.post(
-        "http://localhost:5000/user/check_car_availability",
+      // const response = await axios.post(
+      //   "http://localhost:5000/user/check_car_availability",
+      //   {
+      //     pickupDate,
+      //     returnDate,
+      //     carId,
+      //   }
+      // );
+      const response = await axiosInstance.post(
+        "/user/check_car_availability",
         {
           pickupDate,
           returnDate,
@@ -263,16 +279,18 @@ const CarDetails = () => {
           <div
             id="map"
             className="col-12 col-md-6 map-container mb-4"
-            style={{ height: "200px", backgroundColor: "gray" }}
+            style={{ height: "400px", backgroundColor: "gray" }}
           ></div>
-          <div className="col-12 col-md-3">
+          <div className="col-12 col-md-6">
             <img
               className="m-auto border border-black rounded img-fluid"
               src={carDetails.carImage}
               alt="car-imagePreview"
             />
           </div>
-          <div className="col-12 col-md-3">
+        </div>
+        <div className="flex justify-center">
+          <div className="col-12 col-md-6 ">
             <div className="border border-black p-4 bg-grey-300 flex flex-col md:flex-row justify-center items-center mt-3 mb-3">
               <label>Pickup Date:</label>
               <input
@@ -281,7 +299,7 @@ const CarDetails = () => {
                 placeholder="Pickup Date"
                 value={pickupDate}
                 onChange={handlePickupDateChange}
-                min={today} // Set min to today's date
+                min={tomorrow.toISOString().split("T")[0]} // Set min to tomorrow's date in ISO format
                 required
               />
               <label>Return Date: </label>
@@ -305,6 +323,7 @@ const CarDetails = () => {
             </div>
           </div>
         </div>
+
         <div className="row mt-4">
           <div className="col-6 col-md-3">
             <div className="flex justify-evenly ">
@@ -354,7 +373,7 @@ const CarDetails = () => {
           <div className="col-12">{carDetails.description}</div>
         </div>
       </div>
-      {availableCar && (
+      {availableCar && token ? (
         <div className="container justify-items-start mb-20">
           <div className="border mt-5 mb-5">
             <h1>Amount Details</h1>
@@ -371,6 +390,22 @@ const CarDetails = () => {
           >
             Book Now
           </button>
+        </div>
+      ) : (
+        <div className="container justify-items-start mb-20">
+          <div className="border mt-5 mb-5">
+            <h1>Amount Details</h1>
+            <div className="flex justify-start">
+              <div className="mr-3">Car Pickup Date: {pickupDate}</div>
+              <div className="mr-3">Car Return Date: {returnDate}</div>
+            </div>
+            <div className="mt-3">Total Amount: {calculateTotalAmount()}</div>
+          </div>
+          {!token && (
+            <div>
+              <h1>Log in to the Account for Booking</h1>
+            </div>
+          )}
         </div>
       )}
     </div>

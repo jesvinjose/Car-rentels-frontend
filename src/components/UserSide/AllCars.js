@@ -7,6 +7,7 @@ import gearbox from "../../assets/gearbox.png";
 import gasstation from "../../assets/gas-station.png";
 import axiosInstance from "../../api/axiosInstance";
 import SearchBar from "./SeachBar";
+import { Link } from "react-router-dom";
 
 const AllCars = () => {
   const [allcars, setAllCars] = useState([]);
@@ -23,6 +24,7 @@ const AllCars = () => {
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = allcars.slice(indexOfFirstCar, indexOfLastCar);
+  const token=localStorage.getItem('token')
 
   useEffect(() => {
     console.log("Updated allcars:", allcars); // Log allcars whenever it changes
@@ -40,13 +42,17 @@ const AllCars = () => {
     console.log("Updated fuelTypes:", fuelTypes); // Log fuelTypes whenever it changes
   }, [fuelTypes]);
 
-  useEffect(() => {
-    console.log("Updated sortPriceLowToHigh:", sortPriceLowToHigh); // Log sortPriceLowToHigh whenever it changes
-  }, [sortPriceLowToHigh]);
+  // useEffect(() => {
+  //   console.log("Updated sortPriceLowToHigh:", sortPriceLowToHigh); // Log sortPriceLowToHigh whenever it changes
+  // }, [sortPriceLowToHigh]);
+
+  // useEffect(() => {
+  //   console.log("Updated sortPriceHighToLow:", sortPriceHighToLow);
+  // }, [sortPriceHighToLow]);
 
   useEffect(() => {
-    console.log("Updated sortPriceHighToLow:", sortPriceHighToLow);
-  }, [sortPriceHighToLow]);
+    console.log("Updated sortTypes:", sortTypes);
+  }, [sortTypes]);
 
   // useEffect(() => {
   //   console.log("Updated sortPriceHighToLow:", search);
@@ -241,8 +247,8 @@ const AllCars = () => {
     try {
       console.log(pickupDate, returnDate, "inside handleSubmit");
       // Send a POST request to the server to get available cars
-      const response = await axios.post(
-        "http://localhost:5000/user/availableCars",
+      const response = await axiosInstance.post(
+        "/user/availableCars",
         {
           pickupDate,
           returnDate,
@@ -272,31 +278,25 @@ const AllCars = () => {
     setReturnDate(minReturnDate.toISOString().split("T")[0]);
   };
 
-  const today = new Date().toISOString().split("T")[0];
-  // Calculate next day
-  const tomorrow = new Date();
-  tomorrow.setDate(new Date().getDate() + 1);
-  const nextDay = tomorrow.toISOString().split("T")[0];
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  
+  const secondDay = new Date(today);
+  secondDay.setDate(today.getDate() + 2);
+  const nextDay = secondDay.toISOString().split("T")[0];
+  
+  const [pickupDate, setPickupDate] = useState(tomorrow.toISOString().split("T")[0]);
+  const [returnDate, setReturnDate] = useState(nextDay);
+  
   const [searchInitiated, setSearchInitiated] = useState(false);
-  // const [availableCars, setAvailableCars] = useState([]);
-  // const navigate = useNavigate();
-  const [pickupDate, setPickupDate] = useState(today);
-  const [returnDate, setReturnDate] = useState(nextDay); // Set to next day
 
-  // const [searchInitiated, setSearchInitiated] = useState(false);
-  // const [availableCars, setAvailableCars] = useState([]);
-  // const navigate = useNavigate();
-
-  //-----------------------
 
   useEffect(() => {}, [searchInitiated]);
 
   return (
     <div>
       <Header />
-      {/*  */}
-      {/* <SearchBar handleSubmit={handleSubmit} /> */}
-      {/*  */}
       <div className="border border-black p-4 bg-lime-300 flex flex-col md:flex-row justify-center items-center mt-3">
         <label>Pickup Date:</label>
         <input
@@ -305,7 +305,7 @@ const AllCars = () => {
           placeholder="Pickup Date"
           value={pickupDate}
           onChange={handlePickupDateChange}
-          min={today} // Set min to today's date
+          min={tomorrow.toISOString().split("T")[0]} // Set min to tomorrow's date in ISO format
           required
         />
 
@@ -434,16 +434,16 @@ const AllCars = () => {
                 <label>
                   <input
                     type="checkbox"
-                    checked={sortTypes.includes("sortPriceLowToHigh")}
-                    onChange={() => handleSortTypeChange("sortPriceLowToHigh")}
+                    checked={sortTypes.includes("Ascending")}
+                    onChange={() => handleSortTypeChange("Ascending")}
                   />
                   Price: Low to High
                 </label>
                 <label>
                   <input
                     type="checkbox"
-                    checked={sortTypes.includes("sortPriceHighToLow")}
-                    onChange={() => handleSortTypeChange("sortPriceHighToLow")}
+                    checked={sortTypes.includes("Descending")}
+                    onChange={() => handleSortTypeChange("Descending")}
                   />
                   Price: High to Low
                 </label>
@@ -513,37 +513,23 @@ const AllCars = () => {
                     {/* <h1 className="px-2 text-sm">
                       {car.monthlyRentalRate}Rs/month
                     </h1>  */}
-                    {/* <button className="border border-black w-28 rounded-lg bg-orange-500-100 hover:bg-orange-800-400 shadow-md">
-                      <a
-                        onClick={
-                          searchInitiated ? () => handleBooking(car._id) : null
-                        }
-                        href={
-                          searchInitiated
-                            ? null
-                            : `/car_details?carId=${car._id}`
-                        }
-                        className="btn_3"
-                      >
-                            {searchInitiated ? "Book Now" : "View Details"}
-                      </a>
-                    </button> */}
+
                     <button className="border border-black w-28 rounded-lg bg-orange-500-100 hover:bg-orange-800-400 shadow-md">
-                      {searchInitiated ? (
-                        <a
+                      {searchInitiated && token ? (
+                        <Link
                           // onClick={() => handleBooking(car._id)}
-                          href={`/booking_details?carId=${car._id}&pickupDate=${pickupDate}&returnDate=${returnDate}`}
+                          to={`/booking_details?carId=${car._id}&pickupDate=${pickupDate}&returnDate=${returnDate}`}
                           className="btn_3"
                         >
                           Book Now
-                        </a>
+                        </Link>
                       ) : (
-                        <a
-                          href={`/car_details?carId=${car._id}`}
+                        <Link
+                          to={`/car_details?carId=${car._id}`}
                           className="btn_3"
                         >
                           View Details
-                        </a>
+                        </Link>
                       )}
                     </button>
                   </div>

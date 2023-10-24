@@ -10,7 +10,6 @@ import axiosInstance from "../../api/axiosInstance";
 const BookingDetailsModal = ({
   selectedBookingDetails,
   closeModal,
-  handleAlert,
   handleSubmit,
   otp,
   setOtp,
@@ -23,15 +22,7 @@ const BookingDetailsModal = ({
   dailyRentalRate,
   calculateTotalAmount,
 }) => {
-  // const [otp, setOtp] = useState("");
-  // const [numDays, setNumDays] = useState(0);
-
-  // const handleChange = (e) => {
-  //   setOtp(e.target.value);
-  // };
-
-  // const navigate = useNavigate();
-
+  
   function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -45,9 +36,6 @@ const BookingDetailsModal = ({
       document.body.appendChild(script);
     });
   }
-
-  // const bookingId = selectedBookingDetails[0].bookingId;
-  // console.log(bookingId, "-------bookingId");
 
   async function displayRazorpay() {
     const res = await loadScript(
@@ -143,20 +131,10 @@ const BookingDetailsModal = ({
     }
   };
 
-  // const calculateTotalAmount = () => {
-  //   return numDays * dailyRentalRate;
-  // };
-
   // Check if bookingDetails is defined and not empty
   if (!selectedBookingDetails || selectedBookingDetails.length === 0) {
     return null; // or you can display an error message
   }
-
-  // const dailyRentalRate = selectedBookingDetails[0].dailyRentalRate;
-  // console.log(dailyRentalRate, "------dailyRent");
-
-  // const carId = selectedBookingDetails[0].carId;
-  // console.log(carId, "------carId");
 
   // Access booking details using an index (assuming bookingDetails is an array)
   const firstBookingDetail = selectedBookingDetails[0];
@@ -169,40 +147,6 @@ const BookingDetailsModal = ({
     currentDate > pickupDate && currentDate <= returnDate;
   const isTodayGreaterThanReturn = currentDate > returnDate;
 
-  // console.log(numDays,"----numDays");
-
-  // const handleSubmit = async () => {
-  //   console.log("OTP submitted:", otp);
-  //   const userId = localStorage.getItem("userId");
-  //   let otpToBeChecked = otp;
-  //   // console.log(carId,"------carId");
-  //   // console.log(userId,"userId");
-  //   // console.log(bookingId, "-----bookingId-");
-  //   try {
-  //     const response = await axiosInstance.post(
-  //       `/user/check_vendor_and_end_trip`,
-  //       {
-  //         otpToBeChecked,
-  //         bookingId,
-  //         carId,
-  //         userId,
-  //       }
-  //     );
-  //     if (
-  //       response.data.message ===
-  //       "Car, booking history, and booking details updated"
-  //     ) {
-  //       toast("car, booking history and booking details updated");
-  //       navigate("/bookingslist");
-  //     } else if (response.data.message === "End trip OTP is wrong") {
-  //       toast("End trip OTP is wrong");
-  //     } else if (response.data.message === "Booking not found") {
-  //       toast("Booking not found");
-  //     } else {
-  //       toast("Check your code");
-  //     }
-  //   } catch (error) {}
-  // };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50  ">
@@ -313,8 +257,6 @@ const BookingDetailsModal = ({
         >
           Close
         </button>
-        {/* <button onClick={handleAlert}>Alert Button</button> */}
-        {/* <h1>Hell0</h1> */}
       </div>
     </div>
   );
