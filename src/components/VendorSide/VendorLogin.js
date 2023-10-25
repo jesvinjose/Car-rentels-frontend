@@ -43,6 +43,7 @@ function VendorLogin() {
       if (response.data.message === "Valid Vendor") {
         localStorage.setItem("vendorToken", response.data.vendorToken);
         localStorage.setItem("vendorFirstName", response.data.vendorFirstName);
+        localStorage.setItem("vendor",response.data.vendorFirstName);
         localStorage.setItem("vendorLastName", response.data.vendorBackName);
         localStorage.setItem("vendorEmailId",response.data.vendorEmailId);
         localStorage.setItem("vendorId",response.data.vendorId);
@@ -80,6 +81,7 @@ function VendorLogin() {
     if (response.data.message === "Google Login") {
       localStorage.setItem("vendorToken", response.data.vendorToken);
       localStorage.setItem("vendorFirstName", response.data.vendorFirstName);
+      localStorage.setItem("vendor",response.data.vendorFirstName);
       localStorage.setItem("vendorEmailId", response.data.vendorEmailId);
       localStorage.setItem("vendorLastName", response.data.vendorLastName);
       localStorage.setItem("vendorId", response.data.vendorId);

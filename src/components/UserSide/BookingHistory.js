@@ -4,8 +4,10 @@ import axiosInstance from "../../api/axiosInstance";
 import BookingDetailsModal from "./BookingDetailsModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
+// import ChatModal from "./ChatContainer"; // Import your ChatModal component
+import ChatContainer from "./ChatContainer";
 
 const BookingHistory = () => {
   const [bookingData, setBookingData] = useState([]);
@@ -27,6 +29,53 @@ const BookingHistory = () => {
 
   const [error, setError] = useState(null);
 
+  // const [chatOpen, setChatOpen] = useState(false);
+  // const [chatStates, setChatStates] = useState({}); // Store chat state for each vendor
+
+  // // State to manage chat messages
+  // const [chatMessages, setChatMessages] = useState([]); // Replace earlierMessages
+
+  // // Function to send a message in the chat
+  // const sendChatMessage = (message, vendorId) => {
+  //   const updatedMessages = [
+  //     ...chatStates[vendorId]?.messages,
+  //     { sender: "You", text: message },
+  //   ];
+  //   setChatStates((prevChatStates) => ({
+  //     ...prevChatStates,
+  //     [vendorId]: {
+  //       ...prevChatStates[vendorId],
+  //       messages: updatedMessages,
+  //     },
+  //   }));
+  // };
+
+  // Function to handle chat with a vendor
+  // const handleChatWithVendor = (userId, vendorId) => {
+  //   setChatOpen(true);
+  //   // Initialize the chat state for this vendor if it doesn't exist
+  //   if (!chatStates[vendorId]) {
+  //     setChatStates((prevChatStates) => ({
+  //       ...prevChatStates,
+  //       [vendorId]: { messages: [] },
+  //     }));
+  //   }
+  // };
+
+  // Function to close the chat container
+  // const closeChat = () => {
+  //   setChatOpen(false);
+  // };
+
+  // const handleChatClose = (vendorId) => {
+  //   // Clear the chat state for the specified vendor
+  //   setChatStates((prevChatStates) => {
+  //     const updatedChatStates = { ...prevChatStates };
+  //     delete updatedChatStates[vendorId];
+  //     return updatedChatStates;
+  //   });
+  // };
+  
   const bookingId =
     selectedBookingDetails.length > 0
       ? selectedBookingDetails[0].bookingId
@@ -70,14 +119,14 @@ const BookingHistory = () => {
         toast("End trip OTP is wrong");
       } else if (response.data.message === "Booking not found") {
         // toast("Booking not found");
-        navigate('/404')
+        navigate("/404");
       } else {
         // toast("Check your code");
-        navigate('/404')
+        navigate("/404");
       }
     } catch (error) {
       console.log(error);
-      navigate('/404')
+      navigate("/404");
     }
   };
 
@@ -95,7 +144,7 @@ const BookingHistory = () => {
       setIsLoading(true);
       console.log(isLoading);
       const response = await axiosInstance.get(
-        `/user/bookingslist_user_side/${userId}`,
+        `/user/bookingslist_user_side/${userId}`
         // config
       );
       if (Array.isArray(response.data)) {
@@ -108,15 +157,15 @@ const BookingHistory = () => {
       } else {
         setError("Invalid data received from the server");
         setIsLoading(false);
-        navigate('/404')
+        navigate("/404");
       }
     } catch (error) {
       setError("Error fetching data: " + error.message);
       setIsLoading(false);
-      navigate('/404')
+      navigate("/404");
     }
   };
-  
+
   const handleCancel = async (id) => {
     console.log(id, "-----bookingId");
     try {
@@ -126,7 +175,7 @@ const BookingHistory = () => {
       //   },
       // };
       const response = await axiosInstance.get(
-        `/user/cancelbooking_user_side/${id}`,
+        `/user/cancelbooking_user_side/${id}`
         // config
       );
       if (response.data.message === "Booking cancelled successfully") {
@@ -135,11 +184,11 @@ const BookingHistory = () => {
         fetchData();
       } else {
         // toast("Failed to cancel booking");
-        navigate('/404');
+        navigate("/404");
       }
     } catch (error) {
       // toast("Error in cancelling the booking:", error);
-      navigate('/404');
+      navigate("/404");
     }
   };
 
@@ -189,9 +238,16 @@ const BookingHistory = () => {
       <Header />
       <ToastContainer />
       {isLoading ? (
-         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-         <LoadingSpinner />
-       </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <LoadingSpinner />
+        </div>
       ) : (
         <section className="container px-4 mx-auto">
           <div className="flex items-center gap-x-3">
@@ -295,6 +351,16 @@ const BookingHistory = () => {
                                   Cancel
                                 </button>
                               )}
+                            {["booked", "running"].includes(
+                              booking.bookingStatus
+                            ) && (
+                              <Link
+                                to={`/chat_with_vendor/${booking.bookingId}/${userId}/${booking.vendorId}`}
+                                className="ml-2 text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600"
+                              >
+                                Chat with Vendor
+                              </Link>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -340,6 +406,22 @@ const BookingHistory = () => {
           calculateTotalAmount={calculateTotalAmount}
         />
       )}
+
+      {/* Render the ChatModal component for each open chat */}
+      {/* {chatOpen &&
+        Object.keys(chatStates).map((vendorId) => (
+          <ChatModal
+            key={vendorId}
+            userId={userId}
+            vendorId={vendorId} // Pass vendorId as a prop
+            isOpen={chatOpen}
+            onClose={() => handleChatClose(vendorId)}
+            earlierMessages={chatStates[vendorId].messages}
+            onSendMessage={(message) => sendChatMessage(message, vendorId)}
+          />
+        ))} */}
+
+      
     </div>
   );
 };

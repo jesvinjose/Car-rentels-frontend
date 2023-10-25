@@ -396,6 +396,18 @@ const BookingsList = () => {
                                 Cancel
                               </button>
                             )}
+                            {["booked", "running"].includes(
+                              booking.bookingHistory[0].bookingStatus
+                            ) && (
+                              <Link
+
+                                to={`/chat_with_user/${booking._id}/${booking.bookingHistory[0].userId}/${booking.vendorId}`}
+                                
+                                className="ml-2 text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600"
+                              >
+                                Chat with User
+                              </Link>
+                            )}
                         </td>
                       </tr>
                     ))}

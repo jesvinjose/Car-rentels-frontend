@@ -50,6 +50,7 @@ function UserLogin() {
         // Set values in localStorage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("firstName", response.data.firstName);
+        localStorage.setItem("user",response.data.firstName)
         localStorage.setItem("emailId", response.data.emailId);
         localStorage.setItem("lastName", response.data.lastName);
         localStorage.setItem("userId", response.data.userId);
@@ -88,6 +89,7 @@ function UserLogin() {
     if (response.data.message === "Google Login") {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("firstName", response.data.firstName);
+      localStorage.setItem("user",response.data.firstName)
       localStorage.setItem("emailId", response.data.emailId);
       localStorage.setItem("lastName", response.data.lastName);
       localStorage.setItem("userId", response.data.userId);

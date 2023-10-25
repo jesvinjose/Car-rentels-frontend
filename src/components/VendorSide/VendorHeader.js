@@ -22,6 +22,7 @@ const VendorHeader = () => {
     localStorage.removeItem("vendorLastName");
     localStorage.removeItem("vendorEmailId");
     localStorage.removeItem("vendorId");
+    localStorage.removeItem("vendor")
     navigate("/vendorlogin");
   };
 

@@ -47,6 +47,8 @@ import BookingHistory from "./components/UserSide/BookingHistory";
 import BookingsListAdminSide from "./components/AdminSide/BookingsListAdminSide";
 import NotFound from "./components/UserSide/NotFound";
 import AdminDashboard from "./components/AdminSide/AdminDashboard";
+import ChatContainer from "./components/UserSide/ChatContainer";
+import ChatContainerVendorSide from "./components/VendorSide/ChatContainerVendorSide";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
@@ -181,6 +183,9 @@ function App() {
           <Route path="/404" element={<NotFound/>} />
           <Route path="/*" element={<NotFound/>} />
           <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
+
+          <Route path="/chat_with_vendor/:bookingId/:userId/:vendorId" element={<ChatContainer/>}/>
+          <Route path="/chat_with_user/:bookingId/:userId/:vendorId" element={<ChatContainerVendorSide/>}/>
         </Routes>
       </Router>
     </div>

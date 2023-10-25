@@ -18,6 +18,7 @@ const Header = () => {
     localStorage.removeItem("emailId");
     localStorage.removeItem("userId");
     localStorage.removeItem("walletBalance");
+    localStorage.removeItem("user");
   };
   return (
 <div>
