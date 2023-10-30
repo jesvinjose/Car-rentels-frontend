@@ -109,7 +109,7 @@ import InputText from "./InputText";
 import { useParams } from "react-router-dom";
 
 function ChatContainer() {
-  let socketio = socketIOClient("http://localhost:4500");
+  let socketio = socketIOClient("http://localhost:5000");
   const [chats, setChats] = useState([]);
   const [user, setUser] = useState(localStorage.getItem("user"));
   // const [avatar, setAvatar] = useState(localStorage.getItem("avatar"));

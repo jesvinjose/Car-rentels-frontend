@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import axios from "axios";
-import AvailableCars from "./AvailableCars";
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = ({handleSubmit}) => {

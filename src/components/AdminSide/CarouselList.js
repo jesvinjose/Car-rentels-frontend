@@ -10,6 +10,9 @@ const CarouselList = () => {
   const navigate = useNavigate();
   const [carouselData, setCarouselData] = useState([]);
   // const adminToken = localStorage.getItem("adminToken");
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   useEffect(() => {
     fetchCarouselData();
@@ -37,6 +40,23 @@ const CarouselList = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const totalPages = Math.ceil(carouselData.length / itemsPerPage);
+
+  const displayData = carouselData.filter((item, index) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return index >= startIndex && index < endIndex;
+  });
+
 
   const handleBlock = async (id) => {
     try {
@@ -148,7 +168,7 @@ const CarouselList = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                    {carouselData.map((carousel) => (
+                    {displayData.map((carousel) => (
                       <tr
                         key={carousel._id}
                         className="bg-white dark:bg-gray-900"
@@ -207,6 +227,22 @@ const CarouselList = () => {
                     ))}
                   </tbody>
                 </table>
+                <div>
+                  <button
+                    className="ml-5"
+                    disabled={currentPage == 1}
+                    onClick={handlePrevPage}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="ml-10"
+                    disabled={currentPage == totalPages}
+                    onClick={handleNextPage}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

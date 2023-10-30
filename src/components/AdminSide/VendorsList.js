@@ -123,6 +123,8 @@ const VendorsList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVendorDetails, setSelectedVendorDetails] = useState(null);
   // const adminToken=localStorage.getItem('adminToken');
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     // const config = {
@@ -131,8 +133,9 @@ const VendorsList = () => {
     //   }
     // };
     axiosInstanceforAdmin
-      .get("/admin/vendorslist", 
-      // config
+      .get(
+        "/admin/vendorslist"
+        // config
       )
       .then((response) => {
         // Check if the response data is an array before setting the state
@@ -151,6 +154,22 @@ const VendorsList = () => {
       });
   }, []);
 
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const totalPages = Math.ceil(vendorData.length / itemsPerPage);
+
+  const displayData = vendorData.filter((item, index) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return index >= startIndex && index < endIndex;
+  });
+
   const handleBlock = async (id) => {
     // const config = {
     //   headers: {
@@ -160,7 +179,7 @@ const VendorsList = () => {
     console.log("Handling block for vendor with id:", id);
     const res = await axiosInstanceforAdmin.put(
       `/admin/vendorblock/${id}`,
-      null,
+      null
       // config
     );
     console.log(id);
@@ -183,7 +202,7 @@ const VendorsList = () => {
     // };
     const resss = await axiosInstanceforAdmin.put(
       `/admin/vendorunblock/${id}`,
-      null,
+      null
       // config
     );
     console.log(id);
@@ -265,7 +284,7 @@ const VendorsList = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                    {vendorData.map((vendor) => (
+                    {displayData.map((vendor) => (
                       <tr
                         key={vendor._id}
                         className="bg-white dark:bg-gray-900"
@@ -309,6 +328,22 @@ const VendorsList = () => {
                     ))}
                   </tbody>
                 </table>
+                <div>
+                  <button
+                    className="ml-5"
+                    disabled={currentPage == 1}
+                    onClick={handlePrevPage}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="ml-10"
+                    disabled={currentPage == totalPages}
+                    onClick={handleNextPage}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

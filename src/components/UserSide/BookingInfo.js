@@ -19,6 +19,9 @@ const BookingInfo = () => {
   const carId = searchParams.get("carId");
   const pickupDate = searchParams.get("pickupDate");
   const returnDate = searchParams.get("returnDate");
+  const [walletBalance, setWalletBalance] = useState(
+    localStorage.getItem("walletBalance")
+  );
 
   const navigate=useNavigate();
 
@@ -186,7 +189,7 @@ const BookingInfo = () => {
   }, [carDetails]);
   return (
     <div>
-      <Header />
+      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance} />
       {/* <SearchBar /> */}
       <div className="flex justify-center items-center mt-10">
         <h1>Booking Information</h1>

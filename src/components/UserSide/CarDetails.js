@@ -16,6 +16,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 const CarDetails = () => {
   const [carDetails, setCarDetails] = useState([]);
+  const [walletBalance, setWalletBalance] = useState(
+    localStorage.getItem("walletBalance")
+  );
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const carId = searchParams.get("carId");
@@ -263,7 +266,7 @@ const CarDetails = () => {
   // console.log(carDetails, "---------here is the carDetails");
   return (
     <div>
-      <Header />
+      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance}/>
       <div className="container mt-5">
         <div className="text-center">
           <h1>Car Details</h1>

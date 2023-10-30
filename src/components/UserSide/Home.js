@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Home.css"; // Import the CSS file
 import Header from "./Header";
 import CarTypes from "./CarTypes";
@@ -8,9 +8,12 @@ import Carousel from "./Carousel";
 import NewArrivals from "./NewArrivals";
 function Home() {
   const userToken = localStorage.getItem("token");
+  const [walletBalance, setWalletBalance] = useState(
+    localStorage.getItem("walletBalance")
+  );
   return (
     <>
-      <Header />
+      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance} />
       <Carousel/>
       <CarTypes />
       {userToken ? <NewArrivals/> : <VendorSignUpBar />}

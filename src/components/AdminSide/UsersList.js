@@ -147,6 +147,8 @@ const UsersList = () => {
   const [userData, setUserData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserDetails, setSelectedUserDetails] = useState(null);
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const adminToken = localStorage.getItem("adminToken");
 
@@ -178,6 +180,22 @@ const UsersList = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const totalPages = Math.ceil(userData.length / itemsPerPage);
+
+  const displayData = userData.filter((item, index) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return index >= startIndex && index < endIndex;
+  });
 
   const handleBlock = async (id) => {
     // const config = {
@@ -291,7 +309,7 @@ const UsersList = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                    {userData.map((user) => (
+                    {displayData.map((user) => (
                       <tr key={user._id} className="bg-white dark:bg-gray-900">
                         <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {user.emailId}
@@ -332,6 +350,22 @@ const UsersList = () => {
                     ))}
                   </tbody>
                 </table>
+                <div>
+                    <button
+                      className="ml-5"
+                      disabled={currentPage == 1}
+                      onClick={handlePrevPage}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="ml-10"
+                      disabled={currentPage == totalPages}
+                      onClick={handleNextPage}
+                    >
+                      Next
+                    </button>
+                    </div>
               </div>
             </div>
           </div>

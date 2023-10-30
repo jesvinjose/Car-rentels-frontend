@@ -141,6 +141,9 @@ const BookingsList = () => {
   const [date,setDate]=useState(new Date())
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const vendorToken = localStorage.getItem("vendorToken");
 
@@ -151,6 +154,22 @@ const BookingsList = () => {
   const handleChange = (e) => {
     setOtp(e.target.value);
   };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const totalPages = Math.ceil(bookingData.length / itemsPerPage);
+
+  const displayData = bookingData.filter((item, index) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return index >= startIndex && index < endIndex;
+  });
 
   const handleSubmit = async () => {
     // Handle OTP submission logic here
@@ -351,7 +370,7 @@ const BookingsList = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                    {bookingData.map((booking) => (
+                    {displayData.map((booking) => (
                       <tr
                         key={booking._id}
                         className="bg-white dark:bg-gray-900"
@@ -413,6 +432,22 @@ const BookingsList = () => {
                     ))}
                   </tbody>
                 </table>
+                <div>
+                    <button
+                      className="ml-5"
+                      disabled={currentPage == 1}
+                      onClick={handlePrevPage}
+                    >
+                      Prev
+                    </button>
+                    <button
+                      className="ml-10"
+                      disabled={currentPage == totalPages}
+                      onClick={handleNextPage}
+                    >
+                      Next
+                    </button>
+                    </div>
               </div>
             </div>
           </div>

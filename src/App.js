@@ -39,7 +39,7 @@ import GoogleSignUpForm from "./components/UserSide/GoogleSignUpForm";
 import CarDetails from "./components/UserSide/CarDetails";
 import { PrivateRoutesAdminSide } from "./components/utils/PrivateRoutesAdminSide";
 import GoogleSignUpFormVendorSide from './components/VendorSide/GoogleSignUpFormVendorSide'
-import AvailableCars from "./components/UserSide/AvailableCars";
+
 import BookingInfo from "./components/UserSide/BookingInfo";
 import BookingsList from "./components/VendorSide/BookingsList";
 import BookingSuccessPage from "./components/UserSide/BookingSuccessPage";
@@ -49,6 +49,7 @@ import NotFound from "./components/UserSide/NotFound";
 import AdminDashboard from "./components/AdminSide/AdminDashboard";
 import ChatContainer from "./components/UserSide/ChatContainer";
 import ChatContainerVendorSide from "./components/VendorSide/ChatContainerVendorSide";
+import VenderDashBoard from "./components/VendorSide/VenderDashBoard";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
@@ -142,6 +143,8 @@ function App() {
             path="/admin/userslist"
             element={<PrivateRoutesAdminSide Component={UsersList} />}
           /> */}
+
+          <Route path="/vendorDashboard" element={<VenderDashBoard/>}/>
 
           {/* <Route path="/admin/vendorslist" element={<VendorsList />} /> */}
           <Route

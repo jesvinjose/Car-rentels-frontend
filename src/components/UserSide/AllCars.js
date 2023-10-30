@@ -9,6 +9,7 @@ import axiosInstance from "../../api/axiosInstance";
 import SearchBar from "./SeachBar";
 import { Link } from "react-router-dom";
 
+
 const AllCars = () => {
   const [allcars, setAllCars] = useState([]);
   const [search, setSearch] = useState(""); // Search term
@@ -20,6 +21,9 @@ const AllCars = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [carsPerPage] = useState(6); // Set the number of cars per page
   const [sortTypes, setSortTypes] = useState([]);
+  const [walletBalance, setWalletBalance] = useState(
+    localStorage.getItem("walletBalance")
+  );
 
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
@@ -296,7 +300,7 @@ const AllCars = () => {
 
   return (
     <div>
-      <Header />
+      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance} />
       <div className="border border-black p-4 bg-lime-300 flex flex-col md:flex-row justify-center items-center mt-3">
         <label>Pickup Date:</label>
         <input

@@ -13,6 +13,7 @@ const UserProfile = () => {
   const [userDetails, setUserDetails] = useState(null);
   const usertoken = localStorage.getItem("token");
   const navigate=useNavigate();
+  const walletBalance=localStorage.getItem("walletBalance")
 
   useEffect(() => {
     // const config = {
@@ -80,11 +81,14 @@ const UserProfile = () => {
             <p>Email: {userDetails.emailId}</p>
             {/* Display other user details as needed */}
           </div>
+          <p>Wallet balance:{userDetails.walletBalance}</p>
         </div>
+        
       ) : (
         // You can add a loading spinner or message here while userDetails is null
         <p>Loading user details...</p>
       )}
+      
       {userDetails && (
         <UpdateProfileDetails userData={userDetails} userId={userId} />
       )}

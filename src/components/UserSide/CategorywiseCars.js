@@ -14,6 +14,9 @@ const CategorywiseCars = () => {
   const [categorycars, setCategoryCars] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [carsPerPage] = useState(6); // Set the number of cars per page
+  const [walletBalance, setWalletBalance] = useState(
+    localStorage.getItem("walletBalance")
+  );
 
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
@@ -57,7 +60,7 @@ const CategorywiseCars = () => {
 
   return (
     <div>
-      <Header />
+      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance}/>
       <div
         style={{
           width: "100%",

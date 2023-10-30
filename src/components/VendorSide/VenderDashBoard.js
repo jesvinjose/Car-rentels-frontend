@@ -1,86 +1,64 @@
 import React, { useEffect, useState } from "react";
-import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
-import AdminHeader from "./AdminHeader";
-import BookingsChart from "./BookingsChart"; // Import the Chart component
-import EarningsDataChart from "./EarningsDataChart";
+import VendorHeader from "./VendorHeader";
+import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
+import BookingsChartVendorSide from "./BookingsChartVendorSide";
+import EarningsChartVendorSide from "./EarningsChartVendorSide";
 
-function AdminDashboard() {
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [totalVendors, setTotalVendors] = useState(0);
+const VenderDashBoard = () => {
+  const [totalBookings, setTotalBookings] = useState(0);
   const [totalBookingsThisWeek, setTotalBookingsThisWeek] = useState(0);
   const [totalEarningsThisWeek, setTotalEarningsThisWeek] = useState(0);
-  const [totalEarningsThisMonth, setTotalEarningsThisMonth] = useState(0);
-  const [totalCars,setTotalCars]=useState(0)
+  const vendorId = localStorage.getItem("vendorId");
+
   // State to store chart data
   const [chartDataArray, setChartDataArray] = useState(null);
   const [earningsChartArray,setEarningsChartArray]=useState(null);
 
   useEffect(() => {
     // Fetch bookings vs. date data from the backend
-    axiosInstanceforAdmin
-      .get("/admin/bookings-vs-date-earnings-vs-month") // Adjust the URL to match your backend route
+    axiosInstanceforVendor
+      .get(`/vendor/bookings-vs-date/${vendorId}`) // Adjust the URL to match your backend route
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data,"----------response in vendor dashboard");
         setChartDataArray(response.data.chartDataArray);
         setEarningsChartArray(response.data.earningsData)
       })
       .catch((error) => console.error(error));
   }, []); // Empty dependency array to run this effect only once
-  
-  console.log(chartDataArray,"---------chartArray");
 
   useEffect(() => {
-    // Fetch data from the server and set state variables
-    axiosInstanceforAdmin.get("/admin/stats").then((response) => {
-      const {
-        userCount,
-        carCount,
-        vendorCount,
-        totalBookingsThisWeek,
-        totalEarningsThisWeek,
-        totalEarningsThisMonth
-      } = response.data;
-      setTotalUsers(userCount);
-      setTotalVendors(vendorCount);
-      setTotalCars(carCount);
+    axiosInstanceforVendor.get(`/vendor/stats/${vendorId}`).then((response) => {
+      const { totalBookings, totalBookingsThisWeek, totalEarningsThisWeek } =
+        response.data;
+      setTotalBookings(totalBookings);
       setTotalBookingsThisWeek(totalBookingsThisWeek);
       setTotalEarningsThisWeek(totalEarningsThisWeek);
-      setTotalEarningsThisMonth(totalEarningsThisMonth);
     });
   }, []);
-
   return (
     <div>
-      <AdminHeader />
-      <div className="container mt-5">
+      <VendorHeader />
+      <div className="container mt-5 mb-5">
         <div className="row">
-        <div className="col-md-2">
+          <div className="col-md-4">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Total Cars</h5>
-                <p className="card-text">{totalCars}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Total Users</h5>
-                <p className="card-text">{totalUsers}</p>
+                <h5 className="card-title">Total Bookings</h5>
+                <p className="card-text">{totalBookings}</p>
               </div>
             </div>
           </div>
 
-          <div className="col-md-2">
+          {/* <div className="col-md-3">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Vendors</h5>
                 <p className="card-text">{totalVendors}</p>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="col-md-2">
+          <div className="col-md-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Bookings This Week</h5>
@@ -89,7 +67,7 @@ function AdminDashboard() {
             </div>
           </div>
 
-          <div className="col-md-2">
+          <div className="col-md-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Earnings This Week</h5>
@@ -97,23 +75,13 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-
-          <div className="col-md-2">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Total Earnings This Month</h5>
-                <p className="card-text">₹{totalEarningsThisMonth}</p>
-              </div>
-            </div>
-          </div>
-
         </div>
-        <div className="row mt-5 mb-5">
+        <div className="row mt-5">
           <div className="col-md-6">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Bookings vs. Month</h5>
-                <BookingsChart chartDataArray={chartDataArray} />
+                <BookingsChartVendorSide chartDataArray={chartDataArray} />{" "}
                 {/* Pass the data for the chart */}
               </div>
             </div>
@@ -122,19 +90,15 @@ function AdminDashboard() {
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Earnings vs. Month</h5>
-                <EarningsDataChart earningsChartArray={earningsChartArray}/>
+                <EarningsChartVendorSide earningsChartArray={earningsChartArray} />{" "}
                 {/* Pass the data for the chart */}
               </div>
             </div>
           </div>
         </div>
-
-       
-
-        
       </div>
     </div>
   );
-}
+};
 
-export default AdminDashboard;
+export default VenderDashBoard;

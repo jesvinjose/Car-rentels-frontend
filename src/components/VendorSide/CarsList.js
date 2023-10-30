@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstance from "../../api/axiosInstance";
 import VendorHeader from "./VendorHeader";
-import { Link,useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-
-
-const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate }) => {
-
+const EditCarModal = ({
+  carDataToEdit,
+  closeModal,
+  onCarUpdate,
+  date,
+  setDate,
+}) => {
   const carTypes = ["Standard", "Economy", "Luxury"];
   const fuelTypes = ["Petrol", "Diesel"];
   const gearTypes = ["Manual", "Automatic"];
   const [carDataForm, setCarDataForm] = useState(carDataToEdit[0]);
-  console.log(carDataForm,"hi modal");
+  console.log(carDataForm, "hi modal");
   const [rcImageDataUrl, setRcImageDataUrl] = useState(
     carDataToEdit[0].rcImage
   );
@@ -23,7 +26,7 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate })
     carDataToEdit[0].carImage
   );
 
-  useEffect(()=>{},[carDataForm])
+  useEffect(() => {}, [carDataForm]);
 
   const handleUpdate = async (event) => {
     event.preventDefault();
@@ -40,14 +43,14 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate })
       ...carDataForm,
     };
 
-    const vendortoken=localStorage.getItem('vendorToken')
+    const vendortoken = localStorage.getItem("vendorToken");
 
     console.log(updatedCarDataForm, "handle the update of carDataForm");
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
-        }
+          Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+        },
       };
       // Send the updated car type data to your server using Axios or a similar HTTP library
       const response = await axiosInstance.put(
@@ -58,14 +61,13 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate })
           headers: {
             "Content-Type": "application/json", // Adjust the content type if needed
           },
-        },
-        
+        }
       );
       // console.log(response.data.message, "from editCarDetails to frontend");
       if (response.data.message === "Car updated successfully")
         // console.log("Car updated successfully!");
-        setDate(new Date())
-        onCarUpdate(updatedCarDataForm); // Notify the parent component of the update
+        setDate(new Date());
+      onCarUpdate(updatedCarDataForm); // Notify the parent component of the update
       closeModal();
     } catch (error) {
       console.error("Error updating the car:", error);
@@ -117,18 +119,26 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate })
   // console.log(carImageDataUrl, "---------carImage--------");
   useEffect(() => {
     const map = new mapboxgl.Map({
-      container: 'map',
+      container: "map",
       // style: 'mapbox://styles/mapbox/streets-v11',
-      style:'mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3',
-      center: [carDataForm.carLocation.longitude, carDataForm.carLocation.latitude],
+      style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+      center: [
+        carDataForm.carLocation.longitude,
+        carDataForm.carLocation.latitude,
+      ],
       zoom: 12,
     });
-  
+
     // Add a marker for the car's location
-    new mapboxgl.Marker().setLngLat([carDataForm.carLocation.longitude, carDataForm.carLocation.latitude]).addTo(map);
-  
+    new mapboxgl.Marker()
+      .setLngLat([
+        carDataForm.carLocation.longitude,
+        carDataForm.carLocation.latitude,
+      ])
+      .addTo(map);
+
     // Event listener to update latitude and longitude on map click
-    map.on('click', (e) => {
+    map.on("click", (e) => {
       const { lng, lat } = e.lngLat;
       setCarDataForm((prevDetails) => ({
         ...prevDetails,
@@ -139,7 +149,7 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate })
         },
       }));
     });
-  
+
     return () => {
       map.remove(); // Clean up the map on component unmount
     };
@@ -149,7 +159,11 @@ const EditCarModal = ({ carDataToEdit, closeModal, onCarUpdate, date, setDate })
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg max-w-md w-full overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4 text-center">Car Details</h2>
-        <div id="map" className="map-container mb-4" style={{ width: '100%', height: '100px', backgroundColor: 'gray' }}></div>
+        <div
+          id="map"
+          className="map-container mb-4"
+          style={{ width: "100%", height: "100px", backgroundColor: "gray" }}
+        ></div>
         <form>
           <div className="grid grid-cols-4 gap-4 mb-4">
             <div>
@@ -425,25 +439,28 @@ const CarsList = () => {
   const [selectedCarData, setSelectedCarData] = useState(null);
   // const vendorId = localStorage.getItem("vendorId");
   const { vendorId } = useParams();
+  const itemsPerPage = 3;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [date,setDate]=useState(new Date())
+  const [date, setDate] = useState(new Date());
 
-  const vendortoken=localStorage.getItem('vendorToken')
+  const vendortoken = localStorage.getItem("vendorToken");
 
   useEffect(() => {
     fetchData();
-  },[date]);
+  }, [date]);
 
   const fetchData = async () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
-        }
+          Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+        },
       };
 
       const response = await axiosInstance.get(
-        `/vendor/carslist/${vendorId}`,config
+        `/vendor/carslist/${vendorId}`,
+        config
       );
       if (Array.isArray(response.data)) {
         setCarData(response.data);
@@ -473,11 +490,12 @@ const CarsList = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
-        }
+          Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+        },
       };
       const response = await axios.get(
-        `http://localhost:5000/vendor/deletecar/${id}`,config
+        `http://localhost:5000/vendor/deletecar/${id}`,
+        config
       );
       if (response.data.message === "car deleted successfully") {
         // console.log("Car deleted successfully");
@@ -491,6 +509,22 @@ const CarsList = () => {
     }
   };
 
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const totalPages = Math.ceil(carData.length / itemsPerPage);
+
+  const displayData = carData.filter((item, index) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return index >= startIndex && index < endIndex;
+  });
+
   const handleCarUpdate = (updatedCar) => {
     // Update carData with the updated car
     setCarData((prevCarData) =>
@@ -498,9 +532,7 @@ const CarsList = () => {
     );
   };
 
-  useEffect(()=>{
-
-  },[carData])
+  useEffect(() => {}, [carData]);
 
   return (
     <div>
@@ -520,7 +552,7 @@ const CarsList = () => {
 
         <div className="flex flex-col mt-6">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8 mb-20">
               <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <thead className="bg-gray-50 dark:bg-gray-800">
@@ -578,7 +610,7 @@ const CarsList = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-                    {carData.map((car) => (
+                    {displayData.map((car) => (
                       <tr key={car._id} className="bg-white dark:bg-gray-900">
                         <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                           {
@@ -617,6 +649,22 @@ const CarsList = () => {
                     ))}
                   </tbody>
                 </table>
+                <div>
+                  <button
+                    className="ml-5"
+                    disabled={currentPage == 1}
+                    onClick={handlePrevPage}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="ml-10"
+                    disabled={currentPage == totalPages}
+                    onClick={handleNextPage}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

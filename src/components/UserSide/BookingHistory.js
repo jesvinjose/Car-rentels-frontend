@@ -21,6 +21,9 @@ const BookingHistory = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(
+    localStorage.getItem("walletBalance")
+  );
 
   const currentDate = new Date();
   const navigate = useNavigate();
@@ -29,53 +32,7 @@ const BookingHistory = () => {
 
   const [error, setError] = useState(null);
 
-  // const [chatOpen, setChatOpen] = useState(false);
-  // const [chatStates, setChatStates] = useState({}); // Store chat state for each vendor
 
-  // // State to manage chat messages
-  // const [chatMessages, setChatMessages] = useState([]); // Replace earlierMessages
-
-  // // Function to send a message in the chat
-  // const sendChatMessage = (message, vendorId) => {
-  //   const updatedMessages = [
-  //     ...chatStates[vendorId]?.messages,
-  //     { sender: "You", text: message },
-  //   ];
-  //   setChatStates((prevChatStates) => ({
-  //     ...prevChatStates,
-  //     [vendorId]: {
-  //       ...prevChatStates[vendorId],
-  //       messages: updatedMessages,
-  //     },
-  //   }));
-  // };
-
-  // Function to handle chat with a vendor
-  // const handleChatWithVendor = (userId, vendorId) => {
-  //   setChatOpen(true);
-  //   // Initialize the chat state for this vendor if it doesn't exist
-  //   if (!chatStates[vendorId]) {
-  //     setChatStates((prevChatStates) => ({
-  //       ...prevChatStates,
-  //       [vendorId]: { messages: [] },
-  //     }));
-  //   }
-  // };
-
-  // Function to close the chat container
-  // const closeChat = () => {
-  //   setChatOpen(false);
-  // };
-
-  // const handleChatClose = (vendorId) => {
-  //   // Clear the chat state for the specified vendor
-  //   setChatStates((prevChatStates) => {
-  //     const updatedChatStates = { ...prevChatStates };
-  //     delete updatedChatStates[vendorId];
-  //     return updatedChatStates;
-  //   });
-  // };
-  
   const bookingId =
     selectedBookingDetails.length > 0
       ? selectedBookingDetails[0].bookingId
@@ -153,7 +110,7 @@ const BookingHistory = () => {
           setBookingData(response.data);
           setAllData(response.data); // Fix the typo "respose" to "response"
           setIsLoading(false);
-        }, 1500); // Adjust the timeout value as needed
+        }, 500); // Adjust the timeout value as needed
       } else {
         setError("Invalid data received from the server");
         setIsLoading(false);
@@ -182,6 +139,8 @@ const BookingHistory = () => {
         toast("Car cancelled successfully");
         // Fetch the updated car list after deletion
         fetchData();
+        // Update wallet balance in the header
+        updateWalletBalance();
       } else {
         // toast("Failed to cancel booking");
         navigate("/404");
@@ -189,6 +148,24 @@ const BookingHistory = () => {
     } catch (error) {
       // toast("Error in cancelling the booking:", error);
       navigate("/404");
+    }
+  };
+
+  const updateWalletBalance = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `http://localhost:5000/user/get_wallet_balance/${userId}`
+      );
+      if (response.data.walletBalance) {
+        const updatedBalance = response.data.walletBalance;
+        // Update the wallet balance in local storage
+        localStorage.setItem("walletBalance", updatedBalance);
+        // Update the wallet balance in state
+        setWalletBalance(updatedBalance);
+      }
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error updating wallet balance:", error);
     }
   };
 
@@ -235,7 +212,7 @@ const BookingHistory = () => {
 
   return (
     <div>
-      <Header />
+      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance} />
       <ToastContainer />
       {isLoading ? (
         <div
@@ -420,8 +397,6 @@ const BookingHistory = () => {
             onSendMessage={(message) => sendChatMessage(message, vendorId)}
           />
         ))} */}
-
-      
     </div>
   );
 };
