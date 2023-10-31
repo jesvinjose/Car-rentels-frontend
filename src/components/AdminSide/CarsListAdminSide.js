@@ -4,7 +4,9 @@ import AdminHeader from "./AdminHeader";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+// mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+
+mapboxgl.accessToken="pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A"
 
 const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
   const [vendorFirstName, setVendorFirstName] = useState("");

@@ -8,7 +8,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 // import axiosInstance from "../../api/axiosInstance";
 import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+// mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+mapboxgl.accessToken="pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A";
 
 const CarRegister = () => {
   const carTypes = ["Standard", "Economy", "Luxury"];
