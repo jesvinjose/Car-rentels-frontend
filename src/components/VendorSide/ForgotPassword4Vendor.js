@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import bgImage from '../../assets/ownacar.png'
 import axios from 'axios';
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword4Vendor = () => {
@@ -14,7 +14,7 @@ const ForgotPassword4Vendor = () => {
     event.preventDefault();
     try {
       console.log("inside handleVerifyEmail")
-      const response=await axiosInstance.post("/vendor/verifyEmail",{
+      const response=await axiosInstanceforVendor.post("/vendor/verifyEmail",{
         emailId
       })
       if(response.data.message==="OTP sent successfully"){

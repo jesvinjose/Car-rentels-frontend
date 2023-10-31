@@ -11,6 +11,9 @@ export const PrivateRoutes = ({ Component }) => {
       const response = await axios.get(
         `http://localhost:5000/user/checkBlockStatus/${userId}`
       );
+      // const response = await axios.get(
+      //   `https://www.car-rentals.shop/user/checkBlockStatus/${userId}`
+      // );
       console.log(response, "response in PrivateRoute");
   
       if (userToken) {

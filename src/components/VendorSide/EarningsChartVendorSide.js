@@ -5,6 +5,7 @@ import { CategoryScale } from "chart.js";
 Chart.register(CategoryScale);
 
 const EarningsChartVendorSide = ({ earningsChartArray }) => {
+  console.log("earningsChartArray:", earningsChartArray);
   if (!earningsChartArray || earningsChartArray.length === 0) {
     return <div>No data available for the chart.</div>;
   }

@@ -11,6 +11,9 @@ export const PrivateRoutesVendorSide = ({ Component }) => {
       const response = await axios.get(
         `http://localhost:5000/vendor/checkBlockStatus/${vendorId}`
       );
+      // const response = await axios.get(
+      //   `https://www.car-rentals.shop/vendor/checkBlockStatus/${vendorId}`
+      // );
       console.log(response, "response in PrivateRoute");
   
       if (vendorToken) {

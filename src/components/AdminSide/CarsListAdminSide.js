@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
-import axios from "axios";
+// import axios from "axios";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -21,7 +21,7 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
       // };
       try {
         const response = await axiosInstanceforAdmin.get(
-          `/admin/findVendorNameAndAdhar/${carDetails[0].vendorId}`,
+          `/admin/findVendorNameAndAdhar/${carDetails[0].vendorId}`
           // config
         );
         if (response.data.firstName) {
@@ -39,7 +39,7 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
     };
 
     fetchVendorNameAndAdhar();
-  }, []);
+  }, [carDetails]);
 
   const handleAccept = async (id) => {
     console.log("carId:" + id);
@@ -51,7 +51,7 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
     // };
     const res = await axiosInstanceforAdmin.put(
       `/admin/carrVerificationAccept/${id}`,
-      null,
+      null
       // config
     );
     console.log(res, "return response");
@@ -78,7 +78,7 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
     // };
     const res = await axiosInstanceforAdmin.put(
       `/admin/carrVerificationReject/${id}`,
-      null,
+      null
       // config
     );
     console.log(res, "return response");
@@ -112,7 +112,7 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
       // Add a marker at the car's location
       new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
     }
-  }, []);
+  }, [carDetails]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50  ">
@@ -202,7 +202,7 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
             <strong>Adhar Front Image</strong>
             <img
               src={vendorAdharFrontImage}
-              alt="Adhar Front Image Preview"
+              alt="AdharFrontImagePreview"
               style={{ maxWidth: "100%", maxHeight: "100px" }}
             />
           </p>
@@ -210,7 +210,7 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
             <strong>Adhar Back Image</strong>
             <img
               src={vendorAdharBackImage}
-              alt="Adhar Back Image Preview"
+              alt="AdharBackimagePreview"
               style={{ maxWidth: "100%", maxHeight: "100px" }}
             />
           </p>
@@ -249,18 +249,16 @@ const CarsListAdminSide = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-
-
-  const adminToken = localStorage.getItem("adminToken");
+  // const adminToken = localStorage.getItem("adminToken");
 
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-      },
-    };
-    axios
-      .get("http://localhost:5000/admin/carslist", config)
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
+    axiosInstanceforAdmin
+      .get("/admin/carslist")
       .then((response) => {
         if (Array.isArray(response.data)) {
           setCarsData(response.data);
@@ -295,17 +293,16 @@ const CarsListAdminSide = () => {
     return index >= startIndex && index < endIndex;
   });
 
-
   const handleBlock = async (id) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-      },
-    };
-    const res = await axios.put(
-      `http://localhost:5000/admin/carblock/${id}`,
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
+    const res = await axiosInstanceforAdmin.put(
+      `/admin/carblock/${id}`,
       null,
-      config
+      // config
     );
     // console.log(id);
 
@@ -321,15 +318,15 @@ const CarsListAdminSide = () => {
   const handleUnblock = async (id) => {
     console.log(id, "");
     console.log("hellooooooooooooooooooooooo");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${adminToken}`, // Set the token in the headers
-      },
-    };
-    const resss = await axios.put(
-      `http://localhost:5000/admin/carunblock/${id}`,
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
+    //   },
+    // };
+    const resss = await axiosInstanceforAdmin.put(
+      `/admin/carunblock/${id}`,
       null,
-      config
+      // config
     );
     console.log(id);
 
@@ -466,14 +463,14 @@ const CarsListAdminSide = () => {
                 <div>
                   <button
                     className="ml-5"
-                    disabled={currentPage == 1}
+                    disabled={currentPage === 1}
                     onClick={handlePrevPage}
                   >
                     Prev
                   </button>
                   <button
                     className="ml-10"
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     onClick={handleNextPage}
                   >
                     Next

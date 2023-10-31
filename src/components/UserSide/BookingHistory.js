@@ -154,7 +154,7 @@ const BookingHistory = () => {
   const updateWalletBalance = async () => {
     try {
       const response = await axiosInstance.get(
-        `http://localhost:5000/user/get_wallet_balance/${userId}`
+        `/user/get_wallet_balance/${userId}`
       );
       if (response.data.walletBalance) {
         const updatedBalance = response.data.walletBalance;

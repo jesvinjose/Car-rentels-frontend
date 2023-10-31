@@ -8,7 +8,7 @@ import bgImage from "../../assets/ownacar.png";
 import logo from "../../assets/logo-1.png";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 
 function GoogleSignUpForm() {
     const { email } = useParams(); // Extract carouselId from URL
@@ -24,7 +24,7 @@ function GoogleSignUpForm() {
     e.preventDefault();
 
     try {
-      const response = await axiosInstance.post("/vendor/googleregister", {
+      const response = await axiosInstanceforVendor.post("/vendor/googleregister", {
         firstName,
         lastName,
         email,

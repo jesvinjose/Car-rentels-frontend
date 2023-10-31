@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 
 const UpdateVendorProfileDetails = ({ vendorId, vendorData }) => {
   console.log(vendorData);
@@ -38,16 +38,16 @@ const UpdateVendorProfileDetails = ({ vendorId, vendorData }) => {
     // console.log(vendorDetails, "......frontend..........");
     console.log(vendorDetails.aadharNumber, "-------------");
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
-        }
-      };
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+      //   }
+      // };
 
-      await axiosInstance.post(
+      await axiosInstanceforVendor.post(
         `/vendor/updateVendorProfile/${vendorId}`,
         vendorDetails,
-        config
+        // config
       );
       //   console.log("Vendor details updated:", response.data.vendor);
       alert("Vendor details updated successfully!");

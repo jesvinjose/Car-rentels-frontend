@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import axiosInstance from "../../api/axiosInstance"
+import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 import Profile from "../../assets/profile.png";
 import { useParams } from "react-router-dom";
 import VendorHeader from "./VendorHeader";
@@ -9,16 +9,16 @@ import UpdateVendorProfileDetails from "./UpdateVendorProfileDetails";
 const VendorProfile = () => {
   const { vendorId } = useParams();
   const [vendorDetails, setVendorDetails] = useState(null);
-  const vendortoken=localStorage.getItem('vendorToken');
+  const vendortoken = localStorage.getItem("vendorToken");
   useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
-      }
-    };
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${vendortoken}`  // Set the token in the headers
+    //   }
+    // };
     //Fetch vendor details based on vendorId
-    axiosInstance
-      .get(`/vendor/${vendorId}`,config)
+    axiosInstanceforVendor
+      .get(`/vendor/${vendorId}`)
       .then((response) => {
         setVendorDetails(response.data.vendorDetails);
         console.log(
@@ -29,7 +29,7 @@ const VendorProfile = () => {
       .catch((error) => {
         console.error("Error fetching vendor details:", error);
       });
-  }, [vendorId,vendortoken]);
+  }, [vendorId, vendortoken]);
   console.log(vendorDetails, "---------vendorProfile console-----------");
   return (
     <div>

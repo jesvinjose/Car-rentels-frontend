@@ -1,5 +1,5 @@
 import axios from "axios";
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -16,7 +16,7 @@ function VerifyOTP4PasswordReset4Vendor() {
   const handleVerifyOTP = async (event) => {
     event.preventDefault();
     try {
-      const response = await axiosInstance.post(
+      const response = await axiosInstanceforVendor.post(
         "/vendor/VerifyOTP4PasswordReset4Vendor",
         {
           otp,

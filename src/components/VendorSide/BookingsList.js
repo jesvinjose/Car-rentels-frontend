@@ -218,15 +218,15 @@ const BookingsList = () => {
 
       const fetchData = async () => {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${vendorToken}`, // Set the token in the headers
-          },
-        };
+        // const config = {
+        //   headers: {
+        //     Authorization: `Bearer ${vendorToken}`, // Set the token in the headers
+        //   },
+        // };
   
-        const response = await axios.get(
-          ` http://localhost:5000/vendor/bookingslist/${vendorId}`,
-          config
+        const response = await axiosInstanceforVendor.get(
+          `/vendor/bookingslist/${vendorId}`,
+          // config
         );
         if (Array.isArray(response.data)) {
           setBookingData(response.data);

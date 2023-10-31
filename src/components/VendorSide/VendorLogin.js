@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 
 function VendorLogin() {
 
@@ -34,7 +34,7 @@ function VendorLogin() {
         emailId: emailId,
         password: password,
       };
-      const response = await axiosInstance.post(
+      const response = await axiosInstanceforVendor.post(
         "/vendor/verifyVendorLogin",
         vendorData
       );
@@ -73,7 +73,7 @@ function VendorLogin() {
     console.log(credentialResponseDecoded.email);
     let email = { email: credentialResponseDecoded.email };
     console.log(email);
-    const response = await axiosInstance.post(
+    const response = await axiosInstanceforVendor.post(
       "/vendor/verifyGoogleLogin",
       email
     );

@@ -38,7 +38,7 @@ import EditCarousel from "./components/AdminSide/EditCarousel";
 import GoogleSignUpForm from "./components/UserSide/GoogleSignUpForm";
 import CarDetails from "./components/UserSide/CarDetails";
 import { PrivateRoutesAdminSide } from "./components/utils/PrivateRoutesAdminSide";
-import GoogleSignUpFormVendorSide from './components/VendorSide/GoogleSignUpFormVendorSide'
+import GoogleSignUpFormVendorSide from "./components/VendorSide/GoogleSignUpFormVendorSide";
 
 import BookingInfo from "./components/UserSide/BookingInfo";
 import BookingsList from "./components/VendorSide/BookingsList";
@@ -62,6 +62,15 @@ function App() {
             path="/userprofile/:userId"
             element={<PrivateRoutes Component={UserProfile} />}
           />
+          {/* <Route path="/bookingslist" element={<BookingsList />} /> */}
+
+
+          <Route path="/bookingslist" element={<PrivateRoutesVendorSide Component={BookingsList} />} />
+          <Route path="/booking_history" element={<PrivateRoutes Component={BookingHistory} />} />
+
+          <Route path="/booking_details" element={<PrivateRoutes Component={BookingInfo} />} />
+
+          <Route path="/booking_success" element={<PrivateRoutes Component={BookingSuccessPage} />} />
 
           <Route element={<UsersHome />} path="/usershome" />
           <Route path="/" element={<Home />} />
@@ -70,17 +79,17 @@ function App() {
             path="/googlesignupform/:email"
             element={<GoogleSignUpForm />}
           />
-          <Route path="/googlesignupformvendorside/:email" element={<GoogleSignUpFormVendorSide/>}/>
+          <Route
+            path="/googlesignupformvendorside/:email"
+            element={<GoogleSignUpFormVendorSide />}
+          />
           <Route element={<VerifyOTP />} path="/verifyOTP" />
           <Route element={<UserLogin />} path="/login" />
           <Route element={<UserLogin />} path="/logout" />
           <Route element={<ForgotPassword />} path="/forgotpassword" />
           <Route path="/car_list" element={<CategorywiseCars />} />
           <Route path="/car_details" element={<CarDetails />} />
-          {/* <Route path="/available_cars" element={<AvailableCars/>}/> */}
-          <Route path="/bookingslist" element={<BookingsList/>}/>
-          <Route path="/booking_history" element={<BookingHistory/>}/>
-          
+
 
           <Route
             element={<ForgotPassword4Vendor />}
@@ -101,8 +110,7 @@ function App() {
             element={<PasswordReset4Vendor />}
           />
 
-          <Route path="/booking_details" element={<BookingInfo/>}/>
-          <Route path="/booking_success" element={<BookingSuccessPage/>}/>
+
 
           <Route path="/vendorregister" element={<VendorRegisterForm />} />
           <Route path="/vendorverifyOTP" element={<VendorVerifyOTP />} />
@@ -124,11 +132,6 @@ function App() {
             element={<PrivateRoutesVendorSide Component={CarRegister} />}
           />
 
-          <Route
-            path="/carsList/:vendorId"
-            element={<PrivateRoutesVendorSide Component={CarsList} />}
-          />
-
           {/* <Route path="/admin/home" element={<AdminHome />} />{" "} */}
           <Route
             path="/admin/home"
@@ -138,13 +141,13 @@ function App() {
           {/* Define your AdminHome component */}
           <Route path="/admin" element={<AdminLogin />} />
 
-          <Route path="/admin/userslist" element={<UsersList />} />
-          {/* <Route
+          {/* <Route path="/admin/userslist" element={<UsersList />} /> */}
+          <Route
             path="/admin/userslist"
             element={<PrivateRoutesAdminSide Component={UsersList} />}
-          /> */}
+          />
 
-          <Route path="/vendorDashboard" element={<VenderDashBoard/>}/>
+          <Route path="/vendorDashboard" element={<VenderDashBoard />} />
 
           {/* <Route path="/admin/vendorslist" element={<VendorsList />} /> */}
           <Route
@@ -182,13 +185,26 @@ function App() {
             element={<PrivateRoutesAdminSide Component={EditCarousel} />}
           />
 
-          <Route path="/bookings_list_adminside" element={<BookingsListAdminSide/>}/>
-          <Route path="/404" element={<NotFound/>} />
-          <Route path="/*" element={<NotFound/>} />
-          <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
+          <Route
+            path="/bookings_list_adminside"
+            element={<PrivateRoutesAdminSide Component={BookingsListAdminSide} />}
+          />
 
-          <Route path="/chat_with_vendor/:bookingId/:userId/:vendorId" element={<ChatContainer/>}/>
-          <Route path="/chat_with_user/:bookingId/:userId/:vendorId" element={<ChatContainerVendorSide/>}/>
+
+          <Route path="/404" element={<NotFound />} />
+          <Route path="/*" element={<NotFound />} />
+
+          <Route path="/admin/dashboard" element={<PrivateRoutesAdminSide Component={AdminDashboard} />} />
+
+          <Route
+            path="/chat_with_vendor/:bookingId/:userId/:vendorId"
+            element={<PrivateRoutes Component={ChatContainer} />}
+          />
+
+          <Route
+            path="/chat_with_user/:bookingId/:userId/:vendorId"
+            element={<PrivateRoutesVendorSide Component={ChatContainerVendorSide} />}
+          />
         </Routes>
       </Router>
     </div>

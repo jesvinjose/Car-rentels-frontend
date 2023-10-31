@@ -17,11 +17,11 @@ const VenderDashBoard = () => {
   useEffect(() => {
     // Fetch bookings vs. date data from the backend
     axiosInstanceforVendor
-      .get(`/vendor/bookings-vs-date/${vendorId}`) // Adjust the URL to match your backend route
+      .get(`/vendor/bookings-vs-date-earnings-vs-month/${vendorId}`) // Adjust the URL to match your backend route
       .then((response) => {
         console.log(response.data,"----------response in vendor dashboard");
         setChartDataArray(response.data.chartDataArray);
-        setEarningsChartArray(response.data.earningsData)
+        setEarningsChartArray(response.data.aggregatedData)
       })
       .catch((error) => console.error(error));
   }, []); // Empty dependency array to run this effect only once

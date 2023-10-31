@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 import VendorHeader from "./VendorHeader";
 import { Link, useParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
@@ -43,20 +43,20 @@ const EditCarModal = ({
       ...carDataForm,
     };
 
-    const vendortoken = localStorage.getItem("vendorToken");
+    // const vendortoken = localStorage.getItem("vendorToken");
 
     console.log(updatedCarDataForm, "handle the update of carDataForm");
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
-        },
-      };
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+      //   },
+      // };
       // Send the updated car type data to your server using Axios or a similar HTTP library
-      const response = await axiosInstance.put(
+      const response = await axiosInstanceforVendor.put(
         `/vendor/carDataFormEdit/${carDataForm._id}`,
         updatedCarDataForm,
-        config,
+        // config,
         {
           headers: {
             "Content-Type": "application/json", // Adjust the content type if needed
@@ -444,7 +444,7 @@ const CarsList = () => {
 
   const [date, setDate] = useState(new Date());
 
-  const vendortoken = localStorage.getItem("vendorToken");
+  // const vendortoken = localStorage.getItem("vendorToken");
 
   useEffect(() => {
     fetchData();
@@ -452,15 +452,15 @@ const CarsList = () => {
 
   const fetchData = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
-        },
-      };
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+      //   },
+      // };
 
-      const response = await axiosInstance.get(
+      const response = await axiosInstanceforVendor.get(
         `/vendor/carslist/${vendorId}`,
-        config
+        // config
       );
       if (Array.isArray(response.data)) {
         setCarData(response.data);
@@ -488,14 +488,14 @@ const CarsList = () => {
 
   const handleDelete = async (id) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
-        },
-      };
-      const response = await axios.get(
-        `http://localhost:5000/vendor/deletecar/${id}`,
-        config
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${vendortoken}`, // Set the token in the headers
+      //   },
+      // };
+      const response = await axiosInstanceforVendor.get(
+        `/vendor/deletecar/${id}`,
+        // config
       );
       if (response.data.message === "car deleted successfully") {
         // console.log("Car deleted successfully");
@@ -652,14 +652,14 @@ const CarsList = () => {
                 <div>
                   <button
                     className="ml-5"
-                    disabled={currentPage == 1}
+                    disabled={currentPage === 1}
                     onClick={handlePrevPage}
                   >
                     Prev
                   </button>
                   <button
                     className="ml-10"
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     onClick={handleNextPage}
                   >
                     Next

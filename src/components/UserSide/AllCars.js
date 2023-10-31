@@ -6,7 +6,6 @@ import categoryicon from "../../assets/categoryicon.png";
 import gearbox from "../../assets/gearbox.png";
 import gasstation from "../../assets/gas-station.png";
 import axiosInstance from "../../api/axiosInstance";
-import SearchBar from "./SeachBar";
 import { Link } from "react-router-dom";
 
 
@@ -16,8 +15,8 @@ const AllCars = () => {
   const [carTypes, setCarTypes] = useState([]); // Selected car types
   const [gearTypes, setGearTypes] = useState([]); // Selected gear types
   const [fuelTypes, setFuelTypes] = useState([]);
-  const [sortPriceLowToHigh, setSortPriceLowToHigh] = useState(false); // Sort by price: low to high
-  const [sortPriceHighToLow, setSortPriceHighToLow] = useState(false);
+  // const [sortPriceLowToHigh, setSortPriceLowToHigh] = useState(false); // Sort by price: low to high
+  // const [sortPriceHighToLow, setSortPriceHighToLow] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [carsPerPage] = useState(6); // Set the number of cars per page
   const [sortTypes, setSortTypes] = useState([]);
@@ -112,9 +111,9 @@ const AllCars = () => {
 
   const renderPageNumbers = pageNumbers.map((number) => (
     <li key={number} className="page-item">
-      <a onClick={() => paginate(number)} className="page-link" href="#">
+      <button onClick={() => paginate(number)} className="page-link">
         {number}
-      </a>
+      </button>
     </li>
   ));
 
@@ -203,6 +202,7 @@ const AllCars = () => {
     try {
       let url = "http://localhost:5000/user/allcars"; // Default URL for all cars
 
+      // let url = "https://www.car-rentals.shop/user/allcars"; // Default URL for all cars
       // Add search parameter if provided
       if (search) {
         url += `?search=${search}`;

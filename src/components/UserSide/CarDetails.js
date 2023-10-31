@@ -97,7 +97,7 @@ const CarDetails = () => {
     }
 
     // creating a new order
-    const result = await axios.post("http://localhost:5000/payment/orders", {
+    const result = await axiosInstance.post("/payment/orders", {
       amount: calculateTotalAmount(), // Pass the correct amount dynamically
     });
 
@@ -132,11 +132,11 @@ const CarDetails = () => {
           console.error("Error while handling booking:", error);
         }
 
-        const result = await axios.post(
-          "http://localhost:5000/payment/success",
+        const result = await axiosInstance.post(
+          "/payment/success",
           data
         );
-
+          if(result)
         // alert(result.data.msg);
         navigate("/booking_success");
       },

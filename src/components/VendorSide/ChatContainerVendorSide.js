@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 
 function ChatContainerVendorSide() {
   let socketio = socketIOClient("http://localhost:5000");
+  // let socketio = socketIOClient("https://www.car-rentals.shop");
   const [chats, setChats] = useState([]);
   const [user, setUser] = useState(localStorage.getItem("vendor"));
   // const [avatar, setAvatar] = useState(localStorage.getItem("avatar"));
