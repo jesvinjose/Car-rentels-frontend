@@ -1,5 +1,6 @@
 import { Outlet,useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export const PrivateRoutes = ({ Component }) => {
   const navigate=useNavigate();
@@ -8,8 +9,11 @@ export const PrivateRoutes = ({ Component }) => {
     try {
       const userId = localStorage.getItem("userId");
       const userToken = localStorage.getItem("token");
-      const response = await axios.get(
-        `http://localhost:5000/user/checkBlockStatus/${userId}`
+      // const response = await axios.get(
+      //   `http://localhost:5000/user/checkBlockStatus/${userId}`
+      // );
+      const response = await axiosInstance.get(
+        `/user/checkBlockStatus/${userId}`
       );
       // const response = await axios.get(
       //   `https://www.car-rentals.shop/user/checkBlockStatus/${userId}`

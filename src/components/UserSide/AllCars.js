@@ -200,9 +200,7 @@ const AllCars = () => {
     sortTypes
   ) => {
     try {
-      let url = "http://localhost:5000/user/allcars"; // Default URL for all cars
-
-      // let url = "https://www.car-rentals.shop/user/allcars"; // Default URL for all cars
+      let url = "/user/allcars"; // Default URL for all cars
       // Add search parameter if provided
       if (search) {
         url += `?search=${search}`;
@@ -233,7 +231,7 @@ const AllCars = () => {
             ? `&sortTypes=${sortTypes}`
             : `?sortTypes=${sortTypes}`;
       }
-      const response = await axios.get(url);
+      const response = await axiosInstance.get(url);
       console.log("Response from backend:", response.data);
       if (Array.isArray(response.data)) {
         setAllCars(response.data);

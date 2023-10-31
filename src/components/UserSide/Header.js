@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiSolidUserCircle } from "react-icons/bi";
 import logo from "../../assets/logo-1.png";
 import axios from "axios";
-const Header = ({walletBalance,setWalletBalance}) => {
+const Header = () => {
 
   // const [userId,setUserId]=useState(localStorage.getItem("userId"))
   const token = localStorage.getItem("token");
@@ -24,24 +24,6 @@ const Header = ({walletBalance,setWalletBalance}) => {
   };
 
   
-  // useEffect(() => {
-  //   async function fetchWalletBalance() {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:5000/user/get_wallet_balance/${userId}`
-  //       );
-  //       if (response.data.walletBalance) {
-  //         setWalletBalance(response.data.walletBalance);
-  //         localStorage.setItem("walletBalance",walletBalance)
-  //       }
-  //     } catch (error) {
-  //       // Handle any errors here
-  //       console.error("Error fetching wallet balance:", error);
-  //     }
-  //   }
-
-  //   fetchWalletBalance();
-  // }, [walletBalance]);
 
   return (
     <div>
@@ -94,10 +76,6 @@ const Header = ({walletBalance,setWalletBalance}) => {
                     {firstName}
                   </p>
                 </a>
-
-                {/* {walletBalance ? (
-                  <li className="dropdown-item">Wallet: {walletBalance}</li>
-                ) : null} */}
 
                 {token ? (
                   <Link to="/booking_history" className="dropdown-item">
