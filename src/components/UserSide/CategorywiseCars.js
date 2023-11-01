@@ -60,7 +60,10 @@ const CategorywiseCars = () => {
 
   return (
     <div>
-      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance}/>
+      <Header
+        walletBalance={walletBalance}
+        setWalletBalance={setWalletBalance}
+      />
       <div
         style={{
           width: "100%",

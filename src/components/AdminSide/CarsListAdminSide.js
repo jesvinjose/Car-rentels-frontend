@@ -6,7 +6,8 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 // mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-mapboxgl.accessToken="pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A"
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A";
 
 const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
   const [vendorFirstName, setVendorFirstName] = useState("");
@@ -117,125 +118,136 @@ const CarDetailsModal = ({ carDetails, closeModal, carsData, setCarsData }) => {
   }, [carDetails]);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50  ">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-1/2 border border-black ">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 border border-black">
         <h2 className="text-xl font-semibold mb-4 text-center">Car Details</h2>
         <div
-          id="map"
-          className="map-container mb-4"
-          style={{ width: "100%", height: "200px", backgroundColor: "gray" }}
-        ></div>
-        <div className="flex justify-around">
-          <p>
-            <strong>Model Name:</strong> {carDetails[0].modelName}
-          </p>
-          <p>
-            <strong>Delivery Hub:</strong> {carDetails[0].deliveryHub}
-          </p>
-        </div>
-        <div className="flex justify-around">
-          <p>
-            <strong>Fuel Capacity:</strong> {carDetails[0].fuelCapacity}
-          </p>
-          <p>
-            <strong>Seat Numbers:</strong> {carDetails[0].seatNumber}
-          </p>
-        </div>
-        <div className="flex justify-around">
-          <p>
-            <strong>Mileage:</strong> {carDetails[0].mileage}
-          </p>
-          <p>
-            <strong>Gear Box Type:</strong> {carDetails[0].gearBoxType}
-          </p>
-        </div>
-        <div className="flex justify-around">
-          <p>
-            <strong>Fuel Type:</strong> {carDetails[0].fuelType}
-          </p>
-          <p>
-            <strong>Description:</strong> {carDetails[0].description}
-          </p>
-        </div>
-        <div className="flex justify-around">
-          <p>
-            <strong>RC Number:</strong> {carDetails[0].rcNumber}
-          </p>
-          <p>
-            <strong>Vendor Name:</strong> {vendorFirstName}
-          </p>
-        </div>
-        <div className="flex justify-around">
-          <p>
-            <strong>Hourly Rental Rate:</strong>{" "}
-            {carDetails[0].hourlyRentalRate}
-          </p>
-          <p>
-            <strong>Car Type:</strong> {carDetails[0].carTypeName}
-          </p>
-        </div>
-        <div className="flex justify-around">
-          <p>
-            <strong>Monthly Rental Rate:</strong>{" "}
-            {carDetails[0].monthlyRentalRate}
-          </p>
-          <p>
-            <strong>Daily Rental Rate:</strong> {carDetails[0].dailyRentalRate}
-          </p>
-        </div>
-        <div className="flex justify-around">
-          <p>
-            <strong>RC Image</strong>
-            <img
-              src={carDetails[0].rcImage}
-              alt="RC Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-          <p>
-            <strong>Car Image</strong>
-            <img
-              src={carDetails[0].carImage}
-              alt="Car Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-          <p>
-            <strong>Adhar Front Image</strong>
-            <img
-              src={vendorAdharFrontImage}
-              alt="AdharFrontImagePreview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-          <p>
-            <strong>Adhar Back Image</strong>
-            <img
-              src={vendorAdharBackImage}
-              alt="AdharBackimagePreview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
+          className="overflow-y-auto"
+          style={{ maxHeight: "70vh" }} // Adjust maxHeight as needed
+        >
+          <div
+            id="map"
+            className="map-container mb-4"
+            style={{ width: "100%", height: "200px", backgroundColor: "gray" }}
+          ></div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>Model Name:</strong> {carDetails[0].modelName}
+            </p>
+            <p>
+              <strong>Delivery Hub:</strong> {carDetails[0].deliveryHub}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>Fuel Capacity:</strong> {carDetails[0].fuelCapacity}
+            </p>
+            <p>
+              <strong>Seat Numbers:</strong> {carDetails[0].seatNumber}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>Mileage:</strong> {carDetails[0].mileage}
+            </p>
+            <p>
+              <strong>Gear Box Type:</strong> {carDetails[0].gearBoxType}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>Fuel Type:</strong> {carDetails[0].fuelType}
+            </p>
+            <p>
+              <strong>Description:</strong> {carDetails[0].description}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>RC Number:</strong> {carDetails[0].rcNumber}
+            </p>
+            <p>
+              <strong>Vendor Name:</strong> {vendorFirstName}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>Hourly Rental Rate:</strong>{" "}
+              {carDetails[0].hourlyRentalRate}
+            </p>
+            <p>
+              <strong>Car Type:</strong> {carDetails[0].carTypeName}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>Monthly Rental Rate:</strong>{" "}
+              {carDetails[0].monthlyRentalRate}
+            </p>
+            <p>
+              <strong>Daily Rental Rate:</strong>{" "}
+              {carDetails[0].dailyRentalRate}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around">
+            <p>
+              <strong>RC Image</strong>
+              <img
+                src={carDetails[0].rcImage}
+                alt="RC Preview"
+                style={{ maxWidth: "100%", maxHeight: "100px" }}
+              />
+            </p>
+            <p>
+              <strong>Car Image</strong>
+              <img
+                src={carDetails[0].carImage}
+                alt="Car Preview"
+                style={{ maxWidth: "100%", maxHeight: "100px" }}
+              />
+            </p>
+            <p>
+              <strong>Adhar Front Image</strong>
+              <img
+                src={vendorAdharFrontImage}
+                alt="AdharFrontImagePreview"
+                style={{ maxWidth: "100%", maxHeight: "100px" }}
+              />
+            </p>
+            <p>
+              <strong>Adhar Back Image</strong>
+              <img
+                src={vendorAdharBackImage}
+                alt="AdharBackimagePreview"
+                style={{ maxWidth: "100%", maxHeight: "100px" }}
+              />
+            </p>
+          </div>
+
+          {/* Button section */}
+          <div className="flex flex-col sm:flex-row justify-evenly mt-6">
+            {/* Accept button */}
+            <button
+              onClick={() => handleAccept(carDetails[0]._id)}
+              className="w-full sm:w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700 mb-2 sm:mb-0"
+            >
+              Accept
+            </button>
+
+            {/* Reject button */}
+            <button
+              onClick={() => handleReject(carDetails[0]._id)}
+              className="w-full sm:w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
+            >
+              Reject
+            </button>
+          </div>
         </div>
 
-        <div className="flex justify-evenly">
-          <button
-            onClick={() => handleAccept(carDetails[0]._id)}
-            className="mt-6 w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700"
-          >
-            Accept
-          </button>
-          <button
-            onClick={() => handleReject(carDetails[0]._id)}
-            className="mt-6 w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
-          >
-            Reject
-          </button>
-        </div>
-
+        {/* Close button with responsive classes */}
         <button
           onClick={closeModal}
-          className="mt-6 w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="mt-6 w-full sm:w-5/12 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
         >
           Close
         </button>
@@ -303,12 +315,12 @@ const CarsListAdminSide = () => {
     // };
     const res = await axiosInstanceforAdmin.put(
       `/admin/carblock/${id}`,
-      null,
+      null
       // config
     );
     // console.log(id);
 
-    console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    // console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     if (res) {
       const updatedCar = carsData.map((i) =>
         i._id === id ? { ...i, blockStatus: true } : i
@@ -327,7 +339,7 @@ const CarsListAdminSide = () => {
     // };
     const resss = await axiosInstanceforAdmin.put(
       `/admin/carunblock/${id}`,
-      null,
+      null
       // config
     );
     console.log(id);

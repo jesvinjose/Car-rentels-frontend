@@ -32,43 +32,37 @@ const VendorProfile = () => {
   }, [vendorId, vendortoken]);
   console.log(vendorDetails, "---------vendorProfile console-----------");
   return (
-    <div>
-      <VendorHeader />
-      {vendorDetails ? ( // Use conditional rendering here
-        <div className="flex justify-evenly items-center bg-slate-400 h-30">
-          <div className="flex items-center">
-            <div className="profile-icon">
-              {/* Add your profile icon */}
-              <img className="w-10 h-10" src={Profile} alt="Profile Icon" />
-            </div>
-            <div className="ml-2">
-              {/* Display first name and last name with space in between */}
-              <p>
-                {vendorDetails.firstName} {vendorDetails.lastName}
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <p>Mobile: {vendorDetails.mobileNumber}</p>
-
-            {/* Display other user details as needed */}
-          </div>
-          <div>
-            <p>Email: {vendorDetails.emailId}</p>
-            {/* Display other user details as needed */}
-          </div>
-        </div>
-      ) : (
-        <p>Loading vendor details...</p>
-      )}
-      {vendorDetails && (
-        <UpdateVendorProfileDetails
-          vendorData={vendorDetails}
-          vendorId={vendorId}
-        />
-      )}
+<div className="p-4">
+  <VendorHeader />
+  {vendorDetails ? (
+    <div className="flex flex-col items-center bg-slate-400 p-4">
+      <div className="profile-icon text-center">
+        <img className="w-16 h-16" src={Profile} alt="Profile Icon" />
+      </div>
+      <div className="mt-4 text-center">
+        <p>
+          {vendorDetails.firstName} {vendorDetails.lastName}
+        </p>
+      </div>
+      <div className="mt-2 text-center">
+        <p>Mobile: {vendorDetails.mobileNumber}</p>
+      </div>
+      <div className="mt-2 text-center">
+        <p>Email: {vendorDetails.emailId}</p>
+        {/* Display other user details as needed */}
+      </div>
     </div>
+  ) : (
+    <p>Loading vendor details...</p>
+  )}
+  {vendorDetails && (
+    <UpdateVendorProfileDetails
+      vendorData={vendorDetails}
+      vendorId={vendorId}
+    />
+  )}
+</div>
+
   );
 };
 

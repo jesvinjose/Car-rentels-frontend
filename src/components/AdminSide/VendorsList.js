@@ -53,60 +53,72 @@ const VendorDetailsModal = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50  ">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-1/2 ">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4">
         <h2 className="text-xl font-semibold mb-4 text-center">
           Vendor Details
         </h2>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>First Name:</strong> {vendorDetails[0].firstName}
-          </p>
-          <p>
-            <strong>Last Name:</strong> {vendorDetails[0].lastName}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Email ID:</strong> {vendorDetails[0].emailId}
-          </p>
-          <p>
-            <strong>Aadhar Number:</strong> {vendorDetails[0].aadharNumber}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Adhar Front Image</strong>
-            <img
-              src={vendorDetails[0].aadharFrontImage}
-              alt="Aadhar Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-          <p>
-            <strong>Adhar Back Image</strong>
-            <img
-              src={vendorDetails[0].aadharBackImage}
-              alt="Aadhar Back Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-        </div>
-        {/* <div className="flex justify-evenly">
+        <div
+          className="overflow-y-auto"
+          style={{ maxHeight: "70vh" }} // Adjust maxHeight as needed
+        >
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>First Name:</strong> {vendorDetails[0].firstName}
+            </p>
+            <p>
+              <strong>Last Name:</strong> {vendorDetails[0].lastName}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Email ID:</strong> {vendorDetails[0].emailId}
+            </p>
+            <p>
+              <strong>Aadhar Number:</strong> {vendorDetails[0].aadharNumber}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Adhar Front Image</strong>
+              <img
+                src={vendorDetails[0].aadharFrontImage}
+                alt="Aadhar Front Preview"
+                className="max-w-full max-h-32"
+              />
+            </p>
+            <p>
+              <strong>Adhar Back Image</strong>
+              <img
+                src={vendorDetails[0].aadharBackImage}
+                alt="Aadhar Back Preview"
+                className="max-w-full max-h-32"
+              />
+            </p>
+          </div>
+
+          {/* Button section */}
+          {/* <div className="flex flex-col sm:flex-row justify-evenly mt-6">
+          {/* Accept button 
           <button
             onClick={() => handleAccept(vendorDetails[0]._id)}
-            className="mt-6 w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700"
+            className="w-full sm:w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700 mb-2 sm:mb-0"
           >
             Accept
           </button>
+*/}
+          {/* Reject button */}
+          {/*
           <button
             onClick={() => handleReject(vendorDetails[0]._id)}
-            className="mt-6 w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
+            className="w-full sm:w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
           >
             Reject
           </button>
         </div> */}
+        </div>
 
+        {/* Close button */}
         <button
           onClick={closeModal}
           className="mt-6 w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
@@ -184,7 +196,7 @@ const VendorsList = () => {
     );
     console.log(id);
 
-    console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    // console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
     const updatedVendor = vendorData.map((i) =>
       i._id === id ? { ...i, blockStatus: true } : i

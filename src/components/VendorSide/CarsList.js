@@ -602,7 +602,7 @@ const CarsList = () => {
                         scope="col"
                         className="py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
-                        Hourly Rental Rate
+                        Daily Rental Rate
                       </th>
                       <th
                         scope="col"
@@ -632,7 +632,7 @@ const CarsList = () => {
                           {car.verificationStatus}
                         </td>
                         <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                          {car.hourlyRentalRate}
+                          {car.dailyRentalRate}
                         </td>
                         <td className="pr-4 py-3 text-sm font-medium text-right">
                           <button

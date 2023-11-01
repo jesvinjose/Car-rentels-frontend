@@ -132,13 +132,10 @@ const CarDetails = () => {
           console.error("Error while handling booking:", error);
         }
 
-        const result = await axiosInstance.post(
-          "/payment/success",
-          data
-        );
-          if(result)
-        // alert(result.data.msg);
-        navigate("/booking_success");
+        const result = await axiosInstance.post("/payment/success", data);
+        if (result)
+          // alert(result.data.msg);
+          navigate("/booking_success");
       },
       prefill: {
         name: "Jesvin Jose",
@@ -266,16 +263,25 @@ const CarDetails = () => {
   // console.log(carDetails, "---------here is the carDetails");
   return (
     <div>
-      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance}/>
+      <Header
+        walletBalance={walletBalance}
+        setWalletBalance={setWalletBalance}
+      />
       <div className="container mt-5">
         <div className="text-center">
           <h1>Car Details</h1>
         </div>
         <ToastContainer />
-        <div className="d-flex justify-content-around mt-3">
-          <h3>Model: {carDetails.modelName}</h3>
-          <h3>Delivery at Hub: {carDetails.deliveryHub}</h3>
-          <h3>With Fuel Capacity: {carDetails.fuelCapacity} L</h3>
+        <div className="flex flex-col md:flex-row justify-between mt-3">
+          <div className="md:w-1/3">
+            <h3>Model: {carDetails.modelName}</h3>
+          </div>
+          <div className="md:w-1/3 mt-3 md:mt-0">
+            <h3>Delivery at Hub: {carDetails.deliveryHub}</h3>
+          </div>
+          <div className="md:w-1/3 mt-3 md:mt-0">
+            <h3>With Fuel Capacity: {carDetails.fuelCapacity} L</h3>
+          </div>
         </div>
         <div className="row mt-5">
           <h4>Car Location</h4>
@@ -292,41 +298,34 @@ const CarDetails = () => {
             />
           </div>
         </div>
-        <div className="flex justify-center">
-          <div className="col-12 col-md-6 ">
-            <div className="border border-black p-4 bg-grey-300 flex flex-col md:flex-row justify-center items-center mt-3 mb-3">
-              <label>Pickup Date:</label>
-              <input
-                type="date"
-                className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
-                placeholder="Pickup Date"
-                value={pickupDate}
-                onChange={handlePickupDateChange}
-                min={tomorrow.toISOString().split("T")[0]} // Set min to tomorrow's date in ISO format
-                required
-              />
-              <label>Return Date: </label>
-              <input
-                type="date"
-                className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
-                placeholder="Return Date"
-                value={returnDate}
-                onChange={(e) => setReturnDate(e.target.value)}
-                min={getMinReturnDate()} // Set min to the calculated minimum return date
-                required
-              />
-              <button
-                onClick={() =>
-                  handleSubmit(pickupDate, returnDate, carDetails._id)
-                }
-                className="btn btn-success"
-              >
-                Search
-              </button>
-            </div>
-          </div>
+        <div className="flex flex-col items-center mt-3 mb-3">
+          <label>Pickup Date:</label>
+          <input
+            type="date"
+            className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
+            placeholder="Pickup Date"
+            value={pickupDate}
+            onChange={handlePickupDateChange}
+            min={tomorrow.toISOString().split("T")[0]} // Set min to tomorrow's date in ISO format
+            required
+          />
+          <label>Return Date: </label>
+          <input
+            type="date"
+            className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
+            placeholder="Return Date"
+            value={returnDate}
+            onChange={(e) => setReturnDate(e.target.value)}
+            min={getMinReturnDate()} // Set min to the calculated minimum return date
+            required
+          />
+          <button
+            onClick={() => handleSubmit(pickupDate, returnDate, carDetails._id)}
+            className="btn btn-success"
+          >
+            Search
+          </button>
         </div>
-
         <div className="row mt-4">
           <div className="col-6 col-md-3">
             <div className="flex justify-evenly ">
@@ -380,7 +379,7 @@ const CarDetails = () => {
         <div className="container justify-items-start mb-20">
           <div className="border mt-5 mb-5">
             <h1>Amount Details</h1>
-            <div className="flex justify-start">
+            <div className="flex flex-col md:flex-row justify-start">
               <div className="mr-3">Car Pickup Date: {pickupDate}</div>
               <div className="mr-3">Car Return Date: {returnDate}</div>
             </div>
@@ -398,7 +397,7 @@ const CarDetails = () => {
         <div className="container justify-items-start mb-20">
           <div className="border mt-5 mb-5">
             <h1>Amount Details</h1>
-            <div className="flex justify-start">
+            <div className="flex flex-col md:flex-row justify-start">
               <div className="mr-3">Car Pickup Date: {pickupDate}</div>
               <div className="mr-3">Car Return Date: {returnDate}</div>
             </div>
@@ -406,7 +405,7 @@ const CarDetails = () => {
           </div>
           {!token && (
             <div>
-              <h1>Log in to the Account for Booking</h1>
+              <h1 className="text-center">Log in to the Account for Booking</h1>
             </div>
           )}
         </div>

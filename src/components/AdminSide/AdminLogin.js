@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import { useNavigate } from "react-router-dom";
-import logo from '../../assets/logo-1.png'
+import logo from "../../assets/logo-1.png";
 
 function AdminLoginForm() {
   const [emailId, setEmail] = useState("");
@@ -17,15 +17,15 @@ function AdminLoginForm() {
         emailId,
         password,
       });
-      console.log("res,>>>>>>>>>>>>>>>>", response);
-      console.log(response.data.adminToken,"-----------adminToken");
-      console.log(response.data.adminEmailId,"---------adminEmailId");
+      // console.log("res,>>>>>>>>>>>>>>>>", response);
+      console.log(response.data.adminToken, "-----------adminToken");
+      console.log(response.data.adminEmailId, "---------adminEmailId");
       const adminToken = response.data.adminToken;
-      const adminEmailId=response.data.adminEmailId;
+      const adminEmailId = response.data.adminEmailId;
       console.log(adminToken);
       // Store the token securely (localStorage, cookie, etc.)
       localStorage.setItem("adminToken", adminToken);
-      localStorage.setItem("adminEmailId",adminEmailId)
+      localStorage.setItem("adminEmailId", adminEmailId);
       // You can use `navigate` to programmatically navigate
       navigate("/admin/home"); // Example navigation
     } catch (error) {
@@ -34,14 +34,10 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 border border-black mt-44">
+    <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 border border-black mt-10 sm:mt-20 md:mt-32 lg:mt-44">
       <div className="px-6 py-4">
         <div className="flex justify-center mx-auto">
-          <img
-            className="w-auto h-7 sm:h-24"
-            src={logo}
-            alt=""
-          />
+          <img className="w-auto h-7 sm:h-24" src={logo} alt="" />
         </div>
 
         <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
@@ -93,8 +89,7 @@ function AdminLoginForm() {
 
 export default AdminLoginForm;
 
-
-  /* <form onSubmit={handleLogin}>
+/* <form onSubmit={handleLogin}>
 <input
   type="email"
   placeholder="Email"
@@ -111,4 +106,3 @@ export default AdminLoginForm;
 />
 <button type="submit">Login</button>
 </form> */
-

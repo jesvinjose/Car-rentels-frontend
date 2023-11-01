@@ -3,7 +3,7 @@ import axiosInstance from "../../api/axiosInstance";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const SearchBar = ({handleSubmit}) => {
+const SearchBar = ({ handleSubmit }) => {
   const today = new Date().toISOString().split("T")[0];
   const [pickupDate, setPickupDate] = useState(today);
   const [returnDate, setReturnDate] = useState(today);
@@ -35,7 +35,7 @@ const SearchBar = ({handleSubmit}) => {
           required
         />
 
-        <label>Return Date: </label>
+        <label className="mt-2 md:mt-0">Return Date: </label>
         <input
           type="date"
           className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-4 py-2"
@@ -47,13 +47,12 @@ const SearchBar = ({handleSubmit}) => {
         />
 
         <button
-          onClick={()=>handleSubmit(pickupDate,returnDate)}
-          className="bg-green-500 border border-black rounded-lg px-4 py-2 mb-2 ml-4 text-white hover:bg-green-600 cursor-pointer"
+          onClick={() => handleSubmit(pickupDate, returnDate)}
+          className="bg-green-500 border border-black rounded-lg px-4 py-2 mb-2 mt-2 md:mt-0 md:ml-4 text-white hover:bg-green-600 cursor-pointer"
         >
           Search
         </button>
       </div>
-
     </>
   );
 };

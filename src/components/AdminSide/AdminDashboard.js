@@ -10,10 +10,10 @@ function AdminDashboard() {
   const [totalBookingsThisWeek, setTotalBookingsThisWeek] = useState(0);
   const [totalEarningsThisWeek, setTotalEarningsThisWeek] = useState(0);
   const [totalEarningsThisMonth, setTotalEarningsThisMonth] = useState(0);
-  const [totalCars,setTotalCars]=useState(0)
+  const [totalCars, setTotalCars] = useState(0);
   // State to store chart data
   const [chartDataArray, setChartDataArray] = useState(null);
-  const [earningsChartArray,setEarningsChartArray]=useState(null);
+  const [earningsChartArray, setEarningsChartArray] = useState(null);
 
   useEffect(() => {
     // Fetch bookings vs. date data from the backend
@@ -22,12 +22,12 @@ function AdminDashboard() {
       .then((response) => {
         console.log(response.data);
         setChartDataArray(response.data.chartDataArray);
-        setEarningsChartArray(response.data.earningsData)
+        setEarningsChartArray(response.data.earningsData);
       })
       .catch((error) => console.error(error));
   }, []); // Empty dependency array to run this effect only once
-  
-  console.log(chartDataArray,"---------chartArray");
+
+  console.log(chartDataArray, "---------chartArray");
 
   useEffect(() => {
     // Fetch data from the server and set state variables
@@ -38,7 +38,7 @@ function AdminDashboard() {
         vendorCount,
         totalBookingsThisWeek,
         totalEarningsThisWeek,
-        totalEarningsThisMonth
+        totalEarningsThisMonth,
       } = response.data;
       setTotalUsers(userCount);
       setTotalVendors(vendorCount);
@@ -54,7 +54,7 @@ function AdminDashboard() {
       <AdminHeader />
       <div className="container mt-5">
         <div className="row">
-        <div className="col-md-2">
+          <div className="col-md-6 col-lg-4 mb-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Cars</h5>
@@ -62,7 +62,7 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-          <div className="col-md-2">
+          <div className="col-md-6 col-lg-4 mb-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Users</h5>
@@ -70,8 +70,7 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-
-          <div className="col-md-2">
+          <div className="col-md-6 col-lg-4 mb-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Vendors</h5>
@@ -79,8 +78,7 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-
-          <div className="col-md-2">
+          <div className="col-md-6 col-lg-4 mb-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Bookings This Week</h5>
@@ -88,8 +86,7 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-
-          <div className="col-md-2">
+          <div className="col-md-6 col-lg-4 mb-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Earnings This Week</h5>
@@ -97,8 +94,7 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-
-          <div className="col-md-2">
+          <div className="col-md-6 col-lg-4 mb-4">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Total Earnings This Month</h5>
@@ -106,10 +102,9 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-
         </div>
         <div className="row mt-5 mb-5">
-          <div className="col-md-6">
+          <div className="col-md-12 col-lg-6">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Bookings vs. Month</h5>
@@ -118,20 +113,16 @@ function AdminDashboard() {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-12 col-lg-6">
             <div className="card">
               <div className="card-body">
                 <h5 className="card-title">Earnings vs. Month</h5>
-                <EarningsDataChart earningsChartArray={earningsChartArray}/>
+                <EarningsDataChart earningsChartArray={earningsChartArray} />
                 {/* Pass the data for the chart */}
               </div>
             </div>
           </div>
         </div>
-
-       
-
-        
       </div>
     </div>
   );

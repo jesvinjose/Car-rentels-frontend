@@ -17,16 +17,13 @@ const BookingDetailsModal = ({
   handleChange,
   otp,
   setOtp,
-  navigate
-
+  navigate,
 }) => {
-  
-  console.log(
-    selectedBookingDetails,
-    otpAvailable,
-    ">>>>>>>>>y=userrrrrrrrrrrrrrrrrrrrrr>>>>>>>>>>>>.."
-  );
-  
+  // console.log(
+  //   selectedBookingDetails,
+  //   otpAvailable,
+  // ">>>>>>>>>y=userrrrrrrrrrrrrrrrrrrrrr>>>>>>>>>>>>.."
+  // );
 
   useEffect(() => {}, [selectedBookingDetails]);
 
@@ -39,86 +36,90 @@ const BookingDetailsModal = ({
   const firstBookingDetail = selectedBookingDetails[0];
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50  ">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-1/2 ">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3">
         <h2 className="text-xl font-semibold mb-4 text-center">
           Booking Details
         </h2>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Car Image</strong>
-            <img
-              // src={firstBookingDetail?.carImage}
-              src={firstBookingDetail.car.carImage}
-              alt="Aadhar Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-          <p>
-            <strong>RC Image</strong>
-            <img
-              src={firstBookingDetail.car.rcImage}
-              alt="Aadhar Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          {firstBookingDetail.bookingHistory[0]?.bookingStatus === "booked" &&
-          otpAvailable ? (
-            <p>
-              <strong>Enter OTP to Start Trip:</strong>{" "}
-              <input
-                type="number"
-                value={otp}
-                onChange={handleChange}
-                placeholder="Enter OTP"
-              />
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleSubmit}
-              >
-                Submit OTP
-              </button>
-            </p>
-          ) : null}
-          {firstBookingDetail.bookingHistory[0]?.bookingStatus === "running" ? (
-            <p>
-              <strong>OTP to End Trip:</strong>
-              {firstBookingDetail.endTripOtp}
-            </p>
-          ) : null}
-          {console.log("After condition check")}
-          <p>
-            <strong>RC Number:</strong> {firstBookingDetail.car.rcNumber}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Fuel Type:</strong> {firstBookingDetail.car.fuelType}
-          </p>
-          <p>
-            <strong>Fuel Capacity:</strong>{" "}
-            {firstBookingDetail.car.fuelCapacity}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Delivery Hub:</strong> {firstBookingDetail.car.deliveryHub}
-          </p>
-          <p>
-            <strong>Daily Rental Rate:</strong>{" "}
-            {firstBookingDetail.car.dailyRentalRate}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Mileage:</strong> {firstBookingDetail.car.mileage}
-          </p>
-          <p>
-            <strong>Gear Box Type:</strong> {firstBookingDetail.car.gearBoxType}
-          </p>
+        <div className="overflow-y-auto" style={{ maxHeight: "70vh" }}>
+            <div className="flex flex-col sm:flex-row justify-evenly">
+              <p>
+                <strong>Car Image</strong>
+                <img
+                  // src={firstBookingDetail?.carImage}
+                  src={firstBookingDetail.car.carImage}
+                  alt="Car Image"
+                  style={{ maxWidth: "100%", maxHeight: "100px" }}
+                />
+              </p>
+              <p>
+                <strong>RC Image</strong>
+                <img
+                  src={firstBookingDetail.car.rcImage}
+                  alt="RC Image"
+                  style={{ maxWidth: "100%", maxHeight: "100px" }}
+                />
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-evenly">
+              {firstBookingDetail.bookingHistory[0]?.bookingStatus ===
+                "booked" && otpAvailable ? (
+                <p>
+                  <strong>Enter OTP to Start Trip:</strong>{" "}
+                  <input
+                    type="number"
+                    value={otp}
+                    onChange={handleChange}
+                    placeholder="Enter OTP"
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleSubmit}
+                  >
+                    Submit OTP
+                  </button>
+                </p>
+              ) : null}
+              {firstBookingDetail.bookingHistory[0]?.bookingStatus ===
+              "running" ? (
+                <p>
+                  <strong>OTP to End Trip:</strong>
+                  {firstBookingDetail.endTripOtp}
+                </p>
+              ) : null}
+              <p>
+                <strong>RC Number:</strong> {firstBookingDetail.car.rcNumber}
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-evenly">
+              <p>
+                <strong>Fuel Type:</strong> {firstBookingDetail.car.fuelType}
+              </p>
+              <p>
+                <strong>Fuel Capacity:</strong>{" "}
+                {firstBookingDetail.car.fuelCapacity}
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-evenly">
+              <p>
+                <strong>Delivery Hub:</strong>{" "}
+                {firstBookingDetail.car.deliveryHub}
+              </p>
+              <p>
+                <strong>Daily Rental Rate:</strong>{" "}
+                {firstBookingDetail.car.dailyRentalRate}
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-evenly">
+              <p>
+                <strong>Mileage:</strong> {firstBookingDetail.car.mileage}
+              </p>
+              <p>
+                <strong>Gear Box Type:</strong>{" "}
+                {firstBookingDetail.car.gearBoxType}
+              </p>
+            </div>
         </div>
 
         <button
@@ -138,19 +139,19 @@ const BookingsList = () => {
   const [selectedBookingDetails, setSelectedBookingDetails] = useState(null);
   const [otpAvailable, setOtpAvailable] = useState(false);
   const vendorId = localStorage.getItem("vendorId");
-  const [date,setDate]=useState(new Date())
+  const [date, setDate] = useState(new Date());
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-
   const vendorToken = localStorage.getItem("vendorToken");
 
-  const firstBookingDetail = selectedBookingDetails ? selectedBookingDetails[0] : null;
+  const firstBookingDetail = selectedBookingDetails
+    ? selectedBookingDetails[0]
+    : null;
   const [error, setError] = useState(null);
 
-  
   const handleChange = (e) => {
     setOtp(e.target.value);
   };
@@ -212,37 +213,31 @@ const BookingsList = () => {
   };
 
   useEffect(() => {
-
     fetchData();
   }, [date]);
 
-      const fetchData = async () => {
-      try {
-        // const config = {
-        //   headers: {
-        //     Authorization: `Bearer ${vendorToken}`, // Set the token in the headers
-        //   },
-        // };
-  
-        const response = await axiosInstanceforVendor.get(
-          `/vendor/bookingslist/${vendorId}`,
-          // config
-        );
-        if (Array.isArray(response.data)) {
-          setBookingData(response.data);
-          setError(null); // Clear any previous errors
-        } else {
-          setError("Invalid data received from the server");
-        }
-      } catch (error) {
-        setError("Error fetching data: " + error.message);
+  const fetchData = async () => {
+    try {
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${vendorToken}`, // Set the token in the headers
+      //   },
+      // };
+
+      const response = await axiosInstanceforVendor.get(
+        `/vendor/bookingslist/${vendorId}`
+        // config
+      );
+      if (Array.isArray(response.data)) {
+        setBookingData(response.data);
+        setError(null); // Clear any previous errors
+      } else {
+        setError("Invalid data received from the server");
       }
-    };
-
-
-
-
-
+    } catch (error) {
+      setError("Error fetching data: " + error.message);
+    }
+  };
 
   const handleCancel = async (id) => {
     // console.log(id, "-----bookingId");
@@ -253,7 +248,7 @@ const BookingsList = () => {
       //   },
       // };
       const response = await axiosInstanceforVendor.get(
-        `/vendor/cancelbooking/${id}`,
+        `/vendor/cancelbooking/${id}`
         // config
       );
       if (response.data.message === "Booking cancelled successfully") {
@@ -381,7 +376,7 @@ const BookingsList = () => {
                         <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
                           {booking.bookingHistory[0].pickupDate}
                         </td>
-                        <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
+                        <td className="px-12 py-3 text-sm text-red-500 dark:text-red-400 whitespace-nowrap">
                           {booking.bookingHistory[0].returnDate}
                         </td>
                         <td className="py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
@@ -415,39 +410,37 @@ const BookingsList = () => {
                                 Cancel
                               </button>
                             )}
-                            {["booked", "running"].includes(
-                              booking.bookingHistory[0].bookingStatus
-                            ) && (
-                              <Link
-
-                                to={`/chat_with_user/${booking._id}/${booking.bookingHistory[0].userId}/${booking.vendorId}`}
-                                
-                                className="ml-2 text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600"
-                              >
-                                Chat with User
-                              </Link>
-                            )}
+                          {["booked", "running"].includes(
+                            booking.bookingHistory[0].bookingStatus
+                          ) && (
+                            <Link
+                              to={`/chat_with_user/${booking._id}/${booking.bookingHistory[0].userId}/${booking.vendorId}`}
+                              className="ml-2 text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600"
+                            >
+                              Chat with User
+                            </Link>
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
                 <div>
-                    <button
-                      className="ml-5"
-                      disabled={currentPage == 1}
-                      onClick={handlePrevPage}
-                    >
-                      Prev
-                    </button>
-                    <button
-                      className="ml-10"
-                      disabled={currentPage == totalPages}
-                      onClick={handleNextPage}
-                    >
-                      Next
-                    </button>
-                    </div>
+                  <button
+                    className="ml-5"
+                    disabled={currentPage == 1}
+                    onClick={handlePrevPage}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="ml-10"
+                    disabled={currentPage == totalPages}
+                    onClick={handleNextPage}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

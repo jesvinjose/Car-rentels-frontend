@@ -19,8 +19,7 @@ const AdminHeader = () => {
       <h1 className="text-2xl font-semibold text-gray-800 mb-4">
         Welcome to Admin Dashboard
       </h1>
-      {/* <div className="flex justify-center"> */}
-      <div className="flex justify-evenly">
+      <div className="flex flex-wrap justify-center gap-4 sm:justify-evenly md:justify-center lg:justify-evenly">
         <div className="bg-blue-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-tachometer-alt text-4xl text-blue-600 mb-2"></i>
           <Link to="/admin/dashboard" className="text-blue-600 hover:underline">
@@ -55,18 +54,12 @@ const AdminHeader = () => {
           </Link>
         </div>
         <div className="bg-pink-200 p-4 rounded-lg flex flex-col items-center justify-center">
-          {/* <i className="fas fa-car text-4xl text-pink-600 mb-2"></i> */}
-          <i className="fas fa-camera fa-3x"></i> {/* Adjust size using fa-2x, fa-3x, fa-4x, fa-5x */}
+          <i className="fas fa-camera fa-3x"></i>{" "}
+          {/* Adjust size using fa-2x, fa-3x, fa-4x, fa-5x */}
           <Link to="/admin/carousels" className="text-pink-600 hover:underline">
             Carousels
           </Link>
         </div>
-        {/* <div className="bg-pink-200 p-4 rounded-lg flex flex-col items-center justify-center">
-          <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
-          <Link to="/admin/carrentalrates" className="text-pink-600 hover:underline">
-            Car Rental Rates
-          </Link>
-        </div> */}
         <div className="bg-pink-200 p-4 rounded-lg flex flex-col items-center justify-center">
           <i className="fas fa-car text-4xl text-pink-600 mb-2"></i>
           <Link
@@ -86,7 +79,6 @@ const AdminHeader = () => {
           </button>
         </div>
       </div>
-      {/* </div> */}
     </header>
   );
 };

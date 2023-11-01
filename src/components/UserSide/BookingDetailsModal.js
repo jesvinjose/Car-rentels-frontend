@@ -22,7 +22,6 @@ const BookingDetailsModal = ({
   dailyRentalRate,
   calculateTotalAmount,
 }) => {
-  
   function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -83,13 +82,10 @@ const BookingDetailsModal = ({
           console.error("Error while handling booking:", error);
         }
 
-        const result = await axiosInstance.post(
-          "/payment/success",
-          data
-        );
-          if(result)
-        // alert(result.data.msg);
-        navigate("/booking_success");
+        const result = await axiosInstance.post("/payment/success", data);
+        if (result)
+          // alert(result.data.msg);
+          navigate("/booking_success");
       },
       prefill: {
         name: "Jesvin Jose",
@@ -147,9 +143,8 @@ const BookingDetailsModal = ({
     currentDate > pickupDate && currentDate <= returnDate;
   const isTodayGreaterThanReturn = currentDate > returnDate;
 
-
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50  ">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
       {isTodayGreaterThanReturn && (
         <DayChangeEffect
           currentDate={currentDate}
@@ -157,30 +152,30 @@ const BookingDetailsModal = ({
           setNumDays={setNumDays}
         />
       )}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-1/2 ">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg w-full md:w-1/2 lg:w-1/3">
         <h2 className="text-xl font-semibold mb-4 text-center">
           Booking Details
         </h2>
-        <div className="flex justify-evenly">
-          <p>
+        <div className="flex flex-col md:flex-row justify-evenly">
+          <p className="mb-4 md:mb-0">
             <strong>Car Image</strong>
             <img
               src={firstBookingDetail?.carImage}
-              alt="Aadhar Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
+              alt="Car Image"
+              className="max-w-full max-h-48 md:max-h-100"
             />
           </p>
           <p>
             <strong>RC Image</strong>
             <img
               src={firstBookingDetail?.rcImage}
-              alt="Aadhar Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
+              alt="RC Image"
+              className="max-w-full max-h-48 md:max-h-100"
             />
           </p>
         </div>
 
-        <div className="flex justify-evenly">
+        <div className="flex flex-col md:flex-row justify-evenly">
           {firstBookingDetail.bookingStatus === "booked" &&
           isTodayBetweenPickupAndReturn ? (
             <p>
@@ -208,25 +203,25 @@ const BookingDetailsModal = ({
               </button>
             </p>
           ) : null}
-          {
-            // Display a message indicating the return date and the additional payment
-            isTodayGreaterThanReturn &&
-            firstBookingDetail.bookingStatus === "running" &&
-            numDays > 0 ? (
-              <div>
-                <h6>You have used {numDays} extra days, So please pay {calculateTotalAmount()} to end the trip</h6>
-                <button className="btn btn-primary" onClick={displayRazorpay}>
-                  Pay Now
-                </button>
-              </div>
-            ) : null
-          }
-          {console.log("After condition check")}
+          {isTodayGreaterThanReturn &&
+          firstBookingDetail.bookingStatus === "running" &&
+          numDays > 0 ? (
+            <div>
+              <h6>
+                You have used {numDays} extra days, so please pay{" "}
+                {calculateTotalAmount()} to end the trip
+              </h6>
+              <button className="btn btn-primary" onClick={displayRazorpay}>
+                Pay Now
+              </button>
+            </div>
+          ) : null}
           <p>
             <strong>RC Number:</strong> {firstBookingDetail?.rcNumber}
           </p>
         </div>
-        <div className="flex justify-evenly">
+
+        <div className="flex flex-col md:flex-row justify-evenly">
           <p>
             <strong>Fuel Type:</strong> {firstBookingDetail?.fuelType}
           </p>
@@ -234,7 +229,8 @@ const BookingDetailsModal = ({
             <strong>Fuel Capacity:</strong> {firstBookingDetail?.fuelCapacity}
           </p>
         </div>
-        <div className="flex justify-evenly">
+
+        <div className="flex flex-col md:flex-row justify-evenly">
           <p>
             <strong>Delivery Hub:</strong> {firstBookingDetail?.deliveryHub}
           </p>
@@ -243,7 +239,8 @@ const BookingDetailsModal = ({
             {firstBookingDetail?.dailyRentalRate}
           </p>
         </div>
-        <div className="flex justify-evenly">
+
+        <div className="flex flex-col md:flex-row justify-evenly">
           <p>
             <strong>Mileage:</strong> {firstBookingDetail?.mileage}
           </p>
@@ -251,9 +248,11 @@ const BookingDetailsModal = ({
             <strong>Gear Box Type:</strong> {firstBookingDetail?.gearBoxType}
           </p>
         </div>
+
+        {/* Close Button */}
         <button
           onClick={closeModal}
-          className="mt-6 w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="fixed top-4 right-4 px-2 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700"
         >
           Close
         </button>

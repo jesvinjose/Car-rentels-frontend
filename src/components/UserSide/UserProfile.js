@@ -7,13 +7,12 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
-
 const UserProfile = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
   const usertoken = localStorage.getItem("token");
-  const navigate=useNavigate();
-  const walletBalance=localStorage.getItem("walletBalance")
+  const navigate = useNavigate();
+  const walletBalance = localStorage.getItem("walletBalance");
 
   useEffect(() => {
     // const config = {
@@ -34,7 +33,7 @@ const UserProfile = () => {
     //   .catch((error) => {
     //     console.error("Error fetching user details:", error);
     //   });
-    
+
     // Use axiosInstance instead of axios here
     // axios
     //   .get(`http://localhost:5000/user/${userId}`) // The baseURL will be appended due to the interceptor
@@ -57,38 +56,34 @@ const UserProfile = () => {
   return (
     <div>
       <Header />
-      {userDetails ? ( // Use conditional rendering here
-        <div className="flex justify-evenly items-center bg-slate-400 h-30">
-          <div className="flex items-center">
+      {userDetails ? (
+        <div className="flex flex-col md:flex-row justify-evenly items-center bg-slate-400 py-4 md:py-0">
+          <div className="flex items-center mb-4 md:mb-0">
             <div className="profile-icon">
-              {/* Add your profile icon */}
-              <img className="w-10 h-10" src={Profile} alt="Profile Icon" />
+              <img
+                className="w-16 h-16 md:w-10 md:h-10"
+                src={Profile}
+                alt="Profile Icon"
+              />
             </div>
             <div className="ml-2">
-              {/* Display first name and last name with space in between */}
-              <p>
+              <p className="text-lg">
                 {userDetails.firstName} {userDetails.lastName}
               </p>
             </div>
           </div>
 
-          <div>
+          <div className="text-center md:text-left">
             <p>Mobile: {userDetails.mobileNumber}</p>
-
-            {/* Display other user details as needed */}
-          </div>
-          <div>
             <p>Email: {userDetails.emailId}</p>
+            <p>Wallet balance: {userDetails.walletBalance}</p>
             {/* Display other user details as needed */}
           </div>
-          <p>Wallet balance:{userDetails.walletBalance}</p>
         </div>
-        
       ) : (
-        // You can add a loading spinner or message here while userDetails is null
-        <p>Loading user details...</p>
+        <p className="text-center md:text-left">Loading user details...</p>
       )}
-      
+
       {userDetails && (
         <UpdateProfileDetails userData={userDetails} userId={userId} />
       )}

@@ -54,87 +54,98 @@ const UserDetailsModal = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50  ">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-1/2 ">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3">
         <h2 className="text-xl font-semibold mb-4 text-center">User Details</h2>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>First Name:</strong> {userDetails[0].firstName}
-          </p>
-          <p>
-            <strong>Last Name:</strong> {userDetails[0].lastName}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Email ID:</strong> {userDetails[0].emailId}
-          </p>
-          <p>
-            <strong>Address:</strong> {userDetails[0].address}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Aadhar Number:</strong> {userDetails[0].aadharNumber}
-          </p>
-          <p>
-            <strong>Driving License Number:</strong> {userDetails[0].dlNumber}
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>Adhar Front Image</strong>
-            <img
-              src={userDetails[0].aadharFrontImage}
-              alt="Aadhar Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-          <p>
-            <strong>Adhar Back Image</strong>
-            <img
-              src={userDetails[0].aadharBackImage}
-              alt="Aadhar Back Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-        </div>
-        <div className="flex justify-evenly">
-          <p>
-            <strong>DL Front Image</strong>
-            <img
-              src={userDetails[0].dlFrontImage}
-              alt="DL Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-          <p>
-            <strong>DL Back Image</strong>
-            <img
-              src={userDetails[0].dlBackImage}
-              alt="DL Front Preview"
-              style={{ maxWidth: "100%", maxHeight: "100px" }}
-            />
-          </p>
-        </div>
-        {/* <div className="flex justify-evenly">
+        <div
+          className="overflow-y-auto"
+          style={{ maxHeight: "70vh" }} // Adjust maxHeight as needed
+        >
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>First Name:</strong> {userDetails[0].firstName}
+            </p>
+            <p>
+              <strong>Last Name:</strong> {userDetails[0].lastName}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Email ID:</strong> {userDetails[0].emailId}
+            </p>
+            <p>
+              <strong>Address:</strong> {userDetails[0].address}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Aadhar Number:</strong> {userDetails[0].aadharNumber}
+            </p>
+            <p>
+              <strong>Driving License Number:</strong> {userDetails[0].dlNumber}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Adhar Front Image</strong>
+              <img
+                src={userDetails[0].aadharFrontImage}
+                alt="Aadhar Front Preview"
+                className="max-w-full max-h-32"
+              />
+            </p>
+            <p>
+              <strong>Adhar Back Image</strong>
+              <img
+                src={userDetails[0].aadharBackImage}
+                alt="Aadhar Back Preview"
+                className="max-w-full max-h-32"
+              />
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>DL Front Image</strong>
+              <img
+                src={userDetails[0].dlFrontImage}
+                alt="DL Front Preview"
+                className="max-w-full max-h-32"
+              />
+            </p>
+            <p>
+              <strong>DL Back Image</strong>
+              <img
+                src={userDetails[0].dlBackImage}
+                alt="DL Front Preview"
+                className="max-w-full max-h-32"
+              />
+            </p>
+          </div>
+          {/* Button section */}
+          {/* <div className="flex flex-col sm:flex-row justify-evenly mt-6">
+          {/* Accept button */}
+          {/*
           <button
             onClick={() => handleAccept(userDetails[0]._id)}
-            className="mt-6 w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700"
+            className="w-full sm:w-5/12 px-4 py-2 bg-green-600 text-white rounded hover:bg-indigo-700 mb-2 sm:mb-0"
           >
             Accept
-          </button>
+          </button>*/}
+          {/* Reject button */}{" "}
+          {/*
           <button
             onClick={() => handleReject(userDetails[0]._id)}
-            className="mt-6 w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
+            className="w-full sm:w-5/12 px-4 py-2 bg-red-600 text-white rounded hover:bg-indigo-700"
           >
             Reject
           </button>
         </div> */}
+        </div>
 
+        {/* Close button */}
         <button
           onClick={closeModal}
-          className="mt-6 w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="absolute top-2 right-2 w-12 h-12 sm:relative sm:w-full sm:px-4 sm:py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700"
         >
           Close
         </button>
@@ -203,8 +214,10 @@ const UsersList = () => {
     //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
     //   },
     // };
-    const res = await axiosInstanceforAdmin.put(`/admin/userblock/${id}`, null, 
-    // config
+    const res = await axiosInstanceforAdmin.put(
+      `/admin/userblock/${id}`,
+      null
+      // config
     );
     console.log(id);
 
@@ -226,12 +239,12 @@ const UsersList = () => {
     // };
     const resss = await axiosInstanceforAdmin.put(
       `/admin/userunblock/${id}`,
-      null,
+      null
       // config
     );
     console.log(id);
 
-    console.log(resss, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    // console.log(resss, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
     const updatedUser = userData.map((i) =>
       i._id === id ? { ...i, blockStatus: false } : i
@@ -351,21 +364,21 @@ const UsersList = () => {
                   </tbody>
                 </table>
                 <div>
-                    <button
-                      className="ml-5"
-                      disabled={currentPage == 1}
-                      onClick={handlePrevPage}
-                    >
-                      Prev
-                    </button>
-                    <button
-                      className="ml-10"
-                      disabled={currentPage == totalPages}
-                      onClick={handleNextPage}
-                    >
-                      Next
-                    </button>
-                    </div>
+                  <button
+                    className="ml-5"
+                    disabled={currentPage == 1}
+                    onClick={handlePrevPage}
+                  >
+                    Prev
+                  </button>
+                  <button
+                    className="ml-10"
+                    disabled={currentPage == totalPages}
+                    onClick={handleNextPage}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

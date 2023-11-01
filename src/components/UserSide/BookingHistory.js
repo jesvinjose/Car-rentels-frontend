@@ -32,7 +32,6 @@ const BookingHistory = () => {
 
   const [error, setError] = useState(null);
 
-
   const bookingId =
     selectedBookingDetails.length > 0
       ? selectedBookingDetails[0].bookingId
@@ -212,22 +211,18 @@ const BookingHistory = () => {
 
   return (
     <div>
-      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance} />
+      <Header
+        walletBalance={walletBalance}
+        setWalletBalance={setWalletBalance}
+      />
       <ToastContainer />
       {isLoading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
+        <div className="flex items-center justify-center h-screen">
           <LoadingSpinner />
         </div>
       ) : (
         <section className="container px-4 mx-auto">
-          <div className="flex items-center gap-x-3">
+          <div className="flex flex-col md:flex-row items-center gap-x-3">
             <h2 className="text-lg font-medium text-gray-800 dark:text-white">
               Bookings
             </h2>
@@ -237,7 +232,7 @@ const BookingHistory = () => {
           </div>
 
           <div className="flex flex-col mt-6">
-            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="overflow-x-auto">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                 <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
                   <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -343,16 +338,16 @@ const BookingHistory = () => {
                       ))}
                     </tbody>
                   </table>
-                  <div>
+                  <div class="mt-5 flex justify-center">
                     <button
-                      className="ml-5"
+                      class="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md mr-3 hover:bg-gray-100 dark:hover:bg-gray-700"
                       disabled={currentPage == 1}
                       onClick={handlePrevPage}
                     >
                       Prev
                     </button>
                     <button
-                      className="ml-10"
+                      class="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
                       disabled={currentPage == totalPages}
                       onClick={handleNextPage}
                     >
@@ -383,7 +378,6 @@ const BookingHistory = () => {
           calculateTotalAmount={calculateTotalAmount}
         />
       )}
-
       {/* Render the ChatModal component for each open chat */}
       {/* {chatOpen &&
         Object.keys(chatStates).map((vendorId) => (

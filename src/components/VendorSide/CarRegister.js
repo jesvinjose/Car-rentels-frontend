@@ -6,10 +6,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 // import axiosInstance from "../../api/axiosInstance";
-import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
+import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 
 // mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-mapboxgl.accessToken="pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A";
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A";
 
 const CarRegister = () => {
   const carTypes = ["Standard", "Economy", "Luxury"];
@@ -41,7 +42,7 @@ const CarRegister = () => {
   });
   const navigate = useNavigate();
 
-  const vendortoken=localStorage.getItem('vendorToken')
+  const vendortoken = localStorage.getItem("vendorToken");
 
   const handleModelNameChange = (e) => {
     setModelName(e.target.value);
@@ -130,8 +131,18 @@ const CarRegister = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(modelName,deliveryHub,description,fuelCapacity,selectedFuelType,seatNumber,rcNumber,rcImageDataUrl,"etc");
-    console.log(vendorId,"-------vendorId");
+    console.log(
+      modelName,
+      deliveryHub,
+      description,
+      fuelCapacity,
+      selectedFuelType,
+      seatNumber,
+      rcNumber,
+      rcImageDataUrl,
+      "etc"
+    );
+    console.log(vendorId, "-------vendorId");
     e.preventDefault();
     try {
       // const config = {
@@ -161,7 +172,7 @@ const CarRegister = () => {
           dailyRentalRate,
           monthlyRentalRate,
           carLocation, // Include car location (latitude and longitude)
-        },
+        }
         // config
       );
 
@@ -222,215 +233,307 @@ const CarRegister = () => {
   }, [carLocation.longitude, carLocation.latitude]);
 
   return (
-    <div>
-      <VendorHeader />
-      <p>Car Register</p>
-      <form>
-        <input
-          type="text"
-          name="modelName"
-          placeholder="Model Name"
-          value={modelName}
-          onChange={handleModelNameChange}
-          required
-        />
-        <input
-          type="text"
-          name="deliveryHub"
-          placeholder="Delivery Hub"
-          value={deliveryHub}
-          onChange={handleDeliveryHubChange}
-          required
-        />
-        <input
-          type="number"
-          name="fuelCapacity"
-          placeholder="Fuel Capacity"
-          value={fuelCapacity}
-          onChange={handleFuelCapacityChange}
-          required
-        />
-        <input
-          type="number"
-          name="seatNumber"
-          placeholder="Seat Numbers"
-          value={seatNumber}
-          onChange={handleSeatNumberChange}
-          required
-        />
-        <input
-          type="number"
-          name="mileage"
-          placeholder="Enter Mileage"
-          value={mileage}
-          onChange={handleMileageChange}
-          required
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Enter Description"
-          value={description}
-          onChange={handleDescriptionChange}
-          required
-        />
-        <input
-          type="text"
-          name="rcNumber"
-          placeholder="Enter RC Number"
-          value={rcNumber}
-          onChange={handleRcNumberChange}
-          required
-        />
-        <input
-          type="Number"
-          name="hourlyRentalRate"
-          placeholder="Enter Hourly RentalRate"
-          value={hourlyRentalRate}
-          onChange={handleHourlyRentalRateChange}
-          required
-        />
-        <input
-          type="Number"
-          name="dailyRentalRate"
-          placeholder="Enter Daily RentalRate"
-          value={dailyRentalRate}
-          onChange={handleDailyRentalRateChange}
-          required
-        />
-        <input
-          type="Number"
-          name="monthlyRentalRate"
-          placeholder="Enter Monthly RentalRate"
-          value={monthlyRentalRate}
-          onChange={handleMonthlyRentalRateChange}
-          required
-        />
-        <label
-          htmlFor="gearBox"
-          className="block text-gray-700 text-sm font-bold mb-2"
-        >
-          GearBox Type
-        </label>
-        <select
-          id="gearBox"
-          name="gearBox"
-          value={selectedGearBox}
-          onChange={handleGearBoxChange}
-          className="w-full px-3 py-2 border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Select Gear Box Type"
-        >
-          <option value="" disabled>
-            Select GearBox Type
-          </option>
-          {gearTypes.map((gearType, index) => (
-            <option key={index} value={gearType}>
-              {gearType}
-            </option>
-          ))}
-        </select>
-        <label
-          htmlFor="fuelType"
-          className="block text-gray-700 text-sm font-bold mb-2"
-        >
-          Fuel Type
-        </label>
-        <select
-          id="fuelType"
-          name="fuelType"
-          value={selectedFuelType}
-          onChange={handleFuelTypeChange}
-          className="w-full px-3 py-2 border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          placeholder="Select Gear Box Type"
-        >
-          <option value="" disabled>
-            Select Fuel Type
-          </option>
-          {fuelTypes.map((fuelType, index) => (
-            <option key={index} value={fuelType}>
-              {fuelType}
-            </option>
-          ))}
-        </select>
+    <div className="container">
+      <div className="row">
+        <div className="col-md-12">
+          <VendorHeader />
+          <h2 className="text-2xl font-semibold text-gray-800 my-4 text-center">
+            Car Register
+          </h2>
+          <form>
+            <div className="row">
+              <div className="col-md-6 mb-4">
+                <label htmlFor="modelName" className="form-label">
+                  Model Name
+                </label>
+                <input
+                  type="text"
+                  name="modelName"
+                  placeholder="Model Name"
+                  value={modelName}
+                  onChange={handleModelNameChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="carType"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Car Type
-          </label>
-          <select
-            id="carType"
-            name="carType"
-            value={selectedCarType}
-            onChange={handleCarTypeChange}
-            className="w-full px-3 py-2 border rounded text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Select Car Type"
-          >
-            <option value="" disabled>
-              Select Car Type
-            </option>
-            {carTypes.map((carType, index) => (
-              <option key={index} value={carType}>
-                {carType}
-              </option>
-            ))}
-          </select>
-        </div>
-        <label>RC Image</label>
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            name="rcImage"
-            onChange={handleRcImageChange}
-          />
-          {rcImageDataUrl && (
-            <div>
-              <p>Preview:</p>
-              <img
-                src={rcImageDataUrl}
-                alt="Preview"
-                style={{ maxWidth: "100%" }}
-              />
-            </div>
-          )}
-        </div>
-        <label>Car Image</label>
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            name="carImage"
-            onChange={handleCarImageChange}
-          />
-          {carImageDataUrl && (
-            <div>
-              <p>Preview:</p>
-              <img
-                src={carImageDataUrl}
-                alt="Preview"
-                style={{ maxWidth: "100%" }}
-              />
-            </div>
-          )}
-        </div>
+              <div className="col-md-6 mb-4">
+                <label htmlFor="deliveryHub" className="form-label">
+                  Delivery Hub
+                </label>
+                <input
+                  type="text"
+                  id="deliveryHub"
+                  name="deliveryHub"
+                  placeholder="Delivery Hub"
+                  value={deliveryHub}
+                  onChange={handleDeliveryHubChange}
+                  required
+                  className="form-control"
+                />
+              </div>
 
-        <div style={{ width: "100%", height: "300px", zIndex: 999 }}>
-          <div
-            id="map"
-            className="map-container mb-4"
-            style={{ width: "100%", height: "100%", backgroundColor: "gray" }}
-          ></div>
+              <div className="col-md-6 mb-4">
+                <label htmlFor="fuelCapacity" className="form-label">
+                  Fuel Capacity
+                </label>
+                <input
+                  type="number"
+                  name="fuelCapacity"
+                  placeholder="Fuel Capacity"
+                  value={fuelCapacity}
+                  onChange={handleFuelCapacityChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="seatNumber" className="form-label">
+                  Seat Numbers
+                </label>
+                <input
+                  type="number"
+                  name="seatNumber"
+                  placeholder="Seat Numbers"
+                  value={seatNumber}
+                  onChange={handleSeatNumberChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="mileage" className="form-label">
+                  Mileage
+                </label>
+                <input
+                  type="number"
+                  name="mileage"
+                  placeholder="Enter Mileage"
+                  value={mileage}
+                  onChange={handleMileageChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="description" className="form-label">
+                  Description
+                </label>
+                <input
+                  type="text"
+                  name="description"
+                  placeholder="Enter Description"
+                  value={description}
+                  onChange={handleDescriptionChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="rcNumber" className="form-label">
+                  RC Number
+                </label>
+                <input
+                  type="text"
+                  name="rcNumber"
+                  placeholder="Enter RC Number"
+                  value={rcNumber}
+                  onChange={handleRcNumberChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="hourlyRentalRate" className="form-label">
+                  Hourly Rental Rate
+                </label>
+                <input
+                  type="number"
+                  name="hourlyRentalRate"
+                  placeholder="Enter Hourly Rental Rate"
+                  value={hourlyRentalRate}
+                  onChange={handleHourlyRentalRateChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="dailyRentalRate" className="form-label">
+                  Daily Rental Rate
+                </label>
+                <input
+                  type="number"
+                  name="dailyRentalRate"
+                  placeholder="Enter Daily Rental Rate"
+                  value={dailyRentalRate}
+                  onChange={handleDailyRentalRateChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="monthlyRentalRate" className="form-label">
+                  Monthly Rental Rate
+                </label>
+                <input
+                  type="number"
+                  name="monthlyRentalRate"
+                  placeholder="Enter Monthly Rental Rate"
+                  value={monthlyRentalRate}
+                  onChange={handleMonthlyRentalRateChange}
+                  required
+                  className="form-control"
+                />
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="gearBox" className="form-label">
+                  GearBox Type
+                </label>
+                <select
+                  id="gearBox"
+                  name="gearBox"
+                  value={selectedGearBox}
+                  onChange={handleGearBoxChange}
+                  className="form-select"
+                >
+                  <option value="" disabled>
+                    Select GearBox Type
+                  </option>
+                  {gearTypes.map((gearType, index) => (
+                    <option key={index} value={gearType}>
+                      {gearType}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="fuelType" className="form-label">
+                  Fuel Type
+                </label>
+                <select
+                  id="fuelType"
+                  name="fuelType"
+                  value={selectedFuelType}
+                  onChange={handleFuelTypeChange}
+                  className="form-select"
+                >
+                  <option value="" disabled>
+                    Select Fuel Type
+                  </option>
+                  {fuelTypes.map((fuelType, index) => (
+                    <option key={index} value={fuelType}>
+                      {fuelType}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-md-6 mb-4">
+                <label htmlFor="carType" className="form-label">
+                  Car Type
+                </label>
+                <select
+                  id="carType"
+                  name="carType"
+                  value={selectedCarType}
+                  onChange={handleCarTypeChange}
+                  className="form-select"
+                >
+                  <option value="" disabled>
+                    Select Car Type
+                  </option>
+                  {carTypes.map((carType, index) => (
+                    <option key={index} value={carType}>
+                      {carType}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-md-12 mb-4">
+                <label htmlFor="rcImage" className="form-label">
+                  RC Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="rcImage"
+                  onChange={handleRcImageChange}
+                  className="form-control"
+                />
+                {rcImageDataUrl && (
+                  <div>
+                    <p>Preview:</p>
+                    <img
+                      src={rcImageDataUrl}
+                      alt="Preview"
+                      style={{ maxWidth: "100%" }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-12 mb-4">
+                <label htmlFor="carImage" className="form-label">
+                  Car Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="carImage"
+                  onChange={handleCarImageChange}
+                  className="form-control"
+                />
+                {carImageDataUrl && (
+                  <div>
+                    <p>Preview:</p>
+                    <img
+                      src={carImageDataUrl}
+                      alt="Preview"
+                      style={{ maxWidth: "100%" }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-12 mb-4">
+                <div
+                  id="map"
+                  className="map-container"
+                  style={{
+                    width: "100%",
+                    height: "300px",
+                    backgroundColor: "gray",
+                  }}
+                ></div>
+              </div>
+            </div>
+
+            <div className="col-md-12 mb-4">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="btn btn-primary w-100"
+              >
+                Register Car
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
-      <button type="submit" onClick={handleSubmit}>
-        Register Car
-      </button>
+      </div>
     </div>
   );
 };
 
 export default CarRegister;
-

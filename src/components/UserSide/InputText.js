@@ -1,10 +1,8 @@
-//InputText.js
-
 import React, { useState } from "react";
 
 const styles = {
   button: {
-    width: "10%",
+    width: "20%", // Adjusted width
     height: 50,
     fontWeight: "bold",
     borderRadius: 10,
@@ -19,7 +17,7 @@ const styles = {
     height: 50,
     borderRadius: 10,
     borderWidth: 0,
-    padding: 10,
+    padding: "10px", // Added units for better spacing
     fontSize: 18,
   },
 
@@ -30,14 +28,16 @@ const styles = {
   },
 };
 
-function InputText({addMessage}) {
-    const [message,setMessage]=useState("")
-    function addAMessage(){
-        addMessage({
-            message
-        })
-        setMessage('');
-    }
+function InputText({ addMessage }) {
+  const [message, setMessage] = useState("");
+
+  function addAMessage() {
+    addMessage({
+      message,
+    });
+    setMessage('');
+  }
+
   return (
     <div style={styles.textContainer}>
       <textarea
@@ -45,9 +45,9 @@ function InputText({addMessage}) {
         rows={6}
         placeholder="Write Something..."
         value={message}
-        onChange={e=>setMessage(e.target.value)}
+        onChange={(e) => setMessage(e.target.value)}
       ></textarea>
-      <button style={styles.button} onClick={()=>addAMessage()}>
+      <button style={styles.button} onClick={() => addAMessage()}>
         Enter
       </button>
     </div>

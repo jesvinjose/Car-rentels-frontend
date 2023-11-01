@@ -4,7 +4,6 @@ import { BiSolidUserCircle } from "react-icons/bi";
 import logo from "../../assets/logo-1.png";
 import axios from "axios";
 const Header = () => {
-
   // const [userId,setUserId]=useState(localStorage.getItem("userId"))
   const token = localStorage.getItem("token");
   const firstName = localStorage.getItem("firstName");
@@ -23,16 +22,14 @@ const Header = () => {
     localStorage.removeItem("user");
   };
 
-  
-
   return (
     <div>
-      <header className="bg-white d-flex justify-content-between align-items-center px-4">
+      <header className="bg-white d-flex flex-wrap justify-between align-items-center px-4">
         <div className="d-flex align-items-center">
           <div className="logo mr-4">
             <img src={logo} alt="Logo" />
           </div>
-          <nav className="d-flex">
+          <nav className="d-flex flex-wrap">
             <Link to="/usershome" className="nav-link">
               Home
             </Link>
@@ -76,7 +73,6 @@ const Header = () => {
                     {firstName}
                   </p>
                 </a>
-
                 {token ? (
                   <Link to="/booking_history" className="dropdown-item">
                     <li>Booking History</li>
