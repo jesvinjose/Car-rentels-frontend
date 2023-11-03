@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Header from "./Header";
 import axios from "axios";
 import { useState } from "react";
+import axiosInstance from "../../api/axiosInstance";
 
 const Contact = () => {
   const [name,setName]=useState("");
@@ -43,7 +44,7 @@ const Contact = () => {
     document.querySelector(".loading").style.display = "block";
 
     try {
-      const response = await axios.post("http://localhost:5000/user/submit-message", formData); // Pass formData directly
+      const response = await axiosInstance.post("/user/submit-message", formData); // Pass formData directly
 
       const data = await response.data;
 
