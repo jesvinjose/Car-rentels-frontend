@@ -251,6 +251,14 @@ const BookingHistory = () => {
                           className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                         >
                           <div className="flex items-center gap-x-3">
+                            <span>Booking Date</span>
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                        >
+                          <div className="flex items-center gap-x-3">
                             <span>Trip Start Date</span>
                           </div>
                         </th>
@@ -291,6 +299,9 @@ const BookingHistory = () => {
                           <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
                             {booking.modelName}
                           </td>
+                          <td className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                            {new Date(booking.createdAt).toLocaleDateString()}
+                          </td>
                           <td className="px-12 py-3 text-sm text-green-500 dark:text-green-400 whitespace-nowrap">
                             {booking.pickupDate}
                           </td>
@@ -308,9 +319,9 @@ const BookingHistory = () => {
                               onClick={() =>
                                 handleViewBookingDetails(booking.bookingId)
                               }
-                              className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600"
+                              className="btn btn-info text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600"
                             >
-                              View Booking Details
+                              View
                             </button>
                             {booking.bookingStatus === "booked" &&
                               new Date(booking.pickupDate) > new Date() && (
@@ -318,7 +329,7 @@ const BookingHistory = () => {
                                   onClick={() =>
                                     handleCancel(booking.bookingId)
                                   }
-                                  className="ml-2 text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
+                                  className="btn btn-danger ml-2 text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
                                 >
                                   Cancel
                                 </button>
@@ -330,7 +341,7 @@ const BookingHistory = () => {
                                 to={`/chat_with_vendor/${booking.bookingId}/${userId}/${booking.vendorId}`}
                                 className="ml-2 text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600"
                               >
-                                Chat with Vendor
+                                Chat
                               </Link>
                             )}
                           </td>

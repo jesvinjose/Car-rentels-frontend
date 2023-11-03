@@ -50,6 +50,8 @@ import AdminDashboard from "./components/AdminSide/AdminDashboard";
 import ChatContainer from "./components/UserSide/ChatContainer";
 import ChatContainerVendorSide from "./components/VendorSide/ChatContainerVendorSide";
 import VenderDashBoard from "./components/VendorSide/VenderDashBoard";
+import AboutPage from "./components/UserSide/About";
+import Contact from "./components/UserSide/Contact";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
@@ -89,6 +91,8 @@ function App() {
           <Route element={<ForgotPassword />} path="/forgotpassword" />
           <Route path="/car_list" element={<CategorywiseCars />} />
           <Route path="/car_details" element={<CarDetails />} />
+          <Route path="/about" element={<AboutPage/>}/>
+          <Route path="/contact" element={<Contact/>}/>
 
 
           <Route

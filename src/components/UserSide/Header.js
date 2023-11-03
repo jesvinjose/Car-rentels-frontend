@@ -36,9 +36,6 @@ const Header = () => {
             <Link to="/allcars" className="nav-link ml-3">
               Cars
             </Link>
-            <Link to="/offers" className="nav-link ml-3">
-              Offers
-            </Link>
             <Link to="/about" className="nav-link ml-3">
               About
             </Link>
