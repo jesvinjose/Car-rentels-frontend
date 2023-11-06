@@ -64,7 +64,7 @@ const styles = {
   },
 
   textarea: {
-    width: "60%",
+    width: "70%",
     height: 50,
     borderRadius: 10,
     borderWidth: 0,

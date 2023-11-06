@@ -12,6 +12,7 @@ import ChatContainer from "./ChatContainer";
 const BookingHistory = () => {
   const [bookingData, setBookingData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState([]);
   const userId = localStorage.getItem("userId");
   const [otp, setOtp] = useState("");
@@ -209,6 +210,33 @@ const BookingHistory = () => {
     return index >= startIndex && index < endIndex;
   });
 
+  const openChatModal = (bookingid) => {
+    setIsChatModalOpen(true);
+    console.log(bookingData, "----------bookingData-----------");
+    const fullBookingDetails = bookingData?.filter((item) => {
+      if (item.bookingId === bookingid) return item;
+    });
+    console.log(
+      fullBookingDetails,
+      "------------fullBookingDetails-------------"
+    );
+    const selectedBookingData = {
+      bookingId: fullBookingDetails[0].bookingId,
+      userId: userId,
+      vendorId: fullBookingDetails[0].vendorId,
+    };
+    console.log(
+      selectedBookingData,
+      "-----------------inside chat modal-------------"
+    );
+    setSelectedBookingDetails(selectedBookingData);
+  };
+
+  const closeChatModal = () => {
+    setIsChatModalOpen(false);
+    setSelectedBookingDetails({}); // Reset selectedBookingDetails
+  };
+
   return (
     <div>
       <Header
@@ -314,7 +342,7 @@ const BookingHistory = () => {
                           <td className="pr-4 py-3 text-sm font-medium text-right">
                             {booking.bookingStatus}
                           </td>
-                          <td className="pr-4 py-3 text-sm font-medium text-right">
+                          <td className="pr-4 py-3 text-sm font-medium text-right flex flex-wrap gap-2">
                             <button
                               onClick={() =>
                                 handleViewBookingDetails(booking.bookingId)
@@ -323,26 +351,35 @@ const BookingHistory = () => {
                             >
                               View
                             </button>
+
                             {booking.bookingStatus === "booked" &&
                               new Date(booking.pickupDate) > new Date() && (
                                 <button
                                   onClick={() =>
                                     handleCancel(booking.bookingId)
                                   }
-                                  className="btn btn-danger ml-2 text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
+                                  className="btn btn-danger text-red-500 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600"
                                 >
                                   Cancel
                                 </button>
                               )}
+
                             {["booked", "running"].includes(
                               booking.bookingStatus
                             ) && (
-                              <Link
-                                to={`/chat_with_vendor/${booking.bookingId}/${userId}/${booking.vendorId}`}
-                                className="ml-2 text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600"
+                              <button
+                                onClick={() => openChatModal(booking.bookingId)}
+                                className="btn btn-green text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600 flex items-center"
                               >
+                                <span
+                                  className="mr-1"
+                                  role="img"
+                                  aria-label="Message Icon"
+                                >
+                                  💬
+                                </span>
                                 Chat
-                              </Link>
+                              </button>
                             )}
                           </td>
                         </tr>
@@ -387,6 +424,16 @@ const BookingHistory = () => {
           navigate={navigate}
           dailyRentalRate={dailyRentalRate}
           calculateTotalAmount={calculateTotalAmount}
+        />
+      )}
+
+      {isChatModalOpen && (
+        <ChatContainer
+          closeChatModal={closeChatModal}
+          selectedBookingData={selectedBookingDetails}
+          bookingId={selectedBookingDetails.bookingId}
+          userId={selectedBookingDetails.userId}
+          vendorId={selectedBookingDetails.vendorId}
         />
       )}
     </div>

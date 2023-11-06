@@ -5,6 +5,7 @@ import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import ChatContainerVendorSide from "./ChatContainerVendorSide";
 
 const BookingDetailsModal = ({
   selectedBookingDetails,
@@ -42,84 +43,84 @@ const BookingDetailsModal = ({
           Booking Details
         </h2>
         <div className="overflow-y-auto" style={{ maxHeight: "70vh" }}>
-            <div className="flex flex-col sm:flex-row justify-evenly">
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Car Image</strong>
+              <img
+                // src={firstBookingDetail?.carImage}
+                src={firstBookingDetail.car.carImage}
+                alt="Car Image"
+                style={{ maxWidth: "100%", maxHeight: "100px" }}
+              />
+            </p>
+            <p>
+              <strong>RC Image</strong>
+              <img
+                src={firstBookingDetail.car.rcImage}
+                alt="RC Image"
+                style={{ maxWidth: "100%", maxHeight: "100px" }}
+              />
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            {firstBookingDetail.bookingHistory[0]?.bookingStatus === "booked" &&
+            otpAvailable ? (
               <p>
-                <strong>Car Image</strong>
-                <img
-                  // src={firstBookingDetail?.carImage}
-                  src={firstBookingDetail.car.carImage}
-                  alt="Car Image"
-                  style={{ maxWidth: "100%", maxHeight: "100px" }}
+                <strong>Enter OTP to Start Trip:</strong>{" "}
+                <input
+                  type="number"
+                  value={otp}
+                  onChange={handleChange}
+                  placeholder="Enter OTP"
                 />
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleSubmit}
+                >
+                  Submit OTP
+                </button>
               </p>
+            ) : null}
+            {firstBookingDetail.bookingHistory[0]?.bookingStatus ===
+            "running" ? (
               <p>
-                <strong>RC Image</strong>
-                <img
-                  src={firstBookingDetail.car.rcImage}
-                  alt="RC Image"
-                  style={{ maxWidth: "100%", maxHeight: "100px" }}
-                />
+                <strong>OTP to End Trip:</strong>
+                {firstBookingDetail.endTripOtp}
               </p>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-evenly">
-              {firstBookingDetail.bookingHistory[0]?.bookingStatus ===
-                "booked" && otpAvailable ? (
-                <p>
-                  <strong>Enter OTP to Start Trip:</strong>{" "}
-                  <input
-                    type="number"
-                    value={otp}
-                    onChange={handleChange}
-                    placeholder="Enter OTP"
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={handleSubmit}
-                  >
-                    Submit OTP
-                  </button>
-                </p>
-              ) : null}
-              {firstBookingDetail.bookingHistory[0]?.bookingStatus ===
-              "running" ? (
-                <p>
-                  <strong>OTP to End Trip:</strong>
-                  {firstBookingDetail.endTripOtp}
-                </p>
-              ) : null}
-              <p>
-                <strong>RC Number:</strong> {firstBookingDetail.car.rcNumber}
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-evenly">
-              <p>
-                <strong>Fuel Type:</strong> {firstBookingDetail.car.fuelType}
-              </p>
-              <p>
-                <strong>Fuel Capacity:</strong>{" "}
-                {firstBookingDetail.car.fuelCapacity}
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-evenly">
-              <p>
-                <strong>Delivery Hub:</strong>{" "}
-                {firstBookingDetail.car.deliveryHub}
-              </p>
-              <p>
-                <strong>Daily Rental Rate:</strong>{" "}
-                {firstBookingDetail.car.dailyRentalRate}
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-evenly">
-              <p>
-                <strong>Mileage:</strong> {firstBookingDetail.car.mileage}
-              </p>
-              <p>
-                <strong>Gear Box Type:</strong>{" "}
-                {firstBookingDetail.car.gearBoxType}
-              </p>
-            </div>
+            ) : null}
+            <p>
+              <strong>RC Number:</strong> {firstBookingDetail.car.rcNumber}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Fuel Type:</strong> {firstBookingDetail.car.fuelType}
+            </p>
+            <p>
+              <strong>Fuel Capacity:</strong>{" "}
+              {firstBookingDetail.car.fuelCapacity}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Delivery Hub:</strong>{" "}
+              {firstBookingDetail.car.deliveryHub}
+            </p>
+            <p>
+              <strong>Daily Rental Rate:</strong>{" "}
+              {firstBookingDetail.car.dailyRentalRate}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-evenly">
+            <p>
+              <strong>Mileage:</strong> {firstBookingDetail.car.mileage}
+            </p>
+            <p>
+              <strong>Gear Box Type:</strong>{" "}
+              {firstBookingDetail.car.gearBoxType}
+            </p>
+          </div>
         </div>
 
         <button
@@ -136,6 +137,7 @@ const BookingDetailsModal = ({
 const BookingsList = () => {
   const [bookingData, setBookingData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState(null);
   const [otpAvailable, setOtpAvailable] = useState(false);
   const vendorId = localStorage.getItem("vendorId");
@@ -298,6 +300,36 @@ const BookingsList = () => {
     setSelectedBookingDetails(null);
   };
 
+  const openChatModal = (bookingid) => {
+    console.log(bookingid,"-------------bookingid");
+    setIsChatModalOpen(true);
+    console.log(bookingData, "----------bookingData-----------");
+    if (bookingData && bookingData.length > 0) {
+      const fullBookingDetails = bookingData.find((item) => item._id === bookingid);
+  
+      // Check if fullBookingDetails is defined
+      if (fullBookingDetails) {
+        const selectedBookingData = {
+          bookingId: fullBookingDetails._id,
+          userId: fullBookingDetails.bookingHistory[0].userId,
+          vendorId: vendorId,
+        };
+  
+        console.log(selectedBookingData, "-----------------inside chat modal");
+        setSelectedBookingDetails(selectedBookingData);
+      } else {
+        console.log("No matching booking found for bookingid:", bookingid);
+      }
+    } else {
+      console.log("No booking data available.");
+    }
+  };
+
+  const closeChatModal = () => {
+    setIsChatModalOpen(false);
+    setSelectedBookingDetails({}); // Reset selectedBookingDetails
+  };
+
   return (
     <div>
       <VendorHeader />
@@ -410,7 +442,7 @@ const BookingsList = () => {
                                 Cancel
                               </button>
                             )}
-                          {["booked", "running"].includes(
+                          {/* {["booked", "running"].includes(
                             booking.bookingHistory[0].bookingStatus
                           ) && (
                             <Link
@@ -419,6 +451,16 @@ const BookingsList = () => {
                             >
                               Chat with User
                             </Link>
+                          )} */}
+                          {["booked", "running"].includes(
+                            booking.bookingHistory[0].bookingStatus
+                          ) && (
+                            <button
+                              onClick={() => openChatModal(booking._id)}
+                              className="ml-2 text-green-500 hover:text-green-900 dark:text-green-400 dark:hover:text-green-600"
+                            >
+                              Chat
+                            </button>
                           )}
                         </td>
                       </tr>
@@ -459,6 +501,16 @@ const BookingsList = () => {
           otp={otp}
           setOtp={setOtp}
           navigate={navigate}
+        />
+      )}
+
+      {isChatModalOpen && (
+        <ChatContainerVendorSide
+          closeChatModal={closeChatModal}
+          selectedBookingData={selectedBookingDetails}
+          bookingId={selectedBookingDetails.bookingId}
+          userId={selectedBookingDetails.userId}
+          vendorId={selectedBookingDetails.vendorId}
         />
       )}
     </div>
