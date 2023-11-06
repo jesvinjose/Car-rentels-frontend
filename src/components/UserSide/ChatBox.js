@@ -16,7 +16,7 @@ export default function ChatBoxReciever({user,message}) {
 
 export function ChatBoxSender({user,message}) {
     return (
-      <div style={{display:'flex',justifyContent:'flex-end',flexDirection:'row'}}>
+      <div style={{display:'flex',justifyContent:'flex-end',flexDirection:'row'}} >
         <p style={{padding:10,backgroundColor:'#fff', borderRadius:10,maxWidth:"60%"}}>
           <strong style={{fontSize:13}}>{user}</strong>
           <br></br>

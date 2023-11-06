@@ -36,20 +36,20 @@ const BookingHistory = () => {
     selectedBookingDetails.length > 0
       ? selectedBookingDetails[0].bookingId
       : null;
-  console.log(bookingId, "-------bookingId");
+  // console.log(bookingId, "-------bookingId");
 
   const carId =
     selectedBookingDetails.length > 0 ? selectedBookingDetails[0].carId : null;
-  console.log(carId, "------carId");
+  // console.log(carId, "------carId");
 
   const dailyRentalRate =
     selectedBookingDetails.length > 0
       ? selectedBookingDetails[0].dailyRentalRate
       : null;
-  console.log(dailyRentalRate, "------dailyRent");
+  // console.log(dailyRentalRate, "------dailyRent");
 
   const handleSubmit = async () => {
-    console.log("OTP submitted:", otp);
+    // console.log("OTP submitted:", otp);
     const userId = localStorage.getItem("userId");
     let otpToBeChecked = otp;
     // console.log(carId,"------carId");
@@ -349,16 +349,16 @@ const BookingHistory = () => {
                       ))}
                     </tbody>
                   </table>
-                  <div class="mt-5 flex justify-center">
+                  <div className="mt-5 flex justify-center">
                     <button
-                      class="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md mr-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md mr-3 hover:bg-gray-100 dark:hover:bg-gray-700"
                       disabled={currentPage == 1}
                       onClick={handlePrevPage}
                     >
                       Prev
                     </button>
                     <button
-                      class="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
                       disabled={currentPage == totalPages}
                       onClick={handleNextPage}
                     >
@@ -389,19 +389,6 @@ const BookingHistory = () => {
           calculateTotalAmount={calculateTotalAmount}
         />
       )}
-      {/* Render the ChatModal component for each open chat */}
-      {/* {chatOpen &&
-        Object.keys(chatStates).map((vendorId) => (
-          <ChatModal
-            key={vendorId}
-            userId={userId}
-            vendorId={vendorId} // Pass vendorId as a prop
-            isOpen={chatOpen}
-            onClose={() => handleChatClose(vendorId)}
-            earlierMessages={chatStates[vendorId].messages}
-            onSendMessage={(message) => sendChatMessage(message, vendorId)}
-          />
-        ))} */}
     </div>
   );
 };
