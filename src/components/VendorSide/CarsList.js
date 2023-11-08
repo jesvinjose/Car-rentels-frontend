@@ -126,8 +126,8 @@ const EditCarModal = ({
     const map = new mapboxgl.Map({
       container: "map",
       // style: 'mapbox://styles/mapbox/streets-v11',
-      // style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
-      style:"mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
+      style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+      // style:"mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
       center: [
         carDataForm.carLocation.longitude,
         carDataForm.carLocation.latitude,

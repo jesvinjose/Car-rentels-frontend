@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useLocation,useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import logo from '../../assets/logo-1.png'
+import logo from "../../assets/logo-1.png";
 
 import carseat from "../../assets/car-seat.png";
 import gearbox from "../../assets/gearbox.png";
@@ -22,7 +22,7 @@ const BookingInfo = () => {
     localStorage.getItem("walletBalance")
   );
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   // Assume pickupDate and returnDate are available as props or state
   const [numDays, setNumDays] = useState(0); // Number of days between pickup and return
@@ -98,18 +98,13 @@ const BookingInfo = () => {
           // Call handleBooking with the necessary data
           await handleBooking(carId, data);
         } catch (error) {
-          console.error('Error while handling booking:', error);
+          console.error("Error while handling booking:", error);
         }
 
-        const result = await axiosInstance.post(
-          "/payment/success",
-          data
-        );
-          if(result)
-        // alert(result.data.msg);
-        navigate('/booking_success')
-        
-      
+        const result = await axiosInstance.post("/payment/success", data);
+        if (result)
+          // alert(result.data.msg);
+          navigate("/booking_success");
       },
       prefill: {
         name: "Jesvin Jose",
@@ -128,7 +123,7 @@ const BookingInfo = () => {
     paymentObject.open();
   }
 
-  const handleBooking = async (carId,paymentData) => {
+  const handleBooking = async (carId, paymentData) => {
     const userId = localStorage.getItem("userId");
     // const pickupDateObj = new Date(pickupDate);
     // const returnDateObj = new Date(returnDate);
@@ -149,7 +144,7 @@ const BookingInfo = () => {
       // Additional handling after successful booking
       // ...
     } catch (error) {
-      console.log('Error during booking:', error);
+      console.log("Error during booking:", error);
     }
   };
 
@@ -177,8 +172,8 @@ const BookingInfo = () => {
 
       const map = new mapboxgl.Map({
         container: "map",
-        // style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
-        style:"mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
+        style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+        // style: "mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
         center: [longitude, latitude],
         zoom: 12,
       });
@@ -187,97 +182,137 @@ const BookingInfo = () => {
       new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
     }
   }, [carDetails]);
+
+  const isMobile = window.innerWidth <= 768; // Adjust the mobile breakpoint as needed
+  const isTablet = window.innerWidth <= 1100; // Adjust the tablet breakpoint as needed
+
+  const responsiveClassName = (
+    defaultClass,
+    mobileClass,
+    tabletClass,
+    desktopClass
+  ) => {
+    if (isTablet) {
+      return tabletClass || defaultClass;
+    }
+    return isMobile ? mobileClass : desktopClass || defaultClass;
+  };
+
   return (
     <div>
-      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance} />
-      {/* <SearchBar /> */}
+      <Header />
       <div className="flex justify-center items-center mt-10">
         <h1>Booking Information</h1>
       </div>
-
-      <div className="flex justify-evenly mt-10">
-        <h3>Model:{carDetails.modelName}</h3>
-        <h3>Delivery at Hub:{carDetails.deliveryHub}</h3>
-        <h3>With Fuel Capacity:{carDetails.fuelCapacity} L</h3>
+      <div
+        className={responsiveClassName(
+          "box-car",
+          "",
+          "box-car-tablet",
+          "box-car-desktop"
+        )}
+        style={{
+          boxShadow: "0px 0px 10px 1px rgb(185, 179, 179)",
+          padding: "",
+        }}
+      >
+        <div className="row mt-3">
+          <div className="col-md-4 text-center">
+            <h3>Model: {carDetails.modelName}</h3>
+          </div>
+          <div className="col-md-4 text-center">
+            <h3>Delivery at Hub: {carDetails.deliveryHub}</h3>
+          </div>
+          <div className="col-md-4 text-center">
+            <h3>Fuel Capacity: {carDetails.fuelCapacity} L</h3>
+          </div>
+        </div>
       </div>
       <div className="container">
         <div className="row mt-5">
-          <h4>Car Location</h4>
-          <div
-            id="map"
-            className="col-4 map-container mb-4"
-            style={{ height: "200px", backgroundColor: "gray" }}
-          ></div>
-
-          <div className="col-4">
-            <img
-              className=" m-auto border border-black rounded"
-              src={carDetails.carImage}
-              alt="carImage-preview"
-            />
+          <div className="col-12 col-md-6">
+            <div
+              id="map"
+              className="map-container"
+              style={{
+                height: isMobile ? "400px" : isTablet ? "300px" : "400px",
+                backgroundColor: "gray",
+              }}
+            ></div>
           </div>
-
-          <div className="col-4 m-auto">
-            <div className="row">
-              <div className="col-6">
-                <div className="flex justify-evenly ">
-                  <img
-                    style={{ width: "50px", height: "50px" }}
-                    src={carseat}
-                    alt="carseat-preview"
-                  />
-                  <h5 className="ml-2 m-auto">
-                    {carDetails.seatNumber} seater
-                  </h5>
+          <div className="col-md-6">
+            <div className="col-12 col-md-12">
+              <img
+                className=" m-auto border border-black rounded"
+                src={carDetails.carImage}
+                alt="carImage-preview"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row mt-5">
+        <div className="col-12 col-md-12">
+              <div className="row">
+                <div className="col-6">
+                  <div className="flex justify-evenly">
+                    <img
+                      style={{ width: "50px", height: "50px" }}
+                      src={carseat}
+                      alt="carseat-preview"
+                    />
+                    <h5 className="ml-2 m-auto">
+                      {carDetails.seatNumber} seater
+                    </h5>
+                  </div>
+                </div>
+                <div className="col-6">
+                  <div className="flex justify-evenly">
+                    <img
+                      style={{ width: "50px", height: "50px" }}
+                      src={gearbox}
+                      alt="gearbox-preview"
+                    />
+                    <h5 className="ml-2 m-auto">{carDetails.gearBoxType}</h5>
+                  </div>
                 </div>
               </div>
-              <div className="col-6">
-                <div className="flex justify-evenly">
-                  <img
-                    style={{ width: "50px", height: "50px" }}
-                    src={gearbox}
-                    alt="gearbox-preview"
-                  />
-                  <h5 className="ml-2 m-auto">{carDetails.gearBoxType}</h5>
+              <div className="row mt-5">
+                <div className="col-6">
+                  <div className="flex justify-evenly">
+                    <img
+                      style={{ width: "50px", height: "50px" }}
+                      src={gasstation}
+                      alt="gasstation-preview"
+                    />
+                    <h5 className="ml-2 m-auto">{carDetails.fuelType}</h5>
+                  </div>
+                </div>
+                <div className="col-6 ">
+                  <div className="flex justify-evenly">
+                    <img
+                      style={{ width: "50px", height: "50px" }}
+                      src={mileage}
+                      alt="mileage-preview"
+                    />
+                    <h5 className="ml-2 m-auto">
+                      {carDetails.mileage} km/litre
+                    </h5>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* ================ */}
-            <div className="row mt-5">
-              <div className="col-6">
-                <div className="flex justify-evenly">
-                  <img
-                    style={{ width: "50px", height: "50px" }}
-                    src={gasstation}
-                    alt="gasstation-preview"
-                  />
-                  <h5 className="ml-2 m-auto">{carDetails.fuelType}</h5>
-                </div>
-              </div>
-              <div className="col-6 ">
-                <div className="flex justify-evenly">
-                  <img
-                    style={{ width: "50px", height: "50px" }}
-                    src={mileage}
-                    alt="mileage-preview"
-                  />
-                  <h5 className="ml-2 m-auto">{carDetails.mileage} km/litre</h5>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div className="container border mt-10 mb-10 flex justify-evenly">
         <div className="border mt-5 mb-5">
-          <h1>Description</h1>
+          <h1 className="text-center">Description</h1>
           <div className="row">
             <div className="">{carDetails.description}</div>
           </div>
         </div>
         <div className="border mt-5 mb-5">
-          <h1>Amount Details</h1>
+          <h1 className="text-center">Amount Details</h1>
           <div className="flex justify-evenly">
             <div className="mr-10">Car Pickup Date: {pickupDate}</div>
             <div className="mr-10">Car Return Date: {returnDate}</div>

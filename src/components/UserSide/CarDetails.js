@@ -251,8 +251,8 @@ const CarDetails = () => {
 
       const map = new mapboxgl.Map({
         container: "map",
-        // style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
-        style:"mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
+        style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+        // style: "mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
         center: [longitude, latitude],
         zoom: 12,
       });
@@ -264,114 +264,131 @@ const CarDetails = () => {
   // console.log(carDetails, "---------here is the carDetails");
   return (
     <div>
-      <Header
-        walletBalance={walletBalance}
-        setWalletBalance={setWalletBalance}
-      />
+      <Header />
       <div className="container mt-5">
         <div className="text-center">
           <h1>Car Details</h1>
         </div>
         <ToastContainer />
-        <div className="flex flex-col md:flex-row justify-between mt-3">
-          <div className="md:w-1/3">
-            <h3>Model: {carDetails.modelName}</h3>
-          </div>
-          <div className="md:w-1/3 mt-3 md:mt-0">
-            <h3>Delivery at Hub: {carDetails.deliveryHub}</h3>
-          </div>
-          <div className="md:w-1/3 mt-3 md:mt-0">
-            <h3>With Fuel Capacity: {carDetails.fuelCapacity} L</h3>
+
+        <div
+          class="box-car"
+          style={{
+            boxShadow: "0px 0px 10px 1px rgb(185, 179, 179)",
+            padding: "",
+          }}
+        >
+          <div className="row mt-3">
+            <div className="col-md-4 text-center">
+              <h3>Model: {carDetails.modelName}</h3>
+            </div>
+            <div className="col-md-4 text-center">
+              <h3>Delivery at Hub: {carDetails.deliveryHub}</h3>
+            </div>
+            <div className="col-md-4 text-center">
+              <h3>Fuel Capacity: {carDetails.fuelCapacity} L</h3>
+            </div>
           </div>
         </div>
-        <div className="row mt-5">
-          <h4>Car Location</h4>
-          <div
-            id="map"
-            className="col-12 col-md-6 map-container mb-4"
-            style={{ height: "400px", backgroundColor: "gray" }}
-          ></div>
-          <div className="col-12 col-md-6">
+
+        <div className="row mt-5 flex">
+          <div className="col-12 col-md-6 mt-5">
             <img
               className="m-auto border border-black rounded img-fluid"
               src={carDetails.carImage}
               alt="car-imagePreview"
             />
           </div>
+          <div className="col-12 col-md-6 mt-1">
+            <div className="row">
+              <div className="col-6 col-md-6 text-center">
+                <label>Pickup Date:</label>
+                <br></br>
+                <input
+                  type="date"
+                  className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
+                  placeholder="Pickup Date"
+                  value={pickupDate}
+                  onChange={handlePickupDateChange}
+                  min={tomorrow.toISOString().split("T")[0]} // Set min to tomorrow's date in ISO format
+                  required
+                />
+              </div>
+              <div className="col-6 col-md-6 text-center">
+                <label>Return Date: </label>
+                <br></br>
+                <input
+                  type="date"
+                  className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
+                  placeholder="Return Date"
+                  value={returnDate}
+                  onChange={(e) => setReturnDate(e.target.value)}
+                  min={getMinReturnDate()} // Set min to the calculated minimum return date
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center mt-3 mb-3">
+              <button
+                onClick={() =>
+                  handleSubmit(pickupDate, returnDate, carDetails._id)
+                }
+                className="btn btn-success px-4"
+              >
+                Search
+              </button>
+            </div>
+
+            <div className="row mt-5">
+              <div className="row">
+                <div className="col-6 flex">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={carseat}
+                    alt="Car Seat"
+                  />
+                  <h5 className="ml-2 m-auto">
+                    {carDetails.seatNumber} seater
+                  </h5>
+                </div>
+                <div className="col-6 flex">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={gearbox}
+                    alt="Gearbox"
+                  />
+                  <h5 className="ml-2 m-auto">{carDetails.gearBoxType}</h5>
+                </div>
+              </div>
+
+              <div className="row mt-5">
+                <div className="col-6 flex">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={gasstation}
+                    alt="Gas Station"
+                  />
+                  <h5 className="ml-2 m-auto">{carDetails.fuelType}</h5>
+                </div>
+                <div className="col-6 flex">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={mileage}
+                    alt="Mileage"
+                  />
+                  <h5 className="ml-2 m-auto">{carDetails.mileage} km/litre</h5>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col items-center mt-3 mb-3">
-          <label>Pickup Date:</label>
-          <input
-            type="date"
-            className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
-            placeholder="Pickup Date"
-            value={pickupDate}
-            onChange={handlePickupDateChange}
-            min={tomorrow.toISOString().split("T")[0]} // Set min to tomorrow's date in ISO format
-            required
-          />
-          <label>Return Date: </label>
-          <input
-            type="date"
-            className="border border-black rounded-lg mb-2 md:mr-2 md:mb-0 px-2 py-1"
-            placeholder="Return Date"
-            value={returnDate}
-            onChange={(e) => setReturnDate(e.target.value)}
-            min={getMinReturnDate()} // Set min to the calculated minimum return date
-            required
-          />
-          <button
-            onClick={() => handleSubmit(pickupDate, returnDate, carDetails._id)}
-            className="btn btn-success"
-          >
-            Search
-          </button>
-        </div>
-        <div className="row mt-4">
-          <div className="col-6 col-md-3">
-            <div className="flex justify-evenly ">
-              <img
-                style={{ width: "50px", height: "50px" }}
-                src={carseat}
-                alt="Car Seat"
-              />
-              <h5 className="ml-2 m-auto">{carDetails.seatNumber} seater</h5>
-            </div>
-          </div>
-          <div className="col-6 col-md-3">
-            <div className="flex justify-evenly">
-              <img
-                style={{ width: "50px", height: "50px" }}
-                src={gearbox}
-                alt="Gearbox"
-              />
-              <h5 className="ml-2 m-auto">{carDetails.gearBoxType}</h5>
-            </div>
-          </div>
-          <div className="col-6 col-md-3">
-            <div className="flex justify-evenly">
-              <img
-                style={{ width: "50px", height: "50px" }}
-                src={gasstation}
-                alt="Gas Station"
-              />
-              <h5 className="ml-2 m-auto">{carDetails.fuelType}</h5>
-            </div>
-          </div>
-          <div className="col-6 col-md-3">
-            <div className="flex justify-evenly">
-              <img
-                style={{ width: "50px", height: "50px" }}
-                src={mileage}
-                alt="Mileage"
-              />
-              <h5 className="ml-2 m-auto">{carDetails.mileage} km/litre</h5>
-            </div>
-          </div>
-        </div>
+
+        <div className="row mt-4"></div>
       </div>
+
       <div className="container border mt-10 mb-10">
-        <h1 className="text-center">Description</h1>
+        <h1 className="">Description</h1>
         <div className="row">
           <div className="col-12">{carDetails.description}</div>
         </div>
@@ -411,6 +428,15 @@ const CarDetails = () => {
           )}
         </div>
       )}
+
+      <div className="px-5">
+        <h4 className="mb-5">Car Location</h4>
+        <div
+          id="map"
+          className="col-12 col-md-6 map-container mb-4 border"
+          style={{ height: "400px", backgroundColor: "gray", width: "100%" }}
+        ></div>
+      </div>
     </div>
   );
 };

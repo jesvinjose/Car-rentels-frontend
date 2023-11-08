@@ -19,6 +19,7 @@ const Profile = () => {
   const [aadharBackImagePreview, setAadharBackImagePreview] = useState(null);
   const [dlFrontImagePreview, setDlFrontImagePreview] = useState(null);
   const [dlBackImagePreview, setDlBackImagePreview] = useState(null);
+  const [trigger, setTrigger] = useState(new Date());
 
   useEffect(() => {
     axiosInstance
@@ -36,31 +37,41 @@ const Profile = () => {
         console.error("Error fetching user details:", error);
         // Handle error here
       });
-  }, [userId, usertoken]);
+  }, [trigger]);
 
   // console.log(userDetails, "----------------userDetails----------------");
 
+  const [formValues, setFormValues] = useState({});
+  const [formValuesforProfileImage, setFormValuesforProfileImage] = useState(
+    {}
+  );
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserDetails((prevDetails) => ({
-      ...prevDetails,
+
+    // Update the formValues object with the new key-value pair
+    setFormValues((prevFormValues) => ({
+      ...prevFormValues,
       [name]: value,
     }));
   };
 
+  // console.log(formValues, "---------temporaryUserData");
+
   const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log(userDetails, "......frontend..........");
-
     try {
       setIsLoading(true);
       const response = await axiosInstance.post(
         `user/updateProfile/${userId}`,
-        userDetails
+        { formValues }
       );
-      if (response) setIsLoading(false);
-      console.log("User details updated:", response.data.user);
-      toast("User details updated successfully!");
+      if (response) {
+        setIsLoading(false);
+        console.log("User details updated:", response.data.user);
+        toast("User details updated successfully!");
+        setTrigger(new Date());
+      }
     } catch (error) {
       console.error("Error updating user details:", error.response.data);
       toast("Error updating user details. Please try again.");
@@ -90,35 +101,62 @@ const Profile = () => {
           case "dlBackImage":
             setDlBackImagePreview(reader.result);
             break;
-          case "profileImage":
-            setProfileImagePreview(reader.result);
-            break;
           default:
             break;
         }
 
-        setUserDetails((prevDetails) => ({
-          ...prevDetails,
-          [name]: reader.result, // Assuming single file upload
+        setFormValues((prevFormValues) => ({
+          ...prevFormValues,
+          [name]: reader.result,
         }));
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleProfileImageFileChange = (e) => {
+    const file = e.target.files[0];
+    const name = e.target.name;
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Set image preview based on the file being uploaded
+        switch (name) {
+          case "profileImage":
+            setProfileImagePreview(reader.result);
+            break;
+          default:
+            break;
+        }
+        setFormValuesforProfileImage((prevFormValuesForProfile) => ({
+          ...prevFormValuesForProfile,
+          [name]: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  console.log(formValuesforProfileImage,"------formValuesforProfileImage----------");
+
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    console.log(userDetails.profileImage, "......frontend..........");
+    // console.log(userDetails.profileImage, "......frontend..........");
+    console.log(formValuesforProfileImage,"----------formValuesforProfileImage in handleUpdateProfile");
 
     try {
       setIsLoadingProfile(true);
       const response = await axiosInstance.post(
         `user/updateProfileImage/${userId}`,
-        userDetails
+        {formValuesforProfileImage}
       );
-      if (response) setIsLoadingProfile(false);
-      console.log("User details updated:", response.data.user);
-      toast("Profile Image updated successfully!");
+      if (response) {
+        setIsLoadingProfile(false);
+        console.log("User details updated:", response.data.user);
+        toast("Profile Image updated successfully!");
+        setTrigger(new Date());
+      }
     } catch (error) {
       console.error("Error updating user details:", error);
       toast("Error updating user details. Please try again.");
@@ -143,15 +181,19 @@ const Profile = () => {
                 </div>
               ) : (
                 <form>
-                  {profileImagePreview && (
+                  {profileImagePreview ? (
                     <img
                       src={profileImagePreview}
                       alt="Profile Image Preview"
                       style={{ maxWidth: "100%", maxHeight: "200px" }}
                     />
-                  )}
-                  {!profileImagePreview && (
-                    <img src="http://bootdey.com/img/Content/avatar/avatar1.png" />
+                  ) : (
+                    <div>
+                      <img
+                        src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                        alt="Default Profile Image"
+                      />
+                    </div>
                   )}
 
                   <input
@@ -159,7 +201,7 @@ const Profile = () => {
                     type="file"
                     accept="image/*"
                     name="profileImage"
-                    onChange={handleFileChange}
+                    onChange={handleProfileImageFileChange}
                   />
                   <div className="small font-italic text-muted mb-4">
                     JPG or PNG no larger than 5 MB
@@ -179,7 +221,7 @@ const Profile = () => {
             <div className="card-header">Email and Wallet</div>
             <div className="card-body text-left">
               <p>Email: {userDetails?.emailId || ""}</p>
-              <p>Wallet balance: {userDetails?.walletBalance || ""}</p>
+              <p>Wallet balance: {userDetails?.walletBalance}</p>
             </div>
           </div>
         </div>
@@ -205,8 +247,8 @@ const Profile = () => {
                         id="inputFirstName"
                         type="text"
                         name="firstName"
-                        value={userDetails?.firstName || ""} // Initialize with an empty string
-                        placeholder="Enter your first name"
+                        placeholder={userDetails?.firstName || ""} // Initialize with an empty string
+                        // placeholder="Enter your first name"
                         onChange={handleChange}
                       />
                     </div>
@@ -219,8 +261,8 @@ const Profile = () => {
                         id="inputLastName"
                         name="lastName"
                         type="text"
-                        placeholder="Enter your last name"
-                        value={userDetails?.lastName || ""}
+                        // placeholder="Enter your last name"
+                        placeholder={userDetails?.lastName || ""}
                         onChange={handleChange}
                       />
                     </div>
@@ -235,8 +277,8 @@ const Profile = () => {
                         id="inputOrgName"
                         name="mobileNumber"
                         type="tel"
-                        placeholder="Enter your mobile number"
-                        value={userDetails?.mobileNumber || ""}
+                        // placeholder="Enter your mobile number"
+                        placeholder={userDetails?.mobileNumber || ""}
                         onChange={handleChange}
                       />
                     </div>
@@ -249,8 +291,8 @@ const Profile = () => {
                         id="inputLocation"
                         name="address"
                         type="text"
-                        placeholder="Enter your address"
-                        value={userDetails?.address || ""}
+                        // placeholder="Enter your address"
+                        placeholder={userDetails?.address || ""}
                         onChange={handleChange}
                       />
                     </div>
@@ -265,8 +307,8 @@ const Profile = () => {
                         id="inputEmailAddress"
                         type="Number"
                         name="pinCode"
-                        placeholder="Enter your pincode"
-                        value={userDetails?.pinCode || ""}
+                        // placeholder="Enter your pincode"
+                        placeholder={userDetails?.pinCode || ""}
                         onChange={handleChange}
                       />
                     </div>
@@ -279,8 +321,8 @@ const Profile = () => {
                         id="inputPhone"
                         type="text"
                         name="state"
-                        placeholder="Enter your state"
-                        value={userDetails?.state || ""}
+                        // placeholder="Enter your state"
+                        placeholder={userDetails?.state || ""}
                         onChange={handleChange}
                       />
                     </div>
@@ -296,8 +338,8 @@ const Profile = () => {
                         id="inputPhone"
                         type="text"
                         name="dlNumber"
-                        placeholder="Enter your DL number"
-                        value={userDetails?.dlNumber || ""}
+                        // placeholder="Enter your DL number"
+                        placeholder={userDetails?.dlNumber || ""}
                         onChange={handleChange}
                       />
                     </div>
@@ -310,8 +352,8 @@ const Profile = () => {
                         id="inputBirthday"
                         type="Number"
                         name="aadharNumber"
-                        placeholder="Enter your Aadhar Number"
-                        value={userDetails?.aadharNumber || ""}
+                        // placeholder="Enter your Aadhar Number"
+                        placeholder={userDetails?.aadharNumber || ""}
                         onChange={handleChange}
                       />
                     </div>
