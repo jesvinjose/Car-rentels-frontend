@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useLocation,useNavigate } from "react-router-dom";
 import Header from "./Header";
 import mapboxgl from "mapbox-gl";

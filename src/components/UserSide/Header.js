@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSolidUserCircle } from "react-icons/bi";
 import logo from "../../assets/logo-1.png";
-import axios from "axios";
 const Header = () => {
   // const [userId,setUserId]=useState(localStorage.getItem("userId"))
   const token = localStorage.getItem("token");
   const firstName = localStorage.getItem("firstName");
-  const emailId = localStorage.getItem("emailId");
-  const lastName = localStorage.getItem("lastName");
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
   const handleLogout = (e) => {

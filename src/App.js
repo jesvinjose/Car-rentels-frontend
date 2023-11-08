@@ -52,6 +52,7 @@ import ChatContainerVendorSide from "./components/VendorSide/ChatContainerVendor
 import VenderDashBoard from "./components/VendorSide/VenderDashBoard";
 import AboutPage from "./components/UserSide/About";
 import Contact from "./components/UserSide/Contact";
+import Profile from "./components/UserSide/Profile";
 
 function App() {
   const vendorId = localStorage.getItem("vendorId");
@@ -60,19 +61,35 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route
+          {/* <Route
             path="/userprofile/:userId"
             element={<PrivateRoutes Component={UserProfile} />}
+          /> */}
+
+          <Route
+            path="/userprofile/:userId"
+            element={<PrivateRoutes Component={Profile} />}
           />
           {/* <Route path="/bookingslist" element={<BookingsList />} /> */}
 
+          <Route
+            path="/bookingslist"
+            element={<PrivateRoutesVendorSide Component={BookingsList} />}
+          />
+          <Route
+            path="/booking_history"
+            element={<PrivateRoutes Component={BookingHistory} />}
+          />
 
-          <Route path="/bookingslist" element={<PrivateRoutesVendorSide Component={BookingsList} />} />
-          <Route path="/booking_history" element={<PrivateRoutes Component={BookingHistory} />} />
+          <Route
+            path="/booking_details"
+            element={<PrivateRoutes Component={BookingInfo} />}
+          />
 
-          <Route path="/booking_details" element={<PrivateRoutes Component={BookingInfo} />} />
-
-          <Route path="/booking_success" element={<PrivateRoutes Component={BookingSuccessPage} />} />
+          <Route
+            path="/booking_success"
+            element={<PrivateRoutes Component={BookingSuccessPage} />}
+          />
 
           <Route element={<UsersHome />} path="/usershome" />
           <Route path="/" element={<Home />} />
@@ -91,9 +108,8 @@ function App() {
           <Route element={<ForgotPassword />} path="/forgotpassword" />
           <Route path="/car_list" element={<CategorywiseCars />} />
           <Route path="/car_details" element={<CarDetails />} />
-          <Route path="/about" element={<AboutPage/>}/>
-          <Route path="/contact" element={<Contact/>}/>
-
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<Contact />} />
 
           <Route
             element={<ForgotPassword4Vendor />}
@@ -113,8 +129,6 @@ function App() {
             path="/PasswordReset4Vendor"
             element={<PasswordReset4Vendor />}
           />
-
-
 
           <Route path="/vendorregister" element={<VendorRegisterForm />} />
           <Route path="/vendorverifyOTP" element={<VendorVerifyOTP />} />
@@ -191,14 +205,18 @@ function App() {
 
           <Route
             path="/bookings_list_adminside"
-            element={<PrivateRoutesAdminSide Component={BookingsListAdminSide} />}
+            element={
+              <PrivateRoutesAdminSide Component={BookingsListAdminSide} />
+            }
           />
-
 
           <Route path="/404" element={<NotFound />} />
           <Route path="/*" element={<NotFound />} />
 
-          <Route path="/admin/dashboard" element={<PrivateRoutesAdminSide Component={AdminDashboard} />} />
+          <Route
+            path="/admin/dashboard"
+            element={<PrivateRoutesAdminSide Component={AdminDashboard} />}
+          />
 
           <Route
             path="/chat_with_vendor/:bookingId/:userId/:vendorId"
@@ -207,7 +225,9 @@ function App() {
 
           <Route
             path="/chat_with_user/:bookingId/:userId/:vendorId"
-            element={<PrivateRoutesVendorSide Component={ChatContainerVendorSide} />}
+            element={
+              <PrivateRoutesVendorSide Component={ChatContainerVendorSide} />
+            }
           />
         </Routes>
       </Router>

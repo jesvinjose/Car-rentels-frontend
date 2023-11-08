@@ -204,7 +204,7 @@ const CarRegister = () => {
   console.log(carLocation);
 
   useEffect(() => {
-    mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN; // Set Mapbox access token
+    mapboxgl.accessToken = "pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A"; // Set Mapbox access token
     const map = new mapboxgl.Map({
       container: "map",
       // style: 'mapbox://styles/mapbox/streets-v11',

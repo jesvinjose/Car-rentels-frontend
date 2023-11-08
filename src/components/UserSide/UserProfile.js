@@ -1,57 +1,27 @@
 import Header from "./Header";
 import UpdateProfileDetails from "./UpdateProfileDetails";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Profile from "../../assets/profile.png";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
-import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
   const usertoken = localStorage.getItem("token");
-  const navigate = useNavigate();
-  const walletBalance = localStorage.getItem("walletBalance");
 
   useEffect(() => {
-    // const config = {
-    //   headers: {
-    //     Authorization: `Bearer ${usertoken}`, // Set the token in the headers
-    //   },
-    // };
-    // // Use axiosInstance instead of axios here
-    // axiosInstance
-    //   .get(`user/${userId}`, config) // The baseURL will be appended due to the interceptor
-    //   .then((response) => {
-    //     setUserDetails(response.data.userDetails);
-    //     console.log(
-    //       response.data.userDetails,
-    //       "---------from Response-----------"
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching user details:", error);
-    //   });
-
-    // Use axiosInstance instead of axios here
-    // axios
-    //   .get(`http://localhost:5000/user/${userId}`) // The baseURL will be appended due to the interceptor
     axiosInstance
       .get(`/user/${userId}`) // The baseURL will be appended due to the interceptor
       .then((response) => {
         setUserDetails(response.data.userDetails);
-        console.log(
-          response.data.userDetails,
-          "---------from Response-----------"
-        );
       })
       .catch((error) => {
         console.error("Error fetching user details:", error);
         // navigate('/404')
       });
   }, [userId, usertoken]);
-  console.log(userDetails, "----------userProfile console----------");
+ 
 
   return (
     <div>
@@ -77,7 +47,6 @@ const UserProfile = () => {
             <p>Mobile: {userDetails.mobileNumber}</p>
             <p>Email: {userDetails.emailId}</p>
             <p>Wallet balance: {userDetails.walletBalance}</p>
-            {/* Display other user details as needed */}
           </div>
         </div>
       ) : (
