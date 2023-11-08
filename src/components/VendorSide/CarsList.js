@@ -7,7 +7,9 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 // mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-mapboxgl.accessToken="pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A";
+// mapboxgl.accessToken="pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A";
+
+mapboxgl.accessToken="pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG9wcDAyZjUwYnhmMmtwZWpyaXIyODJ4In0.IElaQos2Dju7KqG0DLp8aw";
 
 
 const EditCarModal = ({
@@ -124,7 +126,8 @@ const EditCarModal = ({
     const map = new mapboxgl.Map({
       container: "map",
       // style: 'mapbox://styles/mapbox/streets-v11',
-      style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+      // style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+      style:"mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
       center: [
         carDataForm.carLocation.longitude,
         carDataForm.carLocation.latitude,

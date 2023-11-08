@@ -251,7 +251,8 @@ const CarDetails = () => {
 
       const map = new mapboxgl.Map({
         container: "map",
-        style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+        // style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+        style:"mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
         center: [longitude, latitude],
         zoom: 12,
       });
