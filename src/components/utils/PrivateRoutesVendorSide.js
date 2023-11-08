@@ -10,7 +10,7 @@ export const PrivateRoutesVendorSide = ({ Component }) => {
       const vendorId = localStorage.getItem("vendorId");
       const vendorToken = localStorage.getItem("vendorToken");
       // const response = await axios.get(
-      //   `http://localhost:5000/vendor/checkBlockStatus/${vendorId}`
+      //   `http:///vendor/checkBlockStatus/${vendorId}`
       // );
       const response = await axiosInstanceforVendor.get(
         `/vendor/checkBlockStatus/${vendorId}`
