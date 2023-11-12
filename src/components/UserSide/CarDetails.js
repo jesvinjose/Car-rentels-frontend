@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import logo from "../../assets/logo-1.png";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import polyline from "@mapbox/polyline";
 
 const CarDetails = () => {
   const [carDetails, setCarDetails] = useState([]);
@@ -26,6 +27,7 @@ const CarDetails = () => {
   // Assume pickupDate and returnDate are available as props or state
   const [numDays, setNumDays] = useState(0); // Number of days between pickup and return
   const dailyRentalRate = carDetails.dailyRentalRate; // Daily rental rate for the car
+
 
   const handlePickupDateChange = (e) => {
     const selectedDate = e.target.value;
@@ -54,6 +56,7 @@ const CarDetails = () => {
 
   const [searchInitiated, setSearchInitiated] = useState(false);
   const [availableCar, setAvailableCar] = useState(false);
+  const [distanceBtwUserandCar,setDistanceBtwUserandCar]=useState(0);
 
   useEffect(() => {}, [searchInitiated]);
 
@@ -69,6 +72,27 @@ const CarDetails = () => {
   const calculateTotalAmount = () => {
     return numDays * dailyRentalRate;
   };
+
+  const [userLocation, setUserLocation] = useState(null);
+  useEffect(() => {
+    // Get user's location using Geolocation API
+    const getUserLocation = () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("inside position");
+          const { latitude, longitude } = position.coords;
+          console.log(latitude, "-----------latitude");
+          console.log(longitude, "----------longitude");
+          setUserLocation({ userLongitude: longitude, userLatitude: latitude });
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+        }
+      );
+    };
+    // Call the function to get user's location
+    getUserLocation();
+  }, []);
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -245,23 +269,119 @@ const CarDetails = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (carDetails && carDetails.carLocation) {
-      const { longitude, latitude } = carDetails.carLocation;
+  // useEffect(() => {
+  //   if (carDetails && carDetails.carLocation) {
+  //     const { longitude, latitude } = carDetails.carLocation;
 
+  //     const map = new mapboxgl.Map({
+  //       container: "map",
+  //       style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
+  //       // style: "mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
+  //       center: [longitude, latitude],
+  //       zoom: 12,
+  //     });
+
+  //     // Add a marker at the car's location
+  //     new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+  //   }
+  // }, [carDetails]);
+  // console.log(carDetails, "---------here is the carDetails");
+
+  useEffect(() => {
+    console.log(carDetails,useLocation,"----------car and user");
+    if (carDetails && carDetails.carLocation && userLocation) {
+      const { longitude: carLongitude, latitude: carLatitude } =
+        carDetails.carLocation;
+      const { userLongitude, userLatitude } = userLocation;
+
+      // Create a new map
       const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
-        // style: "mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
-        center: [longitude, latitude],
+        center: [userLongitude, userLatitude],
         zoom: 12,
       });
 
       // Add a marker at the car's location
-      new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+      new mapboxgl.Marker().setLngLat([carLongitude, carLatitude]).addTo(map);
+
+      // Add a marker at the user's location
+      new mapboxgl.Marker({ color: "green" })
+        .setLngLat([userLongitude, userLatitude])
+        .addTo(map);
+
+      // Use Mapbox Directions API to get the driving route
+      const getDirections = async () => {
+        try {
+          const response = await axios.get(
+            `https://api.mapbox.com/directions/v5/mapbox/driving/${userLongitude},${userLatitude};${carLongitude},${carLatitude}`,
+            {
+              params: {
+                access_token:
+                  "pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A", // Replace with your Mapbox access token
+              },
+            }
+          );
+
+          const routeEncoded = response.data.routes[0].geometry;
+
+          // Decode the polyline string to get the coordinates
+          const routeCoordinates = polyline
+            .decode(routeEncoded)
+            .map((pair) => pair.reverse());
+
+          // Add a line layer to represent the route
+          map.on("load", () => {
+            map.addLayer({
+              id: "route",
+              type: "line",
+              source: {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    type: "LineString",
+                    coordinates: routeCoordinates,
+                  },
+                },
+              },
+              layout: {
+                "line-join": "round",
+                "line-cap": "round",
+              },
+              paint: {
+                "line-color": "blue",
+                "line-width": 2,
+              },
+            });
+          });
+        } catch (error) {
+          console.error("Error fetching directions:", error);
+        }
+      };
+
+      // Call the function to get directions
+      getDirections();
+
+      const directionsRequest = `https://api.mapbox.com/directions/v5/mapbox/driving/${userLongitude},${userLatitude};${carLongitude},${carLatitude}?access_token=pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A`;
+
+      fetch(directionsRequest)
+        .then((response) => response.json())
+        .then((data) => {
+          const route = data.routes[0];
+          const distanceInKm = route.distance / 1000; // Distance in kilometers
+          console.log("Distance between user and car:", distanceInKm, "km");
+          const formattedDistance = distanceInKm.toFixed(2);
+          setDistanceBtwUserandCar(formattedDistance)
+        })
+        .catch((error) => {
+          console.error("Error fetching directions:", error);
+        });
     }
-  }, [carDetails]);
-  // console.log(carDetails, "---------here is the carDetails");
+
+  }, [carDetails, userLocation]);
+
   return (
     <div>
       <Header />
@@ -272,7 +392,7 @@ const CarDetails = () => {
         <ToastContainer />
 
         <div
-          class="box-car"
+          className="box-car"
           style={{
             boxShadow: "0px 0px 10px 1px rgb(185, 179, 179)",
             padding: "",
@@ -436,6 +556,7 @@ const CarDetails = () => {
           className="col-12 col-md-6 map-container mb-4 border"
           style={{ height: "400px", backgroundColor: "gray", width: "100%" }}
         ></div>
+        <div>Distance between user and car: {distanceBtwUserandCar} km</div>
       </div>
     </div>
   );

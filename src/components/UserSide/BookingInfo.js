@@ -10,6 +10,8 @@ import gearbox from "../../assets/gearbox.png";
 import gasstation from "../../assets/gas-station.png";
 import mileage from "../../assets/mileage.png";
 import axiosInstance from "../../api/axiosInstance";
+import axios from "axios";
+import polyline from "@mapbox/polyline";
 
 const BookingInfo = () => {
   const [carDetails, setCarDetails] = useState([]);
@@ -21,6 +23,8 @@ const BookingInfo = () => {
   const [walletBalance, setWalletBalance] = useState(
     localStorage.getItem("walletBalance")
   );
+
+  const [distanceBtwUserandCar,setDistanceBtwUserandCar]=useState(0);
 
   const navigate = useNavigate();
 
@@ -148,6 +152,28 @@ const BookingInfo = () => {
     }
   };
 
+  //new code
+  const [userLocation, setUserLocation] = useState(null);
+  useEffect(() => {
+    // Get user's location using Geolocation API
+    const getUserLocation = () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("inside position");
+          const { latitude, longitude } = position.coords;
+          console.log(latitude, "-----------latitude");
+          console.log(longitude, "----------longitude");
+          setUserLocation({ userLongitude: longitude, userLatitude: latitude });
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+        }
+      );
+    };
+    // Call the function to get user's location
+    getUserLocation();
+  }, []);
+
   useEffect(() => {
     // Make API request to fetch carDetails based on the carId
     const fetchCarDetails = async () => {
@@ -165,23 +191,102 @@ const BookingInfo = () => {
       fetchCarDetails();
     }
   }, []);
-  console.log(carDetails, "---------here is the carDetails");
-  useEffect(() => {
-    if (carDetails && carDetails.carLocation) {
-      const { longitude, latitude } = carDetails.carLocation;
 
+
+  useEffect(() => {
+    console.log(carDetails,useLocation,"----------car and user");
+    if (carDetails && carDetails.carLocation && userLocation) {
+      const { longitude: carLongitude, latitude: carLatitude } =
+        carDetails.carLocation;
+      const { userLongitude, userLatitude } = userLocation;
+
+      // Create a new map
       const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
-        // style: "mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
-        center: [longitude, latitude],
+        center: [userLongitude, userLatitude],
         zoom: 12,
       });
 
       // Add a marker at the car's location
-      new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+      new mapboxgl.Marker().setLngLat([carLongitude, carLatitude]).addTo(map);
+
+      // Add a marker at the user's location
+      new mapboxgl.Marker({ color: "green" })
+        .setLngLat([userLongitude, userLatitude])
+        .addTo(map);
+
+      // Use Mapbox Directions API to get the driving route
+      const getDirections = async () => {
+        try {
+          const response = await axios.get(
+            `https://api.mapbox.com/directions/v5/mapbox/driving/${userLongitude},${userLatitude};${carLongitude},${carLatitude}`,
+            {
+              params: {
+                access_token:
+                  "pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A", // Replace with your Mapbox access token
+              },
+            }
+          );
+
+          const routeEncoded = response.data.routes[0].geometry;
+
+          // Decode the polyline string to get the coordinates
+          const routeCoordinates = polyline
+            .decode(routeEncoded)
+            .map((pair) => pair.reverse());
+
+          // Add a line layer to represent the route
+          map.on("load", () => {
+            map.addLayer({
+              id: "route",
+              type: "line",
+              source: {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    type: "LineString",
+                    coordinates: routeCoordinates,
+                  },
+                },
+              },
+              layout: {
+                "line-join": "round",
+                "line-cap": "round",
+              },
+              paint: {
+                "line-color": "blue",
+                "line-width": 2,
+              },
+            });
+          });
+        } catch (error) {
+          console.error("Error fetching directions:", error);
+        }
+      };
+
+      // Call the function to get directions
+      getDirections();
+
+      const directionsRequest = `https://api.mapbox.com/directions/v5/mapbox/driving/${userLongitude},${userLatitude};${carLongitude},${carLatitude}?access_token=pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A`;
+
+      fetch(directionsRequest)
+        .then((response) => response.json())
+        .then((data) => {
+          const route = data.routes[0];
+          const distanceInKm = route.distance / 1000; // Distance in kilometers
+          console.log("Distance between user and car:", distanceInKm, "km");
+          const formattedDistance = distanceInKm.toFixed(2);
+          setDistanceBtwUserandCar(formattedDistance)
+        })
+        .catch((error) => {
+          console.error("Error fetching directions:", error);
+        });
     }
-  }, [carDetails]);
+
+  }, [carDetails, userLocation]);
 
   const isMobile = window.innerWidth <= 768; // Adjust the mobile breakpoint as needed
   const isTablet = window.innerWidth <= 1100; // Adjust the tablet breakpoint as needed
@@ -250,58 +355,56 @@ const BookingInfo = () => {
             </div>
           </div>
         </div>
+        <div>Distance between user and car: {distanceBtwUserandCar} km</div>
         <div className="row mt-5">
-        <div className="col-12 col-md-12">
-              <div className="row">
-                <div className="col-6">
-                  <div className="flex justify-evenly">
-                    <img
-                      style={{ width: "50px", height: "50px" }}
-                      src={carseat}
-                      alt="carseat-preview"
-                    />
-                    <h5 className="ml-2 m-auto">
-                      {carDetails.seatNumber} seater
-                    </h5>
-                  </div>
-                </div>
-                <div className="col-6">
-                  <div className="flex justify-evenly">
-                    <img
-                      style={{ width: "50px", height: "50px" }}
-                      src={gearbox}
-                      alt="gearbox-preview"
-                    />
-                    <h5 className="ml-2 m-auto">{carDetails.gearBoxType}</h5>
-                  </div>
+          <div className="col-12 col-md-12">
+            <div className="row">
+              <div className="col-6">
+                <div className="flex justify-evenly">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={carseat}
+                    alt="carseat-preview"
+                  />
+                  <h5 className="ml-2 m-auto">
+                    {carDetails.seatNumber} seater
+                  </h5>
                 </div>
               </div>
-              <div className="row mt-5">
-                <div className="col-6">
-                  <div className="flex justify-evenly">
-                    <img
-                      style={{ width: "50px", height: "50px" }}
-                      src={gasstation}
-                      alt="gasstation-preview"
-                    />
-                    <h5 className="ml-2 m-auto">{carDetails.fuelType}</h5>
-                  </div>
-                </div>
-                <div className="col-6 ">
-                  <div className="flex justify-evenly">
-                    <img
-                      style={{ width: "50px", height: "50px" }}
-                      src={mileage}
-                      alt="mileage-preview"
-                    />
-                    <h5 className="ml-2 m-auto">
-                      {carDetails.mileage} km/litre
-                    </h5>
-                  </div>
+              <div className="col-6">
+                <div className="flex justify-evenly">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={gearbox}
+                    alt="gearbox-preview"
+                  />
+                  <h5 className="ml-2 m-auto">{carDetails.gearBoxType}</h5>
                 </div>
               </div>
             </div>
-
+            <div className="row mt-5">
+              <div className="col-6">
+                <div className="flex justify-evenly">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={gasstation}
+                    alt="gasstation-preview"
+                  />
+                  <h5 className="ml-2 m-auto">{carDetails.fuelType}</h5>
+                </div>
+              </div>
+              <div className="col-6 ">
+                <div className="flex justify-evenly">
+                  <img
+                    style={{ width: "50px", height: "50px" }}
+                    src={mileage}
+                    alt="mileage-preview"
+                  />
+                  <h5 className="ml-2 m-auto">{carDetails.mileage} km/litre</h5>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className="container border mt-10 mb-10 flex justify-evenly">
