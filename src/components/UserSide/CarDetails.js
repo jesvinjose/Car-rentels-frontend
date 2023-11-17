@@ -28,7 +28,6 @@ const CarDetails = () => {
   const [numDays, setNumDays] = useState(0); // Number of days between pickup and return
   const dailyRentalRate = carDetails.dailyRentalRate; // Daily rental rate for the car
 
-
   const handlePickupDateChange = (e) => {
     const selectedDate = e.target.value;
     setPickupDate(selectedDate);
@@ -56,7 +55,7 @@ const CarDetails = () => {
 
   const [searchInitiated, setSearchInitiated] = useState(false);
   const [availableCar, setAvailableCar] = useState(false);
-  const [distanceBtwUserandCar,setDistanceBtwUserandCar]=useState(0);
+  const [distanceBtwUserandCar, setDistanceBtwUserandCar] = useState(0);
 
   useEffect(() => {}, [searchInitiated]);
 
@@ -288,7 +287,7 @@ const CarDetails = () => {
   // console.log(carDetails, "---------here is the carDetails");
 
   useEffect(() => {
-    console.log(carDetails,userLocation,"----------car and user");
+    console.log(carDetails, userLocation, "----------car and user");
     if (carDetails && carDetails.carLocation && userLocation) {
       const { longitude: carLongitude, latitude: carLatitude } =
         carDetails.carLocation;
@@ -373,13 +372,12 @@ const CarDetails = () => {
           const distanceInKm = route.distance / 1000; // Distance in kilometers
           console.log("Distance between user and car:", distanceInKm, "km");
           const formattedDistance = distanceInKm.toFixed(2);
-          setDistanceBtwUserandCar(formattedDistance)
+          setDistanceBtwUserandCar(formattedDistance);
         })
         .catch((error) => {
           console.error("Error fetching directions:", error);
         });
     }
-
   }, [carDetails, userLocation]);
 
   return (
@@ -556,7 +554,10 @@ const CarDetails = () => {
           className="col-12 col-md-6 map-container mb-4 border"
           style={{ height: "400px", backgroundColor: "gray", width: "100%" }}
         ></div>
-        <div>Distance between user and car: {distanceBtwUserandCar} km</div>
+        <div className="mb-4">
+          Distance between the User and Car: {distanceBtwUserandCar} km
+        </div>
+        <hr className="mb-4" style={{ borderTop: "1px solid #ccc" }} />
       </div>
     </div>
   );

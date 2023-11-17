@@ -645,20 +645,20 @@ const AllCars = () => {
                     {/* <h1 className="px-2 text-sm">
                       {car.monthlyRentalRate}Rs/month
                     </h1>  */}
-
-                    <button className="border border-black w-28 rounded-lg bg-orange-500-100 hover:bg-orange-800-400 shadow-md">
+                    <button className="border border-black w-28 rounded-lg bg-blue-500 hover:bg-blue-700 shadow-md text-white">
                       {searchInitiated && token ? (
                         <Link
-                          // onClick={() => handleBooking(car._id)}
                           to={`/booking_details?carId=${car._id}&pickupDate=${pickupDate}&returnDate=${returnDate}`}
-                          className="btn_3"
+                          className="btn_3 text-white"
+                          style={{ textDecoration: "none" }}
                         >
                           Book Now
                         </Link>
                       ) : (
                         <Link
                           to={`/car_details?carId=${car._id}`}
-                          className="btn_3"
+                          className="btn_3 text-white"
+                          style={{ textDecoration: "none" }}
                         >
                           View Details
                         </Link>
