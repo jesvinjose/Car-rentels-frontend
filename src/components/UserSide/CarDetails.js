@@ -288,7 +288,7 @@ const CarDetails = () => {
   // console.log(carDetails, "---------here is the carDetails");
 
   useEffect(() => {
-    console.log(carDetails,useLocation,"----------car and user");
+    console.log(carDetails,userLocation,"----------car and user");
     if (carDetails && carDetails.carLocation && userLocation) {
       const { longitude: carLongitude, latitude: carLatitude } =
         carDetails.carLocation;

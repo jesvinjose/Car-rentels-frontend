@@ -8,18 +8,16 @@ import gasstation from "../../assets/gas-station.png";
 import axiosInstance from "../../api/axiosInstance";
 import { Link } from "react-router-dom";
 
-
 const AllCars = () => {
   const [allcars, setAllCars] = useState([]);
   const [search, setSearch] = useState(""); // Search term
   const [carTypes, setCarTypes] = useState([]); // Selected car types
   const [gearTypes, setGearTypes] = useState([]); // Selected gear types
   const [fuelTypes, setFuelTypes] = useState([]);
-  // const [sortPriceLowToHigh, setSortPriceLowToHigh] = useState(false); // Sort by price: low to high
-  // const [sortPriceHighToLow, setSortPriceHighToLow] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [carsPerPage] = useState(6); // Set the number of cars per page
   const [sortTypes, setSortTypes] = useState([]);
+  const [sortTypeForDistance, setSortTypeForDistance] = useState([]);
   const [walletBalance, setWalletBalance] = useState(
     localStorage.getItem("walletBalance")
   );
@@ -27,7 +25,7 @@ const AllCars = () => {
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = allcars.slice(indexOfFirstCar, indexOfLastCar);
-  const token=localStorage.getItem('token')
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     console.log("Updated allcars:", allcars); // Log allcars whenever it changes
@@ -45,17 +43,13 @@ const AllCars = () => {
     console.log("Updated fuelTypes:", fuelTypes); // Log fuelTypes whenever it changes
   }, [fuelTypes]);
 
-  // useEffect(() => {
-  //   console.log("Updated sortPriceLowToHigh:", sortPriceLowToHigh); // Log sortPriceLowToHigh whenever it changes
-  // }, [sortPriceLowToHigh]);
-
-  // useEffect(() => {
-  //   console.log("Updated sortPriceHighToLow:", sortPriceHighToLow);
-  // }, [sortPriceHighToLow]);
-
   useEffect(() => {
     console.log("Updated sortTypes:", sortTypes);
   }, [sortTypes]);
+
+  useEffect(() => {
+    console.log("updated sortTypeForDistance", sortTypeForDistance);
+  }, [sortTypeForDistance]);
 
   // useEffect(() => {
   //   console.log("Updated sortPriceHighToLow:", search);
@@ -64,7 +58,14 @@ const AllCars = () => {
   const handleSearch = async () => {
     try {
       console.log(search, "search in frontend");
-      await handleSelection(search, carTypes, gearTypes, fuelTypes, sortTypes);
+      await handleSelection(
+        search,
+        carTypes,
+        gearTypes,
+        fuelTypes,
+        sortTypes,
+        sortTypeForDistance
+      );
     } catch (error) {
       console.error("Error searching:", error);
     }
@@ -135,7 +136,8 @@ const AllCars = () => {
       carTypes,
       gearTypes,
       updatedFuelTypes,
-      sortTypes
+      sortTypes,
+      sortTypeForDistance
     );
   };
 
@@ -153,7 +155,8 @@ const AllCars = () => {
       carTypes,
       updatedGearTypes,
       fuelTypes,
-      sortTypes
+      sortTypes,
+      sortTypeForDistance
     );
   };
 
@@ -171,7 +174,8 @@ const AllCars = () => {
       updatedCarTypes,
       gearTypes,
       fuelTypes,
-      sortTypes
+      sortTypes,
+      sortTypeForDistance
     );
   };
 
@@ -181,6 +185,9 @@ const AllCars = () => {
       updatedSortTypes = "";
     } else {
       updatedSortTypes = type;
+
+      // Clear the state of the other sort option
+      setSortTypeForDistance("");
     }
     setSortTypes(updatedSortTypes);
     await handleSelection(
@@ -188,6 +195,27 @@ const AllCars = () => {
       carTypes,
       gearTypes,
       fuelTypes,
+      updatedSortTypes,
+      sortTypeForDistance
+    );
+  };
+
+  const handleSortTypeForDistanceChange = async (type) => {
+    let updatedSortTypes = "";
+    if (sortTypeForDistance === type) {
+      updatedSortTypes = "";
+    } else {
+      updatedSortTypes = type;
+      // Clear the state of the other sort option
+      setSortTypes("");
+    }
+    setSortTypeForDistance(updatedSortTypes);
+    await handleSelection(
+      search,
+      carTypes,
+      gearTypes,
+      fuelTypes,
+      sortTypes,
       updatedSortTypes
     );
   };
@@ -197,7 +225,8 @@ const AllCars = () => {
     carTypes,
     gearTypes,
     fuelTypes,
-    sortTypes
+    sortTypes,
+    sortTypeForDistance
   ) => {
     try {
       let url = "/user/allcars"; // Default URL for all cars
@@ -205,10 +234,6 @@ const AllCars = () => {
       if (search) {
         url += `?search=${search}`;
       }
-
-      // Add pickupDate and returnDate to the URL
-      // if(searchInitiated)
-      // url += `?pickupDate=${pickupDate}&returnDate=${returnDate}`;
 
       if (carTypes) {
         url += search ? `&carTypes=${carTypes}` : `?carTypes=${carTypes}`;
@@ -231,7 +256,15 @@ const AllCars = () => {
             ? `&sortTypes=${sortTypes}`
             : `?sortTypes=${sortTypes}`;
       }
-      const response = await axiosInstance.get(url);
+      if (sortTypeForDistance) {
+        url +=
+          search || carTypes || gearTypes || fuelTypes || sortTypes
+            ? `&sortTypeForDistance=${sortTypeForDistance}`
+            : `?sortTypeForDistance=${sortTypeForDistance}`;
+      }
+
+      // Include user's location in the request
+      const response = await axiosInstance.post(url, { userLocation });
       console.log("Response from backend:", response.data);
       if (Array.isArray(response.data)) {
         setAllCars(response.data);
@@ -249,13 +282,10 @@ const AllCars = () => {
     try {
       console.log(pickupDate, returnDate, "inside handleSubmit");
       // Send a POST request to the server to get available cars
-      const response = await axiosInstance.post(
-        "/user/availableCars",
-        {
-          pickupDate,
-          returnDate,
-        }
-      );
+      const response = await axiosInstance.post("/user/availableCars", {
+        pickupDate,
+        returnDate,
+      });
       if (response) {
         // Update the availableCars state with the response data
         setAllCars(response.data);
@@ -283,22 +313,95 @@ const AllCars = () => {
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
-  
+
   const secondDay = new Date(today);
   secondDay.setDate(today.getDate() + 2);
   const nextDay = secondDay.toISOString().split("T")[0];
-  
-  const [pickupDate, setPickupDate] = useState(tomorrow.toISOString().split("T")[0]);
-  const [returnDate, setReturnDate] = useState(nextDay);
-  
-  const [searchInitiated, setSearchInitiated] = useState(false);
 
+  const [pickupDate, setPickupDate] = useState(
+    tomorrow.toISOString().split("T")[0]
+  );
+  const [returnDate, setReturnDate] = useState(nextDay);
+
+  const [searchInitiated, setSearchInitiated] = useState(false);
 
   useEffect(() => {}, [searchInitiated]);
 
+  const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    // Get user's location using Geolocation API
+    const getUserLocation = () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("inside position");
+          const { latitude, longitude } = position.coords;
+          console.log(latitude, "-----------latitude");
+          console.log(longitude, "----------longitude");
+          setUserLocation({ userLongitude: longitude, userLatitude: latitude });
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+        }
+      );
+    };
+    // Call the function to get user's location
+    getUserLocation();
+  }, []);
+
+  console.log(userLocation, "------------users location--------");
+
+  useEffect(() => {
+    // Update the distance for each car when user location or allcars changes
+    allcars.forEach((car) => {
+      const { carLocation, distanceToUser: prevDistance } = car;
+
+      if (userLocation && carLocation) {
+        const { userLongitude, userLatitude } = userLocation;
+        const { longitude: carLongitude, latitude: carLatitude } = carLocation;
+
+        // Calculate the distance between user and car using Mapbox API
+        const directionsRequest = `https://api.mapbox.com/directions/v5/mapbox/driving/${userLongitude},${userLatitude};${carLongitude},${carLatitude}?access_token=pk.eyJ1IjoiamVzdmluam9zZSIsImEiOiJjbG5ha2xmM3AwNWZ1MnFyc3pxczN3aW84In0.1vF_M9hKw9RecdOlyFar2A`;
+
+        axios
+          .get(directionsRequest)
+          .then((response) => {
+            const route = response.data.routes[0];
+            const distanceInKm = route.distance / 1000; // Distance in kilometers
+            const formattedDistance = distanceInKm.toFixed(2);
+
+            // Only update the state and log if the distance has changed
+            if (prevDistance !== formattedDistance) {
+              // Update the car object with the calculated distance
+              car.distanceToUser = formattedDistance;
+
+              // Update the state to trigger a re-render
+              setAllCars((prevCars) =>
+                prevCars.map((prevCar) =>
+                  prevCar._id === car._id
+                    ? { ...prevCar, distanceToUser: formattedDistance }
+                    : prevCar
+                )
+              );
+
+              console.log(allcars, "-----------allcars-");
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching directions:", error);
+          });
+      }
+    });
+  }, [userLocation, allcars]);
+
+  console.log(allcars, "-----------allcars-");
+
   return (
     <div>
-      <Header walletBalance={walletBalance} setWalletBalance={setWalletBalance} />
+      <Header
+        walletBalance={walletBalance}
+        setWalletBalance={setWalletBalance}
+      />
       <div className="border border-black p-4 bg-lime-300 flex flex-col md:flex-row justify-center items-center mt-3">
         <label>Pickup Date:</label>
         <input
@@ -432,7 +535,7 @@ const AllCars = () => {
 
               {/* Sort option */}
               <div className="mb-3">
-                <h5>Sort:</h5>
+                <h5>Sort By Price:</h5>
                 <label>
                   <input
                     type="checkbox"
@@ -448,6 +551,30 @@ const AllCars = () => {
                     onChange={() => handleSortTypeChange("Descending")}
                   />
                   Price: High to Low
+                </label>
+              </div>
+
+              <div className="mb-3">
+                <h5>Sort By Distance:</h5>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={sortTypeForDistance.includes("Ascending")}
+                    onChange={() =>
+                      handleSortTypeForDistanceChange("Ascending")
+                    }
+                  />
+                  Distance: Low to High
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={sortTypeForDistance.includes("Descending")}
+                    onChange={() =>
+                      handleSortTypeForDistanceChange("Descending")
+                    }
+                  />
+                  Distance: High to Low
                 </label>
               </div>
             </div>
@@ -510,7 +637,10 @@ const AllCars = () => {
                       {car.hourlyRentalRate}Rs/hr
                     </h1> */}
                     <h1 className="px-2 text-lg">
-                      Rental-Rate:{car.dailyRentalRate} Rs/day
+                      Rent:{car.dailyRentalRate} Rs/day
+                    </h1>
+                    <h1 className="px-2 text-lg">
+                      Distance from user:{car.distanceToUser} km
                     </h1>
                     {/* <h1 className="px-2 text-sm">
                       {car.monthlyRentalRate}Rs/month
