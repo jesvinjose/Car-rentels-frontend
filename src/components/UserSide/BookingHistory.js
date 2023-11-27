@@ -4,10 +4,11 @@ import axiosInstance from "../../api/axiosInstance";
 import BookingDetailsModal from "./BookingDetailsModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 // import ChatModal from "./ChatContainer"; // Import your ChatModal component
 import ChatContainer from "./ChatContainer";
+import { useSelector } from "react-redux";
 
 const BookingHistory = () => {
   const [bookingData, setBookingData] = useState([]);
@@ -15,6 +16,13 @@ const BookingHistory = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState([]);
   const userId = localStorage.getItem("userId");
+  const userinfo = useSelector((state) => {
+    // console.log(state); // Log the entire state
+    return state.userinfo;
+  });
+  // const userId=userinfo?.userinfo?.userId;
+  console.log(userinfo,"----------userinfo");
+
   const [otp, setOtp] = useState("");
   const [numDays, setNumDays] = useState(0);
   const [date, setDate] = useState(new Date());
@@ -26,10 +34,10 @@ const BookingHistory = () => {
     localStorage.getItem("walletBalance")
   );
 
-  const currentDate = new Date();
+  // const currentDate = new Date();
   const navigate = useNavigate();
 
-  const usertoken = localStorage.getItem("token");
+  // const usertoken = localStorage.getItem("token");
 
   const [error, setError] = useState(null);
 
@@ -51,7 +59,8 @@ const BookingHistory = () => {
 
   const handleSubmit = async () => {
     // console.log("OTP submitted:", otp);
-    const userId = localStorage.getItem("userId");
+    // const userId = localStorage.getItem("userId");
+    const userId=userinfo.userinfo.userId;
     let otpToBeChecked = otp;
     // console.log(carId,"------carId");
     // console.log(userId,"userId");
@@ -93,11 +102,6 @@ const BookingHistory = () => {
 
   const fetchData = async () => {
     try {
-      // const config = {
-      //   headers: {
-      //     Authorization: `Bearer ${usertoken}`, // Set the token in the headers
-      //   },
-      // };
       setIsLoading(true);
       console.log(isLoading);
       const response = await axiosInstance.get(
@@ -126,11 +130,6 @@ const BookingHistory = () => {
   const handleCancel = async (id) => {
     console.log(id, "-----bookingId");
     try {
-      // const config = {
-      //   headers: {
-      //     Authorization: `Bearer ${usertoken}`, // Set the token in the headers
-      //   },
-      // };
       const response = await axiosInstance.get(
         `/user/cancelbooking_user_side/${id}`
         // config
@@ -160,6 +159,7 @@ const BookingHistory = () => {
         const updatedBalance = response.data.walletBalance;
         // Update the wallet balance in local storage
         localStorage.setItem("walletBalance", updatedBalance);
+        
         // Update the wallet balance in state
         setWalletBalance(updatedBalance);
       }
@@ -239,10 +239,7 @@ const BookingHistory = () => {
 
   return (
     <div>
-      <Header
-        walletBalance={walletBalance}
-        setWalletBalance={setWalletBalance}
-      />
+      <Header/>
       <ToastContainer />
       {isLoading ? (
         <div className="flex items-center justify-center h-screen">
@@ -389,14 +386,14 @@ const BookingHistory = () => {
                   <div className="mt-5 flex justify-center">
                     <button
                       className="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md mr-3 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      disabled={currentPage == 1}
+                      disabled={currentPage === 1}
                       onClick={handlePrevPage}
                     >
                       Prev
                     </button>
                     <button
                       className="px-3 py-2 text-sm font-medium text-gray-800 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
-                      disabled={currentPage == totalPages}
+                      disabled={currentPage === totalPages}
                       onClick={handleNextPage}
                     >
                       Next

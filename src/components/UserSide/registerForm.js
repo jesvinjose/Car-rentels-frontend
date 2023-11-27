@@ -1,7 +1,6 @@
 //RegisterForm.js
 
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import bgImage from "../../assets/signUpbackgroundImage.jpg";
@@ -245,54 +244,3 @@ function RegisterForm() {
 }
 
 export default RegisterForm;
-
-// <div>
-//       <h1>Register</h1>
-//       <form onSubmit={handleLogin}>
-//         <input
-//           type="string"
-//           placeholder="First Name"
-//           value={firstName}
-//           onChange={(e) => setFirstName(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="string"
-//           placeholder="Last Name"
-//           value={lastName}
-//           onChange={(e) => setLastName(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="password"
-//           placeholder="Confirm Password"
-//           value={confirmPassword}
-//           onChange={(e) => setConfirmPassword(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="email"
-//           placeholder="Email"
-//           value={emailId}
-//           onChange={(e) => setEmail(e.target.value)}
-//           required
-//         />
-//         <input
-//           type="Number"
-//           placeholder="Mobile Number"
-//           value={mobileNumber}
-//           onChange={(e) => setMobileNumber(e.target.value)}
-//           required
-//         />
-
-//         <button type="submit">Register</button>
-//       </form>
-//     </div>
-//   );

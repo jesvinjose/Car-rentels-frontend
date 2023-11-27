@@ -76,6 +76,7 @@ function App() {
             path="/bookingslist"
             element={<PrivateRoutesVendorSide Component={BookingsList} />}
           />
+          
           <Route
             path="/booking_history"
             element={<PrivateRoutes Component={BookingHistory} />}

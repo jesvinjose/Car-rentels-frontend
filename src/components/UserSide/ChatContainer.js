@@ -5,6 +5,7 @@ import socketIOClient from "socket.io-client";
 import ChatBoxReciever, { ChatBoxSender } from "./ChatBox";
 import InputText from "./InputText";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
   // let socketio = socketIOClient("http://localhost:5000");
@@ -15,7 +16,12 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
   // const { bookingId, userId, vendorId } = useParams();
 
   const [messageList, setMessageList] = useState([]);
-  const currentUserId = localStorage.getItem("userId");
+  const userinfo = useSelector((state) => {
+    // console.log(state); // Log the entire state
+    return state.userinfo;
+  });
+  // const currentUserId = localStorage.getItem("userId");
+  const currentUserId=userinfo.userinfo.userId;
   const [messageTriger, setMessageTriger] = useState(new Date());
 
   useEffect(() => {
@@ -59,6 +65,7 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
         style={chatListStyles} ref={chatContainerRef}
       >
         {messageList?.map((chat, index) => {
+          console.log(chat.timestamp);
           if (chat.sender === currentUserId) {
             return (
               <ChatBoxSender
@@ -83,6 +90,12 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
         })}
       </div>
     );
+
+
+    
+    
+    
+    
   }
 
   const [message, setMessage] = useState("");

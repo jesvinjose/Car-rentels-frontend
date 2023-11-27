@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 
-// const axiosInstance = axios.create({
-//   baseURL: 'http://localhost:5000', // Replace with your actual base URL
-// });
-
 const axiosInstance = axios.create({
-  baseURL: 'https://www.car-rentals.shop', // Replace with your actual base URL
+  baseURL: 'http://localhost:5000', // Replace with your actual base URL
 });
+
+// const axiosInstance = axios.create({
+//   baseURL: 'https://www.car-rentals.shop', // Replace with your actual base URL
+// });
 
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -32,7 +32,6 @@ axiosInstance.interceptors.response.use(
       toast.error(`${error.response.data.message}`,{position:toast.POSITION.TOP_CENTER})
       localStorage.removeItem('token')
       window.location.href = '/login';
-
     }
     else{
       toast.error(`${error.response.data.message}`,{position:toast.POSITION.TOP_CENTER})

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import bgImage from "../../assets/signUpbackgroundImage.jpg";
 import logo from "../../assets/logo-1.png";
 import { useLocation } from "react-router-dom";
@@ -17,14 +15,6 @@ const PasswordReset = () => {
     event.preventDefault();
     console.log(password);
     console.log(confirmPassword);
-    // const response = await axios.post(
-    //   "http://localhost:5000/user/confirmPasswordReset",
-    //   {
-    //     emailId,
-    //     password,
-    //     confirmPassword,
-    //   }
-    // );
     const response = await axiosInstance.post("/user/confirmPasswordReset", {
       emailId,
       password,

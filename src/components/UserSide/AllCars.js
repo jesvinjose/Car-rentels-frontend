@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.css"; // Import Font Awesome CSS
 import categoryicon from "../../assets/categoryicon.png";
@@ -18,14 +19,23 @@ const AllCars = () => {
   const [carsPerPage] = useState(6); // Set the number of cars per page
   const [sortTypes, setSortTypes] = useState([]);
   const [sortTypeForDistance, setSortTypeForDistance] = useState([]);
-  const [walletBalance, setWalletBalance] = useState(
-    localStorage.getItem("walletBalance")
-  );
 
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = allcars.slice(indexOfFirstCar, indexOfLastCar);
   const token = localStorage.getItem("token");
+  // console.log(token,"----------token from local storage");
+  // const userinfo = useSelector((state) => state.userinfo);
+  // Add this console.log to see the entire Redux state in your component
+  const userinfo = useSelector((state) => {
+    // console.log(state); // Log the entire state
+    return state.userinfo;
+  });
+  
+
+  // const token = userinfo &&  userinfo?.userinfo?.token;
+  console.log(userinfo,"----------from redux------------")
+  // console.log(token, "----------token from redux------------");
 
   useEffect(() => {
     console.log("Updated allcars:", allcars); // Log allcars whenever it changes
@@ -398,10 +408,7 @@ const AllCars = () => {
 
   return (
     <div>
-      <Header
-        walletBalance={walletBalance}
-        setWalletBalance={setWalletBalance}
-      />
+      <Header />
       <div className="border border-black p-4 bg-lime-300 flex flex-col md:flex-row justify-center items-center mt-3">
         <label>Pickup Date:</label>
         <input

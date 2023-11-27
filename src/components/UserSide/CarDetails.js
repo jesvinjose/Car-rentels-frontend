@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
-import SearchBar from "./SeachBar";
 import carseat from "../../assets/car-seat.png";
 import gearbox from "../../assets/gearbox.png";
 import gasstation from "../../assets/gas-station.png";
@@ -17,9 +16,6 @@ import polyline from "@mapbox/polyline";
 
 const CarDetails = () => {
   const [carDetails, setCarDetails] = useState([]);
-  const [walletBalance, setWalletBalance] = useState(
-    localStorage.getItem("walletBalance")
-  );
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const carId = searchParams.get("carId");
@@ -212,19 +208,11 @@ const CarDetails = () => {
 
   const handleSubmit = async (pickupDate, returnDate, carId) => {
     console.log(pickupDate, "pickupDate+++", carId);
-    console.log(typeof pickupDate);
+    // console.log(typeof pickupDate);
     setSearchInitiated(true); // Set search initiated flag to true
     try {
       console.log(pickupDate, returnDate, "inside handleSubmit");
       // Send a POST request to the server to get available cars
-      // const response = await axios.post(
-      //   "http://localhost:5000/user/check_car_availability",
-      //   {
-      //     pickupDate,
-      //     returnDate,
-      //     carId,
-      //   }
-      // );
       const response = await axiosInstance.post(
         "/user/check_car_availability",
         {
@@ -267,24 +255,6 @@ const CarDetails = () => {
       fetchCarDetails();
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (carDetails && carDetails.carLocation) {
-  //     const { longitude, latitude } = carDetails.carLocation;
-
-  //     const map = new mapboxgl.Map({
-  //       container: "map",
-  //       style: "mapbox://styles/jesvinjose/cln9szz4n03hz01r4clrd2gx3",
-  //       // style: "mapbox://styles/jesvinjose/cloppcklg00ib01nz83kvdfdn",
-  //       center: [longitude, latitude],
-  //       zoom: 12,
-  //     });
-
-  //     // Add a marker at the car's location
-  //     new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
-  //   }
-  // }, [carDetails]);
-  // console.log(carDetails, "---------here is the carDetails");
 
   useEffect(() => {
     console.log(carDetails, userLocation, "----------car and user");

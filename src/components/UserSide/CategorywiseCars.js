@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
-import axios from "axios";
 import { useLocation } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import categoryicon from "../../assets/categoryicon.png";
@@ -14,10 +13,6 @@ const CategorywiseCars = () => {
   const [categorycars, setCategoryCars] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [carsPerPage] = useState(6); // Set the number of cars per page
-  const [walletBalance, setWalletBalance] = useState(
-    localStorage.getItem("walletBalance")
-  );
-
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = categorycars.slice(indexOfFirstCar, indexOfLastCar);
@@ -26,9 +21,8 @@ const CategorywiseCars = () => {
     // Make API request to fetch cars based on the category
     const fetchCars = async () => {
       try {
-        // const response = await axios.get(`http://localhost:5000/user/car_list?category=${category}`);
         const response = await axiosInstance.get(
-          `/user//car_list?category=${category}`
+          `/user/car_list?category=${category}`
         );
         setCategoryCars(response.data);
       } catch (error) {
@@ -52,18 +46,15 @@ const CategorywiseCars = () => {
 
   const renderPageNumbers = pageNumbers.map((number) => (
     <li key={number} className="page-item">
-      <a onClick={() => paginate(number)} className="page-link" href="#">
+      <button onClick={() => paginate(number)} className="page-link">
         {number}
-      </a>
+      </button>
     </li>
   ));
 
   return (
     <div>
-      <Header
-        walletBalance={walletBalance}
-        setWalletBalance={setWalletBalance}
-      />
+      <Header />
       <div
         style={{
           width: "100%",

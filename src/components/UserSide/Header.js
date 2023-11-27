@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSolidUserCircle } from "react-icons/bi";
+import { clearuserinfo } from '../../redux/actions/ClearUserinfoAction';
+import {useDispatch } from 'react-redux';
 import logo from "../../assets/logo-1.png";
+
 const Header = () => {
+  const dispatch = useDispatch()
   // const [userId,setUserId]=useState(localStorage.getItem("userId"))
   const token = localStorage.getItem("token");
   const firstName = localStorage.getItem("firstName");
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
   const handleLogout = (e) => {
+    dispatch(clearuserinfo())
     document.cookie = "userToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT"; // Clear cookie
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");

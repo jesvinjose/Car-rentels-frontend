@@ -9,7 +9,6 @@ import LoadingSpinner from "./LoadingSpinner";
 const Profile = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
-  const usertoken = localStorage.getItem("token");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
 
@@ -184,15 +183,16 @@ const Profile = () => {
                   {profileImagePreview ? (
                     <img
                       src={profileImagePreview}
-                      alt="Profile Image Preview"
+                      alt="Profile Preview"
                       style={{ maxWidth: "100%", maxHeight: "200px" }}
-                    />
+                    /> 
                   ) : (
                     <div>
-                      <img
-                        src="http://bootdey.com/img/Content/avatar/avatar1.png"
+                      {/* <img
+                        // src="http://bootdey.com/img/Content/avatar/avatar1.png"
                         alt="Default Profile Image"
-                      />
+                      /> */}
+                      <LoadingSpinner />
                     </div>
                   )}
 
@@ -366,7 +366,7 @@ const Profile = () => {
                       {dlFrontImagePreview && (
                         <img
                           src={dlFrontImagePreview}
-                          alt="DL Front Image Preview"
+                          alt="DL Front Preview"
                           style={{ maxWidth: "100%", maxHeight: "200px" }}
                         />
                       )}
@@ -385,7 +385,7 @@ const Profile = () => {
                       {dlBackImagePreview && (
                         <img
                           src={dlBackImagePreview}
-                          alt="DL Back Image Preview"
+                          alt="DL Back Preview"
                           style={{ maxWidth: "100%", maxHeight: "200px" }}
                         />
                       )}
@@ -406,7 +406,7 @@ const Profile = () => {
                       {aadharFrontImagePreview && (
                         <img
                           src={aadharFrontImagePreview}
-                          alt="Aadhar Front Image Preview"
+                          alt="Aadhar Front Preview"
                           style={{ maxWidth: "100%", maxHeight: "200px" }}
                         />
                       )}
@@ -425,7 +425,7 @@ const Profile = () => {
                       {aadharBackImagePreview && (
                         <img
                           src={aadharBackImagePreview}
-                          alt="Profile Image Preview"
+                          alt="Profile Preview"
                           style={{ maxWidth: "100%", maxHeight: "200px" }}
                         />
                       )}
