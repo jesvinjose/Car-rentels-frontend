@@ -20,8 +20,8 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
     // console.log(state); // Log the entire state
     return state.userinfo;
   });
-  // const currentUserId = localStorage.getItem("userId");
-  const currentUserId=userinfo.userinfo.userId;
+  const currentUserId = localStorage.getItem("userId");
+  // const currentUserId=userinfo.userinfo.userId;
   const [messageTriger, setMessageTriger] = useState(new Date());
 
   useEffect(() => {
