@@ -14,14 +14,16 @@ const BookingHistory = () => {
   const [bookingData, setBookingData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [error, setError] = useState(null);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState([]);
+  const [walletBalance, setWalletBalance] = useState(0);
   const userId = localStorage.getItem("userId");
   const userinfo = useSelector((state) => {
     // console.log(state); // Log the entire state
     return state.userinfo;
   });
   // const userId=userinfo?.userinfo?.userId;
-  console.log(userinfo,"----------userinfo");
+  console.log(userinfo, "----------userinfo");
 
   const [otp, setOtp] = useState("");
   const [numDays, setNumDays] = useState(0);
@@ -30,16 +32,11 @@ const BookingHistory = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [walletBalance, setWalletBalance] = useState(
-    localStorage.getItem("walletBalance")
-  );
 
   // const currentDate = new Date();
   const navigate = useNavigate();
 
   // const usertoken = localStorage.getItem("token");
-
-  const [error, setError] = useState(null);
 
   const bookingId =
     selectedBookingDetails.length > 0
@@ -60,7 +57,7 @@ const BookingHistory = () => {
   const handleSubmit = async () => {
     // console.log("OTP submitted:", otp);
     // const userId = localStorage.getItem("userId");
-    const userId=userinfo.userinfo.userId;
+    const userId = userinfo.userinfo.userId;
     let otpToBeChecked = otp;
     // console.log(carId,"------carId");
     // console.log(userId,"userId");
@@ -159,7 +156,7 @@ const BookingHistory = () => {
         const updatedBalance = response.data.walletBalance;
         // Update the wallet balance in local storage
         localStorage.setItem("walletBalance", updatedBalance);
-        
+
         // Update the wallet balance in state
         setWalletBalance(updatedBalance);
       }
@@ -172,10 +169,9 @@ const BookingHistory = () => {
   const handleViewBookingDetails = async (bookingid) => {
     setIsModalOpen(true);
     // console.log("inside view Details before response", bookingData);
-    const fullBookingDetails = bookingData?.filter((item) => {
-      // console.log("item is ",item)
-      if (item.bookingId === bookingid) return item;
-    });
+    const fullBookingDetails = bookingData?.find(
+      (item) => item.bookingId === bookingid
+    );
     console.log(fullBookingDetails);
     setSelectedBookingDetails(fullBookingDetails);
     console.log(selectedBookingDetails, "transferred to modal");
@@ -239,7 +235,7 @@ const BookingHistory = () => {
 
   return (
     <div>
-      <Header/>
+      <Header />
       <ToastContainer />
       {isLoading ? (
         <div className="flex items-center justify-center h-screen">

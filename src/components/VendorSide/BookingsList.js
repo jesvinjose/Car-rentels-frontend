@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import VendorHeader from "./VendorHeader";
 import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import ChatContainerVendorSide from "./ChatContainerVendorSide";
 
 const BookingDetailsModal = ({
@@ -20,12 +19,7 @@ const BookingDetailsModal = ({
   setOtp,
   navigate,
 }) => {
-  // console.log(
-  //   selectedBookingDetails,
-  //   otpAvailable,
-  // ">>>>>>>>>y=userrrrrrrrrrrrrrrrrrrrrr>>>>>>>>>>>>.."
-  // );
-
+ 
   useEffect(() => {}, [selectedBookingDetails]);
 
   // Check if bookingDetails is defined and not empty
@@ -49,7 +43,7 @@ const BookingDetailsModal = ({
               <img
                 // src={firstBookingDetail?.carImage}
                 src={firstBookingDetail.car.carImage}
-                alt="Car Image"
+                alt="Car"
                 style={{ maxWidth: "100%", maxHeight: "100px" }}
               />
             </p>
@@ -57,7 +51,7 @@ const BookingDetailsModal = ({
               <strong>RC Image</strong>
               <img
                 src={firstBookingDetail.car.rcImage}
-                alt="RC Image"
+                alt="RC"
                 style={{ maxWidth: "100%", maxHeight: "100px" }}
               />
             </p>
@@ -137,6 +131,7 @@ const BookingDetailsModal = ({
 const BookingsList = () => {
   const [bookingData, setBookingData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState(null);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState(null);
   const [otpAvailable, setOtpAvailable] = useState(false);
@@ -147,12 +142,9 @@ const BookingsList = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const vendorToken = localStorage.getItem("vendorToken");
-
   const firstBookingDetail = selectedBookingDetails
     ? selectedBookingDetails[0]
     : null;
-  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setOtp(e.target.value);
@@ -181,8 +173,6 @@ const BookingsList = () => {
     let bookingId = firstBookingDetail._id;
     let carId = firstBookingDetail.carId;
     let userId = firstBookingDetail.bookingHistory[0].userId;
-    console.log(userId, "00userId");
-    console.log(bookingId, "-----bookingId-");
     try {
       const response = await axiosInstanceforVendor.post(
         `/vendor/check_user_and_deliver_vehicle`,
@@ -470,14 +460,14 @@ const BookingsList = () => {
                 <div>
                   <button
                     className="ml-5"
-                    disabled={currentPage == 1}
+                    disabled={currentPage === 1}
                     onClick={handlePrevPage}
                   >
                     Prev
                   </button>
                   <button
                     className="ml-10"
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     onClick={handleNextPage}
                   >
                     Next

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import AdminHeader from "./AdminHeader";
 
@@ -9,49 +8,7 @@ const VendorDetailsModal = ({
   vendorData,
   setVendorData,
 }) => {
-  // console.log(
-  //   vendorDetails,
-  //   ">>>>>>>>>y=userrrrrrrrrrrrrrrrrrrrrr>>>>>>>>>>>>.."
-  // );
-  const handleAccept = async (id) => {
-    console.log("vendorId:" + id);
-    console.log("inside handle Accept");
-    const res = await axiosInstanceforAdmin.put(
-      `/admin/vendorVerificationAccept/${id}`
-    );
-    console.log(res, "return response");
-    if (res.data.message === "Vendor Account is Accepted") {
-      // setUserData()
-      const updatedVendorData = vendorData.map((vendor) => {
-        if (vendor._id === id) {
-          return { ...vendor, verificationStatus: "Approved" };
-        }
-        return vendor;
-      });
-      setVendorData(updatedVendorData);
-      console.log("vendor is verified successfully by the admin");
-    }
-  };
-
-  const handleReject = async (id) => {
-    console.log("vendorId:" + id);
-    console.log("inside handle Reject");
-    const res = await axiosInstanceforAdmin.put(
-      `/admin/vendorVerificationReject/${id}`
-    );
-    console.log(res, "return response");
-    if (res.data.message === "Vendor Account is Rejected") {
-      const updatedVendorData = vendorData.map((vendor) => {
-        if (vendor._id === id) {
-          return { ...vendor, verificationStatus: "Rejected" };
-        }
-        return vendor;
-      });
-      setVendorData(updatedVendorData);
-      console.log("vendor is rejected successfully by the admin");
-    }
-  };
-
+ 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4">
@@ -189,11 +146,7 @@ const VendorsList = () => {
     //   },
     // };
     console.log("Handling block for vendor with id:", id);
-    const res = await axiosInstanceforAdmin.put(
-      `/admin/vendorblock/${id}`,
-      null
-      // config
-    );
+   
     console.log(id);
 
     // console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -212,14 +165,8 @@ const VendorsList = () => {
     //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
     //   },
     // };
-    const resss = await axiosInstanceforAdmin.put(
-      `/admin/vendorunblock/${id}`,
-      null
-      // config
-    );
+   
     console.log(id);
-
-    console.log(resss, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
     const updatedVendor = vendorData.map((i) =>
       i._id === id ? { ...i, blockStatus: false } : i
@@ -343,14 +290,14 @@ const VendorsList = () => {
                 <div>
                   <button
                     className="ml-5"
-                    disabled={currentPage == 1}
+                    disabled={currentPage === 1}
                     onClick={handlePrevPage}
                   >
                     Prev
                   </button>
                   <button
                     className="ml-10"
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     onClick={handleNextPage}
                   >
                     Next

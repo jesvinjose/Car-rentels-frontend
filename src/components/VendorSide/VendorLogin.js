@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -11,11 +11,8 @@ import jwt_decode from "jwt-decode";
 import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 
 function VendorLogin() {
-  const vendorId = localStorage.getItem("vendorId");
   useEffect(() => {
-    // if (!vendorId) {
-    //   navigate("/vendorlogin");
-    // }
+
     const urlParams = new URLSearchParams(window.location.search).get(
       "redirectFrom"
     );

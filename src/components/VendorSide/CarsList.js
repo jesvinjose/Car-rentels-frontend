@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 import VendorHeader from "./VendorHeader";
 import { Link, useParams } from "react-router-dom";

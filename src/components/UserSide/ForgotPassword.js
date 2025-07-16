@@ -1,6 +1,5 @@
 import React,{useState} from 'react';
 import bgImage from '../../assets/signUpbackgroundImage.jpg'
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 const ForgotPassword = () => {

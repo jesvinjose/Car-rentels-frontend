@@ -20,9 +20,6 @@ const BookingInfo = () => {
   const carId = searchParams.get("carId");
   const pickupDate = searchParams.get("pickupDate");
   const returnDate = searchParams.get("returnDate");
-  const [walletBalance, setWalletBalance] = useState(
-    localStorage.getItem("walletBalance")
-  );
 
   const [distanceBtwUserandCar, setDistanceBtwUserandCar] = useState(0);
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import axiosInstanceforAdmin from '../../api/axiosInstanceforAdmin';
 import AdminHeader from './AdminHeader';
 import { useNavigate } from 'react-router-dom';

@@ -1,11 +1,7 @@
-import { useState } from "react";
 import DayChangeEffect from "./DayChangeEffect";
-import axios from "axios";
 import logo from "../../assets/logo-1.png";
-import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+
 
 const BookingDetailsModal = ({
   selectedBookingDetails,
@@ -161,7 +157,7 @@ const BookingDetailsModal = ({
             <strong>Car Image</strong>
             <img
               src={firstBookingDetail?.carImage}
-              alt="Car Image"
+              alt="Car"
               className="max-w-full max-h-48 md:max-h-100"
             />
           </p>
@@ -169,7 +165,7 @@ const BookingDetailsModal = ({
             <strong>RC Image</strong>
             <img
               src={firstBookingDetail?.rcImage}
-              alt="RC Image"
+              alt="RC"
               className="max-w-full max-h-48 md:max-h-100"
             />
           </p>

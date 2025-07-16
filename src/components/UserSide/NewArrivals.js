@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Link } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import categoryicon from "../../assets/categoryicon.png";
 import gearbox from "../../assets/gearbox.png";

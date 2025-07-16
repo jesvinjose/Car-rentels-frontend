@@ -1,6 +1,5 @@
 import React,{useState} from 'react';
 import bgImage from '../../assets/ownacar.png'
-import axios from 'axios';
 import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 import { useNavigate } from 'react-router-dom';
 

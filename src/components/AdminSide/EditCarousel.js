@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import AdminHeader from "./AdminHeader";
 import { useParams, useNavigate } from "react-router-dom";
@@ -10,7 +9,6 @@ const EditCarousel = () => {
   const navigate = useNavigate();
 
   const [carouselDetails, setCarouselDetails] = useState({});
-  const adminToken = localStorage.getItem("adminToken");
 
   useEffect(() => {
     fetchData();

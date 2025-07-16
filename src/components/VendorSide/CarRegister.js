@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 // import * as React from "react";
-import axios from "axios";
 import VendorHeader from "./VendorHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
@@ -44,9 +43,6 @@ const CarRegister = () => {
     longitude: 77.594566,
   });
   const navigate = useNavigate();
-
-  const vendortoken = localStorage.getItem("vendorToken");
-
   const handleModelNameChange = (e) => {
     setModelName(e.target.value);
     console.log(modelName, "modelName");

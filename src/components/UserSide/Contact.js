@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Header from "./Header";
-import axios from "axios";
 import { useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 
@@ -12,8 +11,7 @@ const Contact = () => {
 
 
   useEffect(() => {
-    // Move this code inside the useEffect hook to ensure it runs after the component is mounted
-    const messageContainer = document.getElementById("message-container");
+  
 
     // Ensure that the elements are present before accessing their properties
     const loading = document.querySelector(".loading");
@@ -30,9 +28,6 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const form = document.querySelector(".php-email-form"); // Move the form selection inside the handleSubmit function
-    // const formData = new FormData(form); // Pass the HTML form element to the FormData constructor
-
     const formData={
       name:name,
       email:email,
@@ -45,8 +40,6 @@ const Contact = () => {
 
     try {
       const response = await axiosInstance.post("/user/submit-message", formData); // Pass formData directly
-
-      const data = await response.data;
 
       if (response.status >= 200 && response.status < 300) {
         // If the response status is in the 200s (success), show the success message.

@@ -14,7 +14,6 @@ import VendorVerifyOTP from "./components/VendorSide/VendorVerifyOTP";
 import VendorLogin from "./components/VendorSide/VendorLogin";
 import VendorHome from "./components/VendorSide/VendorHome";
 import VendorsList from "./components/AdminSide/VendorsList";
-import UserProfile from "./components/UserSide/UserProfile";
 import ForgotPassword from "./components/UserSide/ForgotPassword";
 import VerifyOTP4PasswordReset from "./components/UserSide/VerifyOTP4PasswordReset";
 import PasswordReset from "./components/UserSide/PasswordReset";
@@ -54,7 +53,6 @@ import Profile from "./components/UserSide/Profile";
 
 
 function App() {
-  const vendorId = localStorage.getItem("vendorId");
 
   return (
     <div className="App">

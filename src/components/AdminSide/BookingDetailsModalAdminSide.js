@@ -16,7 +16,7 @@ const BookingDetailsModalAdminSide = ({
             <strong>Car Image</strong>
             <img
               src={selectedBookingDetails[0]?.carImage}
-              alt="Car Image"
+              alt="Carlogo"
               className="max-w-full max-h-100"
             />
           </div>
@@ -24,7 +24,7 @@ const BookingDetailsModalAdminSide = ({
             <strong>RC Image</strong>
             <img
               src={selectedBookingDetails[0].rcImage}
-              alt="RC Image"
+              alt="RC"
               className="max-w-full max-h-100"
             />
           </div>
@@ -35,7 +35,7 @@ const BookingDetailsModalAdminSide = ({
             <strong>Vendor Adhar Front Image</strong>
             <img
               src={selectedBookingDetails[0]?.aadharFrontImage}
-              alt="Vendor Aadhar Front Image"
+              alt="Vendor Aadhar Front"
               className="max-w-full max-h-100"
             />
           </div>
@@ -43,7 +43,7 @@ const BookingDetailsModalAdminSide = ({
             <strong>Vendor Adhar Back Image</strong>
             <img
               src={selectedBookingDetails[0].aadharBackImage}
-              alt="Vendor Aadhar Back Image"
+              alt="Vendor Aadhar Back"
               className="max-w-full max-h-100"
             />
           </div>

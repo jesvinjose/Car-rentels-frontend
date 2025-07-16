@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AdminHeader from "./AdminHeader";
-import axios from "axios";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 
 const CarouselList = () => {
   const navigate = useNavigate();
@@ -230,14 +228,14 @@ const CarouselList = () => {
                 <div>
                   <button
                     className="ml-5"
-                    disabled={currentPage == 1}
+                    disabled={currentPage === 1}
                     onClick={handlePrevPage}
                   >
                     Prev
                   </button>
                   <button
                     className="ml-10"
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     onClick={handleNextPage}
                   >
                     Next

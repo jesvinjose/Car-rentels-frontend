@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import axiosInstance from "../../api/axiosInstance";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const SearchBar = ({ handleSubmit }) => {
   const today = new Date().toISOString().split("T")[0];

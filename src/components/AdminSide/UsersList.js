@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import AdminHeader from "./AdminHeader";
 
@@ -14,44 +13,6 @@ const UserDetailsModal = ({
   //   ">>>>>>>>>y=userrrrrrrrrrrrrrrrrrrrrr>>>>>>>>>>>>.."
   // );
   // const [userData, setUserData] = useState(userDetails[0]);
-  const handleAccept = async (id) => {
-    console.log("userId:" + id);
-    console.log("inside handle Accept");
-    const res = await axiosInstanceforAdmin.put(
-      `/admin/userVerificationAccept/${id}`
-    );
-    console.log(res, "return response");
-    if (res.data.message === "User Account is Accepted") {
-      // setUserData()
-      const updatedUserData = userData.map((user) => {
-        if (user._id === id) {
-          return { ...user, verificationStatus: "Approved" };
-        }
-        return user;
-      });
-      setUserData(updatedUserData);
-      console.log("user is verified successfully by the admin");
-    }
-  };
-
-  const handleReject = async (id) => {
-    console.log("userId:" + id);
-    console.log("inside handle Reject");
-    const res = await axiosInstanceforAdmin.put(
-      `/admin/userVerificationReject/${id}`
-    );
-    console.log(res, "return response");
-    if (res.data.message === "User Account is Rejected") {
-      const updatedUserData = userData.map((user) => {
-        if (user._id === id) {
-          return { ...user, verificationStatus: "Rejected" };
-        }
-        return user;
-      });
-      setUserData(updatedUserData);
-      console.log("user is rejected successfully by the admin");
-    }
-  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -161,8 +122,6 @@ const UsersList = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const adminToken = localStorage.getItem("adminToken");
-
   // console.log(userData,"------------full Users--------------");
   useEffect(() => {
     // const config = {
@@ -214,11 +173,7 @@ const UsersList = () => {
     //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
     //   },
     // };
-    const res = await axiosInstanceforAdmin.put(
-      `/admin/userblock/${id}`,
-      null
-      // config
-    );
+
     console.log(id);
 
     // console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -237,11 +192,7 @@ const UsersList = () => {
     //     Authorization: `Bearer ${adminToken}`, // Set the token in the headers
     //   },
     // };
-    const resss = await axiosInstanceforAdmin.put(
-      `/admin/userunblock/${id}`,
-      null
-      // config
-    );
+
     console.log(id);
 
     // console.log(resss, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -366,14 +317,14 @@ const UsersList = () => {
                 <div>
                   <button
                     className="ml-5"
-                    disabled={currentPage == 1}
+                    disabled={currentPage === 1}
                     onClick={handlePrevPage}
                   >
                     Prev
                   </button>
                   <button
                     className="ml-10"
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     onClick={handleNextPage}
                   >
                     Next

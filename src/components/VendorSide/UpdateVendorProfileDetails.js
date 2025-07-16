@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import axiosInstanceforVendor from '../../api/axiosInstanceforVendor'
 
 const UpdateVendorProfileDetails = ({ vendorId, vendorData }) => {
@@ -15,8 +14,6 @@ const UpdateVendorProfileDetails = ({ vendorId, vendorData }) => {
     aadharFrontImage: vendorData.aadharFrontImage,
     aadharBackImage: vendorData.aadharBackImage,
   });
-
-  const vendortoken=localStorage.getItem('vendorToken')
 
   // Add state properties to hold image previews
   const [aadharFrontImagePreview, setAadharFrontImagePreview] = useState(

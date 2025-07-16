@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 // const axiosInstanceforVendor = axios.create({
 //   baseURL: 'https://www.car-rentals.shop', // Replace with your actual base URL

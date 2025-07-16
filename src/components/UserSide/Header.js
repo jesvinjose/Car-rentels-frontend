@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { clearuserinfo } from '../../redux/actions/ClearUserinfoAction';

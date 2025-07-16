@@ -1,12 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const VendorHeader = () => {
   const vendorToken = localStorage.getItem("vendorToken");
   const vendorFirstName = localStorage.getItem("vendorFirstName");
-  const vendorLastName = localStorage.getItem("vendorLastName");
-  const vendorEmailId = localStorage.getItem("vendorEmailId");
   const vendorId = localStorage.getItem("vendorId");
   // const { vendorId } = useParams();
 

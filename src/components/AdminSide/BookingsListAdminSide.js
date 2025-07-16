@@ -5,21 +5,19 @@ import BookingDetailsModalAdminSide from "./BookingDetailsModalAdminSide";
 
 const BookingsListAdminSide = () => {
   const [bookingData, setBookingData] = useState([]);
-  const [error, setError] = useState(null);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState([]);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
-
 
   const handleViewBookingDetails = async (bookingid) => {
     console.log("inside handleViewBookingDetails");
     setIsModalOpen(true);
     // console.log("inside view Details before response", bookingData);
-    const fullBookingDetails = bookingData?.filter((item) => {
-      // console.log("item is ",item)
-      if (item.bookingId === bookingid) return item;
-    });
+    const fullBookingDetails = bookingData?.find(
+      (item) => item.bookingId === bookingid
+    );
     console.log(fullBookingDetails);
     setSelectedBookingDetails(fullBookingDetails);
     console.log(selectedBookingDetails, "transferred to modal");
@@ -30,7 +28,6 @@ const BookingsListAdminSide = () => {
     setSelectedBookingDetails([]);
   };
 
-  const adminToken = localStorage.getItem("adminToken");
   const adminEmailId = localStorage.getItem("adminEmailId");
 
   useEffect(() => {
@@ -76,7 +73,6 @@ const BookingsListAdminSide = () => {
     const endIndex = startIndex + itemsPerPage;
     return index >= startIndex && index < endIndex;
   });
-
 
   console.log(bookingData, "-------bookingData");
 
@@ -183,14 +179,14 @@ const BookingsListAdminSide = () => {
                 <div>
                   <button
                     className="ml-5"
-                    disabled={currentPage == 1}
+                    disabled={currentPage === 1}
                     onClick={handlePrevPage}
                   >
                     Prev
                   </button>
                   <button
                     className="ml-10"
-                    disabled={currentPage == totalPages}
+                    disabled={currentPage === totalPages}
                     onClick={handleNextPage}
                   >
                     Next
