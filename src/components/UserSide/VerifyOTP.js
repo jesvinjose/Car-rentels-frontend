@@ -1,9 +1,10 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import bgImage from "../../assets/signUpbackgroundImage.jpg";
 import axiosInstance from '../../api/axiosInstance'
+
 function VerifyOTP() {
   const location = useLocation();
   const {
@@ -45,6 +46,7 @@ function VerifyOTP() {
       navigate('/404')
     }
   };
+
 
   return (
     <div

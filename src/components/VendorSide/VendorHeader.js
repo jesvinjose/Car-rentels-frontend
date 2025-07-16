@@ -89,7 +89,7 @@ const VendorHeader = () => {
             </div>
           </div>
         ) : (
-          <Link to="/login">
+          <Link to="/vendorlogin">
             <div className="w-full sm:w-1/2 md:w-1/4 lg:w-1/5 p-4">
               <div className="bg-indigo-200 p-4 rounded-lg flex flex-col items-center justify-center">
                 <i className="fas fa-sign-in-alt text-4xl text-indigo-600 mb-2"></i>

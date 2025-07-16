@@ -19,8 +19,6 @@ import ForgotPassword from "./components/UserSide/ForgotPassword";
 import VerifyOTP4PasswordReset from "./components/UserSide/VerifyOTP4PasswordReset";
 import PasswordReset from "./components/UserSide/PasswordReset";
 import VendorProfile from "./components/VendorSide/VendorProfile";
-// import CarRentalRates from "./components/AdminSide/CarRentalRates";
-// import CarTypeRegister from "./components/AdminSide/CarTypeRegister";
 import CarsList from "./components/VendorSide/CarsList";
 import CarRegister from "./components/VendorSide/CarRegister";
 import CarsListAdminSide from "./components/AdminSide/CarsListAdminSide";
@@ -54,6 +52,7 @@ import AboutPage from "./components/UserSide/About";
 import Contact from "./components/UserSide/Contact";
 import Profile from "./components/UserSide/Profile";
 
+
 function App() {
   const vendorId = localStorage.getItem("vendorId");
 
@@ -66,6 +65,13 @@ function App() {
             element={<PrivateRoutes Component={UserProfile} />}
           /> */}
 
+          <Route path="/usershome" element={<UsersHome />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/allcars" element={<AllCars />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<UserLogin />}/>
+
           <Route
             path="/userprofile/:userId"
             element={<PrivateRoutes Component={Profile} />}
@@ -76,7 +82,7 @@ function App() {
             path="/bookingslist"
             element={<PrivateRoutesVendorSide Component={BookingsList} />}
           />
-          
+
           <Route
             path="/booking_history"
             element={<PrivateRoutes Component={BookingHistory} />}
@@ -92,8 +98,6 @@ function App() {
             element={<PrivateRoutes Component={BookingSuccessPage} />}
           />
 
-          <Route element={<UsersHome />} path="/usershome" />
-          <Route path="/" element={<Home />} />
           <Route element={<RegisterForm />} path="/register" />
           <Route
             path="/googlesignupform/:email"
@@ -104,13 +108,12 @@ function App() {
             element={<GoogleSignUpFormVendorSide />}
           />
           <Route element={<VerifyOTP />} path="/verifyOTP" />
-          <Route element={<UserLogin />} path="/login" />
+
           <Route element={<UserLogin />} path="/logout" />
           <Route element={<ForgotPassword />} path="/forgotpassword" />
           <Route path="/car_list" element={<CategorywiseCars />} />
           <Route path="/car_details" element={<CarDetails />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<Contact />} />
+
 
           <Route
             element={<ForgotPassword4Vendor />}
@@ -124,7 +127,7 @@ function App() {
             path="/verifyOTP4PasswordReset4Vendor"
             element={<VerifyOTP4PasswordReset4Vendor />}
           />
-          <Route path="/allcars" element={<AllCars />} />
+
           <Route path="/PasswordReset" element={<PasswordReset />} />
           <Route
             path="/PasswordReset4Vendor"

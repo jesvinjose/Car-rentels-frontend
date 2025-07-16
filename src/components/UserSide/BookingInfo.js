@@ -24,7 +24,7 @@ const BookingInfo = () => {
     localStorage.getItem("walletBalance")
   );
 
-  const [distanceBtwUserandCar,setDistanceBtwUserandCar]=useState(0);
+  const [distanceBtwUserandCar, setDistanceBtwUserandCar] = useState(0);
 
   const navigate = useNavigate();
 
@@ -192,9 +192,8 @@ const BookingInfo = () => {
     }
   }, []);
 
-
   useEffect(() => {
-    console.log(carDetails,useLocation,"----------car and user");
+    console.log(carDetails, useLocation, "----------car and user");
     if (carDetails && carDetails.carLocation && userLocation) {
       const { longitude: carLongitude, latitude: carLatitude } =
         carDetails.carLocation;
@@ -279,13 +278,12 @@ const BookingInfo = () => {
           const distanceInKm = route.distance / 1000; // Distance in kilometers
           console.log("Distance between user and car:", distanceInKm, "km");
           const formattedDistance = distanceInKm.toFixed(2);
-          setDistanceBtwUserandCar(formattedDistance)
+          setDistanceBtwUserandCar(formattedDistance);
         })
         .catch((error) => {
           console.error("Error fetching directions:", error);
         });
     }
-
   }, [carDetails, userLocation]);
 
   const isMobile = window.innerWidth <= 768; // Adjust the mobile breakpoint as needed

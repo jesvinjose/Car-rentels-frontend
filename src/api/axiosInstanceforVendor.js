@@ -1,13 +1,15 @@
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
-
-const axiosInstanceforVendor = axios.create({
-  baseURL: 'https://www.car-rentals.shop', // Replace with your actual base URL
-});
+import dotenv from 'dotenv';
+dotenv.config();
 
 // const axiosInstanceforVendor = axios.create({
-//   baseURL: 'http://localhost:5000', // Replace with your actual base URL
+//   baseURL: 'https://www.car-rentals.shop', // Replace with your actual base URL
 // });
+
+const axiosInstanceforVendor = axios.create({
+  baseURL: process.env.baseURL,
+});
 
 
 axiosInstanceforVendor.interceptors.request.use(

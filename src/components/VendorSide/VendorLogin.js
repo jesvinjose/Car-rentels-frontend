@@ -11,7 +11,11 @@ import jwt_decode from "jwt-decode";
 import axiosInstanceforVendor from "../../api/axiosInstanceforVendor";
 
 function VendorLogin() {
+  const vendorId = localStorage.getItem("vendorId");
   useEffect(() => {
+    // if (!vendorId) {
+    //   navigate("/vendorlogin");
+    // }
     const urlParams = new URLSearchParams(window.location.search).get(
       "redirectFrom"
     );

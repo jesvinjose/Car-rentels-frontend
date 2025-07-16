@@ -23,7 +23,7 @@ const SearchBar = ({ handleSubmit }) => {
 
   return (
     <>
-      <div className="border border-black p-4 bg-lime-300 flex flex-col md:flex-row justify-center items-center mt-3">
+      <div className="border border-black p-4 bg-red-400 flex flex-col md:flex-row justify-center items-center mt-3">
         <label>Pickup Date:</label>
         <input
           type="date"

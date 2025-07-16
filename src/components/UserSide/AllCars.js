@@ -409,7 +409,7 @@ const AllCars = () => {
   return (
     <div>
       <Header />
-      <div className="border border-black p-4 bg-lime-300 flex flex-col md:flex-row justify-center items-center mt-3">
+      <div className="border border-black p-4 bg-blue-200 rounded-lg shadow-xl flex flex-col md:flex-row justify-end items-center mt-3">
         <label>Pickup Date:</label>
         <input
           type="date"
@@ -434,7 +434,7 @@ const AllCars = () => {
 
         <button
           onClick={() => handleSubmit(pickupDate, returnDate)}
-          className="bg-green-500 border border-black rounded-lg px-4 py-2 mb-2 ml-4 text-white hover:bg-green-600 cursor-pointer"
+          className="bg-green-500 border shadow-xl border-black rounded-lg px-4 py-2 mb-2 ml-4 text-white hover:bg-green-600 cursor-pointer"
         >
           Search
         </button>

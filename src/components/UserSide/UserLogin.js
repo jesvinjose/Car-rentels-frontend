@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -6,7 +6,8 @@ import bgImage from "../../assets/signUpbackgroundImage.jpg";
 import logo from "../../assets/logo-1.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+// import { useSelector } from "react-redux";
 import { userinfo } from "../../redux/actions/UserInfoAction";
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
@@ -61,6 +62,7 @@ function UserLogin() {
         localStorage.setItem("walletBalance", response.data.walletBalance);
         navigate("/usershome");
       } else if (response.data.message === "Wrong password") {
+        console.log("Wrong password..............");
         toast("Wrong password");
       } else if (
         response.data.message === "User is not registered, please register now"
@@ -71,8 +73,6 @@ function UserLogin() {
         "User is blocked, contact jesvinjose49@gmail.com"
       ) {
         toast("User is blocked, contact jesvinjose49@gmail.com");
-      } else if (response.data.message === "Wrong password") {
-        toast("Wrong password");
       } else {
         // toast("Internal server error");
         navigate("/404");

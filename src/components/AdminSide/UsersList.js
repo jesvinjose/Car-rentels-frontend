@@ -256,7 +256,7 @@ const UsersList = () => {
     setIsModalOpen(true);
     console.log("inside view Details before response");
     const fullUserDetails = userData.filter((item) => item._id === id);
-    console.log(fullUserDetails);
+    console.log(fullUserDetails,"------fullUserDetails---------");
     setSelectedUserDetails(fullUserDetails);
     console.log(selectedUserDetails, "transfered to modal");
   };

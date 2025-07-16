@@ -1,6 +1,6 @@
 // AdminLoginForm.js
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import axiosInstanceforAdmin from "../../api/axiosInstanceforAdmin";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo-1.png";
@@ -27,7 +27,10 @@ function AdminLoginForm() {
       localStorage.setItem("adminToken", adminToken);
       localStorage.setItem("adminEmailId", adminEmailId);
       // You can use `navigate` to programmatically navigate
-      navigate("/admin/home"); // Example navigation
+      // navigate("/admin/home"); // Example navigation
+      if (adminToken) {
+        navigate("/admin/home");
+      }
     } catch (error) {
       console.error("Login failed:", error);
     }
