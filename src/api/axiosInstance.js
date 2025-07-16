@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
-import dotenv from 'dotenv';
 
-dotenv.config();
 
 const axiosInstance = axios.create({
-  baseURL: process.env.baseURL,
+  baseURL: process.env.REACT_APP_API_baseURL,
 });
 
 // const axiosInstance = axios.create({
