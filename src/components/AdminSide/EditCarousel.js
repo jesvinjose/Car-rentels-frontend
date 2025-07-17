@@ -10,10 +10,7 @@ const EditCarousel = () => {
 
   const [carouselDetails, setCarouselDetails] = useState({});
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+  
   const fetchData = async () => {
     // const config = {
     //   headers: {
@@ -27,6 +24,11 @@ const EditCarousel = () => {
     setCarouselDetails(response.data);
     console.log(carouselDetails, "carouselsdata");
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   console.log(carouselDetails);
   const [carouselName, setCarouselName] = useState("");

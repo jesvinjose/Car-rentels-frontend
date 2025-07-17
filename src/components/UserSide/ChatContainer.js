@@ -12,7 +12,7 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
   // const { bookingId, userId, vendorId } = useParams();
 
   const [messageList, setMessageList] = useState([]);
- 
+
   const currentUserId = localStorage.getItem("userId");
   // const currentUserId=userinfo.userinfo.userId;
   const [messageTriger, setMessageTriger] = useState(new Date());
@@ -33,12 +33,11 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
       // Disconnect the socket when the component unmounts
       socketio.disconnect();
     };
-  }, [messageTriger]);
+  }, [messageTriger, bookingId, socketio]);
 
   console.log(messageList, "-----------receivedMessages");
 
   function ChatsList() {
-
     const chatListStyles = {
       maxHeight: "300px",
       overflowY: "auto",
@@ -54,9 +53,7 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
       }
     }, [messageList]);
     return (
-      <div
-        style={chatListStyles} ref={chatContainerRef}
-      >
+      <div style={chatListStyles} ref={chatContainerRef}>
         {messageList?.map((chat, index) => {
           console.log(chat.timestamp);
           if (chat.sender === currentUserId) {
@@ -83,12 +80,6 @@ function ChatContainer({ bookingId, userId, vendorId, closeChatModal }) {
         })}
       </div>
     );
-
-
-    
-    
-    
-    
   }
 
   const [message, setMessage] = useState("");

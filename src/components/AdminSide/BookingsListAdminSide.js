@@ -7,6 +7,8 @@ const BookingsListAdminSide = () => {
   const [bookingData, setBookingData] = useState([]);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState([]);
   const [error, setError] = useState(null);
+  console.log(error,"<----------------error");
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
